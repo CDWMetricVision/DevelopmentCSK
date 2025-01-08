@@ -1,13 +1,13 @@
-//newdevinstancehyberscaler AWS Connect instance
+//masdevelopment
 let customer1 = {
-    "connectARN": "50a49da4-8909-443b-a3c0-33bb97ce165c",
-    "contactFlowARN": "5a3c0863-4337-4f3b-ae8c-a81c233aa2f3"
+    "connectARN": "08aaaa8c-2bbf-4571-8570-f853f6b7dba0",
+    "contactFlowARN": "669aa1e2-2530-4475-8ec8-693ee6b84c1d"
 }
 
-//devinstance AWS Connect instance
+//masdevelopmentinstance2
 let customer2 = {
-    "connectARN": "15e62379-5da6-4894-a63d-0aa38892ad7c",
-    "contactFlowARN": "dc37c1aa-8a22-4b34-b18d-96c31ce0fa60"
+    "connectARN": "5c1408e0-cd47-4ba9-9b0c-c168752e2285",
+    "contactFlowARN": "971bba36-27a2-474d-9476-73e20d009d0e"
 }
 
 customer1Button = document.querySelector("#customer1")
