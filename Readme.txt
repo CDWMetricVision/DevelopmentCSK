@@ -1,5 +1,5 @@
 This repository contains the updated code for Charlie, as of December 13, 2024.
-Steps to Implement in new AWS Accounnt
+Steps to Implement in new AWS Account
 1.	Run CognitoFull.yml in CloudFormation. Required parameters are as follows:
 •	CognitoUserPoolName – name of user pool
 •	CognitoUserPoolAppClientName – name of app client in user pool
