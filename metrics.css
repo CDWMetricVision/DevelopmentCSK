@@ -1,5 +1,5 @@
 .logout-button {
-    position: right;
+    position: absolute;
     top: 20px;  /* Adjust the distance from the top */
     left: 20px;  /* Adjust the distance from the left */
     padding: 10px 20px;
