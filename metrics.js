@@ -320,6 +320,7 @@ function createTable(data, container) {
         columnRow.appendChild(row);
     })
     table.appendChild(tableBody);
+    tableWrapper.setAttribute("style", "display: none !important");
     container.appendChild(tableWrapper);
 }
 
