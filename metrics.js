@@ -92,8 +92,8 @@ function createTableLineGauge(data) {
     let results = document.querySelector("#results");
     rowDiv.appendChild(section)
     results.appendChild(rowDiv)
-    createTable(data, section)
     createLineGraphNew(data, section)
+    createTable(data, section)
     createGauge(data, section)
     createIcons(section)
     
