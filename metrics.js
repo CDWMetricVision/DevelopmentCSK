@@ -329,13 +329,18 @@ async function submitCustomDateTimeframe() {
     let endDate = document.querySelector("#customEndDate").value
     let startTime = document.querySelector("#startTime").value
     let endTime = document.querySelector("#endTime").value
-    let startTimeandDate = `${startTime}_${startDate}`;
-    let endTimeandDate = `${endTime}_${endDate}`;
+    let timezoneChoice = document.querySelector("#timezoneButton").innerHTML
+    let localTime = false;
+    if (timezoneChoice === "Local Timezone") {
+        localTime = true;
+    }
+    let startUTC = localDateToUTC(startDate, startTime);
+    let endUTC = localDateToUTC(endDate, endTime);
     let loadingModal = document.createElement("p");
     loadingModal.innerHTML = "loading . . .";
     let sectionHeader = document.querySelector(".loading");
     sectionHeader.append(loadingModal);
-    let data = await customTimeFetchCloudWatchData(startTimeandDate, endTimeandDate);
+    let data = await customTimeFetchCloudWatchData(startUTC, endUTC);
     // let data = JSON.parse(sessionStorage.getItem("fakeMetricVisionData"))
     if (!data.result) {
         sectionHeader.removeChild(loadingModal);
@@ -344,6 +349,27 @@ async function submitCustomDateTimeframe() {
         sectionHeader.appendChild(error);
         return
     } else {
+         if (localTime) {
+            for (let i = 0; i < data.data.MetricDataResults.length; i ++) {
+                if (data.data.MetricDataResults[i]['Timestamps'].length > 0) {
+                    let timestampsArray = data.data.MetricDataResults[i]['Timestamps']
+                    for (let j = 0; j < timestampsArray.length; j ++) {
+                        let formatter = new Intl.DateTimeFormat("en-US", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                        });
+                        let UTCDate = timestampsArray[j] + " UTC";
+                        let UTCDateObject = new Date(UTCDate);
+                        let formattedDate = formatter.format(UTCDateObject);
+                        timestampsArray[j] = formattedDate;
+                    }
+                }
+            }
+        }
         sessionStorage.setItem("MetricVisionData", JSON.stringify(data.data.MetricDataResults));
         sectionHeader.removeChild(loadingModal);
         let results = document.querySelector("#results");
@@ -434,6 +460,24 @@ function getFormattedDates() {
       twoWeeksAgoDate: twoWeeksAgoFormattedDate,
       twoWeeksAgoTime: twoWeeksAgoFormattedTime
     };
+}
+
+function timezoneDropdownChoice(event) {
+    let timezoneDropdownButtonText = document.querySelector("#timezoneButton")
+    timezoneDropdownButtonText.innerHTML = event.target.innerHTML
+}
+ 
+function refreshDropdownChoice(event) {
+    let refreshDropdownButton = document.querySelector("#autoRefreshButton");
+    refreshDropdownButton.innerHTML = `<i class="fa-solid fa-arrows-rotate fa-lg"></i> ${event.target.innerHTML}`;
+}
+ 
+function localDateToUTC(rawDateInput, rawTimeInput) {
+    let [year, month, day] = rawDateInput.split("-");
+    month = parseInt(month) - 1;
+    let [hours, minutes] = rawTimeInput.split(":");
+    let UTCDate = new Date(year, month, day, hours, minutes).toISOString()
+    return UTCDate;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
