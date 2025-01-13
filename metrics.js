@@ -272,8 +272,6 @@ function chartLineGraph(graphData, container) {
     flexDiv.classList.add("flex-grow-1");
     let flexDivId = `lineChart_${title}`;
     flexDiv.setAttribute("id", flexDivId);
-    flexDiv.setAttribute("style", "display: none !important");
-    
 
     // Step 6: Display the chart
     chart.container(flexDiv);
