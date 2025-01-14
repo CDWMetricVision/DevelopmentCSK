@@ -92,6 +92,11 @@ function createTableLineGauge(data) {
     let results = document.querySelector("#results");
     rowDiv.appendChild(section)
     results.appendChild(rowDiv)
+    if (data.Id.includes("percentage")) {
+        data.Values.forEach(function(value, index) {
+            data.Values[index] = Math.floor(value * 100)
+        })
+    }
     createLineGraphNew(data, section)
     createTable(data, section)
     createGauge(data, section)
@@ -109,7 +114,7 @@ function createIcons(container) {
     chartIcon.addEventListener("click", hideOtherCharts)
     tableIcon.addEventListener("click", hideOtherCharts)
     gaugeIcon.addEventListener("click", hideOtherCharts)
-    container.append(tableIcon, chartIcon, gaugeIcon);
+    container.append(chartIcon, tableIcon, gaugeIcon);
 }
 function hideOtherCharts(e) {
     let target = e.target.classList[0].replace("Chart",'');
@@ -133,21 +138,34 @@ function createGauge(data, container) {
     // create data set on our data
     let values = data["Values"]
     let min, max, avg, sum;
-    if (values.length === 0) {
+   if (data.Id.includes("percentage")) {
         min = 0;
-        max = 1;
-        avg = 0;
-        sum = 0;
-    } else if (values.every(value => value === values[0])) {
-        min = Math.min(0, values[0]);
-        max = values[0] +1;
-        sum = values.reduce((acc, num) => acc + num, 0);
-        avg = parseFloat((sum / values.length).toFixed(2));
+        max = 100;
+        sum = "N/A"
+        if (values.length === 0) {
+            avg = 0;
+        } else if (values.every(value => value === values[0])) {
+            avg = parseFloat(((values.reduce((acc, num) => acc + num, 0)) / values.length).toFixed(2));
+        } else {
+            avg = parseFloat(((values.reduce((acc, num) => acc + num, 0)) / values.length).toFixed(2));
+        }
     } else {
-        min = Math.min(...values);
-        max = Math.max(...values);
-        sum = values.reduce((acc, num) => acc + num, 0);
-        avg = parseFloat((sum / values.length).toFixed(2));
+        if (values.length === 0) {
+            min = 0;
+            max = 1;
+            sum = 0;
+            avg = 0;
+        } else if (values.every(value => value === values[0])) {
+            min = Math.min(0, values[0]);
+            max = values[0] +1;
+            sum = values.reduce((acc, num) => acc + num, 0);
+            avg = values[0];
+        } else {
+            min = Math.min(...values);
+            max = Math.max(...values);
+            sum = values.reduce((acc, num) => acc + num, 0);
+            avg = parseFloat((sum / values.length).toFixed(2));
+        }
     }
 
     let dataSet = anychart.data.set([avg]);//Where to set avg value!!
@@ -312,11 +330,19 @@ function createTable(data, container) {
     rowHeader.setAttribute("scope", "row");
     rowHeader.innerHTML = metricLabel;
     columnRow.appendChild(rowHeader);
-    data.Values.forEach(value => {
-        let row = document.createElement("td");
-        row.innerHTML = value;
-        columnRow.appendChild(row);
-    })
+    if (data.Id.includes("percentage")) {
+        data.Values.forEach(value => {
+            let row = document.createElement("td");
+            row.innerHTML = value + '%';
+            columnRow.appendChild(row);
+        })
+    } else {
+        data.Values.forEach(value => {
+            let row = document.createElement("td");
+            row.innerHTML = value;
+            columnRow.appendChild(row);
+        })
+    }
     table.appendChild(tableBody);
     tableWrapper.setAttribute("style", "display: none !important");
     container.appendChild(tableWrapper);
