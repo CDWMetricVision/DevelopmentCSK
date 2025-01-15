@@ -149,8 +149,19 @@ function createGauge(data, container) {
         } else {
             avg = parseFloat(((values.reduce((acc, num) => acc + num, 0)) / values.length).toFixed(2));
         }
-    } else {
+    } else if (data.Id.includes("packet_loss")) {
+        min = 0;
+        max = 100;
+        sum = "N/A";
         if (values.length === 0) {
+            avg = 0;
+        } else if (values.every(value => value === values[0])) {
+            avg = parseFloat(((values.reduce((acc, num) => acc + num, 0)) / values.length).toFixed(2));
+        } else {
+            avg = parseFloat(((values.reduce((acc, num) => acc + num, 0)) / values.length).toFixed(2));
+        }
+    } else {
+       if (values.length === 0) {
             min = 0;
             max = 1;
             sum = 0;
@@ -167,7 +178,6 @@ function createGauge(data, container) {
             avg = parseFloat((sum / values.length).toFixed(2));
         }
     }
-
     let dataSet = anychart.data.set([avg]);//Where to set avg value!!
     // set the gauge type
     let gauge = anychart.gauges.circular();
@@ -265,8 +275,14 @@ function createLineGraphNew(data, container) {
     let chartMetricData = [];
     for (let i = 0; i < data["Timestamps"].length; i++) {
         let chartData = [];
-        chartData.push(data["Timestamps"][i], data["Values"][i])
-        chartMetricData.push(chartData)
+        if (metric === "to_instance_packet_loss_rate") {
+            chartData.push(data["Timestamps"][i], data["Values"][i].toFixed(3))
+            chartMetricData.push(chartData)
+            continue
+        } else {
+            chartData.push(data["Timestamps"][i], data["Values"][i])
+            chartMetricData.push(chartData)
+        }
     }
     let graphData = {
         "title": metric,
@@ -334,6 +350,12 @@ function createTable(data, container) {
         data.Values.forEach(value => {
             let row = document.createElement("td");
             row.innerHTML = value + '%';
+            columnRow.appendChild(row);
+        })
+    } else if (data.Id.includes("packet_loss")){
+        data.Values.forEach(value => {
+            let row = document.createElement("td");
+            row.innerHTML = value.toFixed(3) + '%';
             columnRow.appendChild(row);
         })
     } else {
