@@ -1,5 +1,10 @@
-getMetricsButton = document.querySelector("#getMetricsButton")
-getMetricsButton.value = JSON.stringify(getMetricsButton)
+let getMetricsButton = {
+    "connectARN": "08aaaa8c-2bbf-4571-8570-f853f6b7dba0",
+    "contactFlowARN": "669aa1e2-2530-4475-8ec8-693ee6b84c1d"
+}
+
+getMetricsButtonButton = document.querySelector("#getMetricsButton")
+getMetricsButtonButton.value = JSON.stringify(getMetricsButton)
 
 function redirect(arnObject) {
     let connectARN = arnObject.connectARN;
@@ -12,7 +17,7 @@ function parseARNObject(event) {
     let parsedObject = JSON.parse(stringObject)
     redirect(parsedObject)
 }
-Go.addEventListener("click", parseARNObject)
+getMetricsButtonButton.addEventListener("click", parseARNObject)
 
 window.onload = () => {
     let hash = window.location.hash;
