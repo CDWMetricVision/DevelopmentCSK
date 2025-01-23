@@ -1,12 +1,23 @@
-async function getARNQueryParams() {
-    let queryString = window.location.search;
-    let urlParams = new URLSearchParams(queryString);
-    let connectARN = urlParams.get("connectARN")
-    let contactFlowARN = urlParams.get("contactFlowARN")
-    return {
-        "connectARN": connectARN,
-        "contactFlowARN": contactFlowARN
-    }
+getMetricsButton = document.querySelector("#getMetricsButton")
+getMetricsButton.value = JSON.stringify(getMetricsButton)
+
+function redirect(arnObject) {
+    let connectARN = arnObject.connectARN;
+    let contactFlowARN = arnObject.contactFlowARN;
+    location.href = `metrics.html?connectARN=${connectARN}&contactFlowARN=${contactFlowARN}`;
+}
+
+function parseARNObject(event) {
+    let stringObject = event.target.value;
+    let parsedObject = JSON.parse(stringObject)
+    redirect(parsedObject)
+}
+Go.addEventListener("click", parseARNObject)
+
+window.onload = () => {
+    let hash = window.location.hash;
+    let token = hash.split("access_token=")[1].split("&")[0];
+    sessionStorage.setItem("MetricVisionAccessToken", token)
 }
 
 async function customTimeFetchCloudWatchData(customStartTimeandDate, customEndTimeandDate) {
