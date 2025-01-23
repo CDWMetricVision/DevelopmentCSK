@@ -1,33 +1,97 @@
-let getMetricsButton = {
-    "connectARN": "08aaaa8c-2bbf-4571-8570-f853f6b7dba0",
-    "contactFlowARN": "669aa1e2-2530-4475-8ec8-693ee6b84c1d"
+async function getARNQueryParams() {
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+    let instanceId = urlParams.get("instanceId")
+    return {
+        "instanceId": instanceId
+    }
 }
 
-getMetricsButtonButton = document.querySelector("#getMetricsButton")
-getMetricsButtonButton.value = JSON.stringify(getMetricsButton)
-
-function redirect(arnObject) {
-    let connectARN = arnObject.connectARN;
-    let contactFlowARN = arnObject.contactFlowARN;
-    location.href = `metrics.html?connectARN=${connectARN}&contactFlowARN=${contactFlowARN}`;
+function sendInstanceId(event) {
+    let baseApiUrl = event.target.dataset.baseApiUrl;
+    sessionStorage.setItem("baseApiUrl", baseApiUrl);
+    let instanceId = event.target.dataset.instanceId;
+    let url = new URL(window.location.href);
+    url.searchParams.set("instanceId", instanceId);
+    window.history.replaceState({}, '', url)
+    getContactFlowNames();
+    getQueueNames();
 }
 
-function parseARNObject(event) {
-    let stringObject = event.target.value;
-    let parsedObject = JSON.parse(stringObject)
-    redirect(parsedObject)
+async function getQueueNames() {
+    let baseURL = sessionStorage.getItem("baseApiUrl");
+    let instanceId = await getARNQueryParams();
+    let paramURL = `${baseURL}/queues/?instanceId=${instanceId['instanceId']}`;
+    try {
+        let token = sessionStorage.getItem("MetricVisionAccessToken");
+        let response = await fetch(paramURL, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        if (!response.ok) {
+            console.log(response)
+            return {
+                "errorMessage": response,
+                "result": false
+            }
+        } else {
+            let queueNames = await response.json();
+            sessionStorage.setItem("queueNames", queueNames)
+            return {
+                "queueNames": queueNames,
+                "result": true
+            }
+        }
+    } catch(err) {
+        console.log(err)
+        return {
+            "errorMessage": err,
+            "result": false
+        }
+    }
 }
-getMetricsButtonButton.addEventListener("click", parseARNObject)
 
-window.onload = () => {
-    let hash = window.location.hash;
-    let token = hash.split("access_token=")[1].split("&")[0];
-    sessionStorage.setItem("MetricVisionAccessToken", token)
+async function getContactFlowNames() {
+    let baseURL = sessionStorage.getItem("baseApiUrl");
+    let instanceId = await getARNQueryParams();
+    let paramURL = `${baseURL}/contactFlows/?instanceId=${instanceId['instanceId']}`;
+    try {
+        let token = sessionStorage.getItem("MetricVisionAccessToken");
+        let response = await fetch(paramURL, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        if (!response.ok) {
+            console.log(response)
+            return {
+                "errorMessage": response,
+                "result": false
+            }
+        } else {
+            let contactFlowNames = await response.json();
+            sessionStorage.setItem("contactFlowNames", contactFlowNames)
+            return {
+                "contactFlowNames": contactFlowNames,
+                "result": true
+            }
+        }
+    } catch(err) {
+        console.log(err)
+        return {
+            "errorMessage": err,
+            "result": false
+        }
+    }
 }
 
 async function customTimeFetchCloudWatchData(customStartTimeandDate, customEndTimeandDate) {
     // let baseURL = "https://yfa9htwb2c.execute-api.us-east-1.amazonaws.com/testing/metrics";
-    let baseURL = "https://szw9nl20j5.execute-api.us-east-1.amazonaws.com/test/Any";
+    // let baseURL = "https://szw9nl20j5.execute-api.us-east-1.amazonaws.com/test/Any";
+    let baseURL = sessionStorage.getItem("baseApiUrl");
     let customStartTimeParam = '';
     let customEndTimeParam = '';
     if (customStartTimeandDate && customEndTimeandDate) {
@@ -36,7 +100,7 @@ async function customTimeFetchCloudWatchData(customStartTimeandDate, customEndTi
     }
 
     let arn = await getARNQueryParams();
-    let paramURL = `${baseURL}/?connectARN=${arn["connectARN"]}&contactFlowARN=${arn["contactFlowARN"]}${customStartTimeParam}${customEndTimeParam}`;
+    let paramURL = `${baseURL}/Any/?instanceId=${arn["instanceId"]}${customStartTimeParam}${customEndTimeParam}`;
     try {
         let token = sessionStorage.getItem("MetricVisionAccessToken");
         let response = await fetch(paramURL, {
@@ -392,9 +456,26 @@ async function submitCustomDateTimeframe() {
     let startTime = document.querySelector("#startTime").value
     let endTime = document.querySelector("#endTime").value
     let timezoneChoice = document.querySelector("#timezoneButton").innerHTML
-    let localTime = false;
-    if (timezoneChoice === "Local Timezone") {
-        localTime = true;
+    let localTimezoneChoice = timezoneChoice.split(" ")[0];
+    let formatterOptions = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    }
+    let timezoneFormats = {
+        "Hawaii": "Pacific/Honolulu",
+        "Alaska": "America/Anchorage",
+        "Pacific": "America/Los_Angeles", 
+        "Mountain": "America/Denver",
+        "Central": "America/Chicago",
+        "Eastern": "America/New_York",
+        "UTC": "UTC"
+    }
+    if (localTimezoneChoice != "Local") {
+        formatterOptions.timeZone = timezoneFormats[localTimezoneChoice];
     }
     let startUTC = localDateToUTC(startDate, startTime);
     let endUTC = localDateToUTC(endDate, endTime);
@@ -411,24 +492,15 @@ async function submitCustomDateTimeframe() {
         sectionHeader.appendChild(error);
         return
     } else {
-         if (localTime) {
-            for (let i = 0; i < data.data.MetricDataResults.length; i ++) {
-                if (data.data.MetricDataResults[i]['Timestamps'].length > 0) {
-                    let timestampsArray = data.data.MetricDataResults[i]['Timestamps']
-                    for (let j = 0; j < timestampsArray.length; j ++) {
-                        let formatter = new Intl.DateTimeFormat("en-US", {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                        });
-                        let UTCDate = timestampsArray[j] + " UTC";
-                        let UTCDateObject = new Date(UTCDate);
-                        let formattedDate = formatter.format(UTCDateObject);
-                        timestampsArray[j] = formattedDate;
-                    }
+        for (let i = 0; i < data.data.MetricDataResults.length; i++) {
+            if (data.data.MetricDataResults[i]['Timestamps'].length > 0) {
+                let timestampsArray = data.data.MetricDataResults[i]['Timestamps']
+                for (let j = 0; j < timestampsArray.length; j++) {
+                    let formatter = new Intl.DateTimeFormat("en-US", formatterOptions)
+                    let UTCDate = timestampsArray[j] + " UTC";
+                    let UTCDateObject = new Date(UTCDate);
+                    let formattedDate = formatter.format(UTCDateObject);
+                    timestampsArray[j] = formattedDate;
                 }
             }
         }
@@ -543,15 +615,10 @@ function localDateToUTC(rawDateInput, rawTimeInput) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    displayMetricTableData();
+    // displayMetricTableData();
     displayTimeandDates();
 });
 
-window.onload = () => {
-    let hash = window.location.hash;
-    let token = hash.split("access_token=")[1].split("&")[0];
-    sessionStorage.setItem("MetricVisionAccessToken", token)
-}
 //For testing purposes, use fake data to simulate real data when working in test environment, because not authenticated with Cognito
 
 // let fakeData = { "MetricDataResults": [{ "Id": "calls_per_interval", "Label": "VoiceCalls CallsPerInterval", "Timestamps": ["12/11 10:36 AM", "12/11 2:36 PM", "12/12 3:41 PM", "12/16 2:42 PM"], "Values": [6.0, 2.0, 4.0, 1.0] }, { "Id": "missed_calls", "Label": "VoiceCalls MissedCalls", "Timestamps": ["12/10 01:00 AM","12/10 04:00 AM", "12/10 06:32 AM"], "Values": [1.0,2.0,4.0] }, { "Id": "calls_breaching_concurrency_quota", "Label": "VoiceCalls CallsBreachingConcurrencyQuota", "Timestamps": [], "Values": [] }, { "Id": "call_recording_upload_error", "Label": "CallRecordings CallRecordingUploadError", "Timestamps": [], "Values": [] }, { "Id": "chats_breaching_active_chat_quota", "Label": "Chats ChatsBreachingActiveChatQuota", "Timestamps": [], "Values": [] }, { "Id": "concurrent_active_chats", "Label": "Chats ConcurrentActiveChats", "Timestamps": [], "Values": [] }, { "Id": "contact_flow_errors", "Label": "1cf9d6bb-1a1e-44a4-b3c7-951cc17cb9de ContactFlow ContactFlowErrors", "Timestamps": [], "Values": [] }, { "Id": "contact_flow_fatal_errors", "Label": "1cf9d6bb-1a1e-44a4-b3c7-951cc17cb9de ContactFlow ContactFlowFatalErrors", "Timestamps": [], "Values": [] }, { "Id": "throttled_calls", "Label": "VoiceCalls ThrottledCalls", "Timestamps": [], "Values": [] }, { "Id": "to_instance_packet_loss_rate", "Label": "Agent Voice WebRTC ToInstancePacketLossRate", "Timestamps": [], "Values": [] }] }
