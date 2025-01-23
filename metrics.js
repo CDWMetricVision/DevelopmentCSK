@@ -530,7 +530,12 @@ document.addEventListener("DOMContentLoaded", function () {
     displayMetricTableData();
     displayTimeandDates();
 });
-  
+
+window.onload = () => {
+    let hash = window.location.hash;
+    let token = hash.split("access_token=")[1].split("&")[0];
+    sessionStorage.setItem("MetricVisionAccessToken", token)
+}
 //For testing purposes, use fake data to simulate real data when working in test environment, because not authenticated with Cognito
 
 // let fakeData = { "MetricDataResults": [{ "Id": "calls_per_interval", "Label": "VoiceCalls CallsPerInterval", "Timestamps": ["12/11 10:36 AM", "12/11 2:36 PM", "12/12 3:41 PM", "12/16 2:42 PM"], "Values": [6.0, 2.0, 4.0, 1.0] }, { "Id": "missed_calls", "Label": "VoiceCalls MissedCalls", "Timestamps": ["12/10 01:00 AM","12/10 04:00 AM", "12/10 06:32 AM"], "Values": [1.0,2.0,4.0] }, { "Id": "calls_breaching_concurrency_quota", "Label": "VoiceCalls CallsBreachingConcurrencyQuota", "Timestamps": [], "Values": [] }, { "Id": "call_recording_upload_error", "Label": "CallRecordings CallRecordingUploadError", "Timestamps": [], "Values": [] }, { "Id": "chats_breaching_active_chat_quota", "Label": "Chats ChatsBreachingActiveChatQuota", "Timestamps": [], "Values": [] }, { "Id": "concurrent_active_chats", "Label": "Chats ConcurrentActiveChats", "Timestamps": [], "Values": [] }, { "Id": "contact_flow_errors", "Label": "1cf9d6bb-1a1e-44a4-b3c7-951cc17cb9de ContactFlow ContactFlowErrors", "Timestamps": [], "Values": [] }, { "Id": "contact_flow_fatal_errors", "Label": "1cf9d6bb-1a1e-44a4-b3c7-951cc17cb9de ContactFlow ContactFlowFatalErrors", "Timestamps": [], "Values": [] }, { "Id": "throttled_calls", "Label": "VoiceCalls ThrottledCalls", "Timestamps": [], "Values": [] }, { "Id": "to_instance_packet_loss_rate", "Label": "Agent Voice WebRTC ToInstancePacketLossRate", "Timestamps": [], "Values": [] }] }
