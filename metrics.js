@@ -1,39 +1,3 @@
-function sendInstanceId(event) {
-    // Reset the "Start Date" and "End Date" fields
-    document.getElementById('customStartDate').value = '';
-    document.getElementById('customEndDate').value = '';
-    
-    // Reset the "Start Time" and "End Time" fields
-    document.getElementById('startTime').value = '';
-    document.getElementById('endTime').value = '';
-
-    // Reset checkboxes (if any)
-    const checkboxes = document.querySelectorAll('.form-check-input');
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = false;
-    });
-
-    // Reset dropdowns (Timezone and Metrics)
-    document.getElementById('timezoneButton').textContent = 'UTC Timezone';
-    const metricsDropdown = document.querySelectorAll('.dropdown-menu .dropdown-item');
-    metricsDropdown.forEach(item => {
-        item.classList.remove('active');
-    });
-
-    // Clear any dynamic content (like results or tables)
-    document.getElementById('results').innerHTML = '';
-    document.getElementById('sectionResults').innerHTML = '';
-
-    // Reset other states, e.g., selected instances
-    document.querySelector("#awsConnectInstanceName").innerHTML = '';
-    document.getElementById('getMetricsButton').disabled = true;
-
-    // Optionally show a message that the data was cleared or reset
-    alert('Metrics data cleared and reset.');
-}
-
-//
-
 async function getARNQueryParams() {
     let queryString = window.location.search;
     let urlParams = new URLSearchParams(queryString);
