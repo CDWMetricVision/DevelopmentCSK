@@ -325,23 +325,21 @@
 
         function showDashboards() {
             alert('Showing dashboards...');
-             window.location.href = 'https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards/';
+           
         }
 
          function createNewDashboard() {
             // Redirect to the desired URL
             alert('Creating a new dashboard...');
-            window.location.href = 'https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards/';
+       
         }
 
         function showAlarms() {
             alert('Showing alarms...');
-             window.location.href = 'https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#alarmsV2:?~(alarmStateFilter~'ALARM)';
         }
 
         function createNewAlarm() {
             alert('Creating a new alarm...');
-            window.location.href = 'https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#alarmsV2:create?~(Page~'MetricSelection~AlarmType~'MetricAlarm~AlarmData~(Metrics~(~)~AlarmName~'~AlarmDescription~'~ActionsEnabled~true~ComparisonOperator~'GreaterThanThreshold~DatapointsToAlarm~1~EvaluationPeriods~1~TreatMissingData~'missing~AlarmActions~(~)~InsufficientDataActions~(~)~OKActions~(~))~AlarmRecommendation~false~MultiTimeSeries~false)';
         }
         window.onload = () => {
             if (window.location.hash) {
