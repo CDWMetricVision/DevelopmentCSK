@@ -41,37 +41,7 @@
     </div>
 
     
-    <!-- New Left Panel Feature -->
-    <div class="toggle-btn" onclick="toggleSidePanel()">☰</div>
-    <div class="side-panel" id="sidePanel">
-        <div class="panel-options-wrapper">
-            <div class="cdw-logo">
-                <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/cdw-2023-Red-Panel.png" alt="CDW Logo">
-            </div>
-            <!-- Accounts Section -->
-            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="awsAccountName">Accounts</button>
-            <div class="dropdown-menu">
-                <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Development</button>
-                <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Test1</button>
-                <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Test2</button>
-            </div>
-            <div id="connectInstances" class="w-100"></div>
-            <p id="awsConnectInstanceName" class="text-center" class=""></p>
     
-            <button class="btn btn-primary btn-block mt-2" id="getMetricsButton" onclick="sendInstanceId(event)" disabled>Apply</button>
-    
-            <!-- Dashboards Section -->
-            <button class="btn btn-secondary btn-block mt-3" onclick="showDashboards()">Dashboards</button>
-            <!-- <i class="fas fa-plus add-icon d-flex" onclick="createNewDashboard()"></i> -->
-    
-            <!-- Alarms Section -->
-            <button class="btn btn-secondary btn-block mt-3" onclick="showAlarms()">Alarms</button>
-            <!-- <i class="fas fa-plus add-icon d-flex" onclick="createNewAlarm()" style="text-align:center"></i> -->
-        </div>
-        
-        <!-- Existing Logout Link -->
-        <a href="https://cskcustomer1.s3.us-east-1.amazonaws.com/logged_out.html" class="text-center" >Logout</a>
-    </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
