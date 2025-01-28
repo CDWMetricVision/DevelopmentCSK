@@ -66,19 +66,20 @@ async function getAlarmsData(){
     .filter(account => account[input])
     .map(account => account[input].cloudWatchAPI)[0];
     try{
-        let response = await fetch(apiURL, {
-            headers: {
-                'Content-Type': 'application/json'
+        await fetch(apiURL).then(response =>{
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        });
-        if (!response.ok) {
-            console.log(response);
-        } else {
-            let alarms = await response.json();
-            console.log("alarms",alarms);
-            // alarms = [{"AlarmName": "Alarm_ConcurrentCalls", "State": "ALARM", "Metric": "ConcurrentCalls", "Namespace": "AWS/Connect", "Description": "No description"}, {"AlarmName": "Alarm_callsperinterval", "State": "INSUFFICIENT_DATA", "Metric": "CallsPerInterval", "Namespace": "AWS/Connect", "Description": "No description"}, {"AlarmName": "Alarm_missedcalls", "State": "INSUFFICIENT_DATA", "Metric": "MissedCalls", "Namespace": "AWS/Connect", "Description": "No description"}];
-            createTable(alarms);
-        }
+            return response.json();
+            }).then(data=>{
+                const body = JSON.parse(data.body); // Parse the body string into an array of objects
+                console.log(body);
+                createTable(body);
+
+            })
+            .catch(error =>{
+                console.error('There was a problem with the fetch operation:', error);
+            });
     } catch(err){
         console.log(err);
     }
