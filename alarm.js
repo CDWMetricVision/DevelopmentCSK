@@ -2,7 +2,7 @@ function getAccountsAlarmsAPI() {
     const allAccountsAlarmsList = [
         {
             "MAS Sandbox Development": {
-                "cloudWatchAPI":"https://ps8du4fwof.execute-api.us-east-1.amazonaws.com/test/GetAlarmCloudwatch"
+                "cloudWatchAPI":"https://3fc73zg0h0.execute-api.us-east-1.amazonaws.com/testing/getalarms"
             }
         },
         {
