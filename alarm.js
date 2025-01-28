@@ -12,7 +12,7 @@ function getAccountsAlarmsAPI() {
         },
         {
             "MAS Sandbox Test2": {
-                "cloudWatchAPI":"t16ya9cmcl.execute-api.us-east-1.amazonaws.com/test2/GetAlarmCloudwatch_test2"
+                "cloudWatchAPI":"https://hltiodxu24.execute-api.us-east-1.amazonaws.com/test/getalarm"
             }
         }
     ]
