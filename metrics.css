@@ -221,6 +221,90 @@ a:hover {
     flex-direction: column;
     align-items: center;
 }
+/* alarm page */
+.alarm-options-wrapper{
+    gap: 10px;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+#alarmsList {
+    margin: 20px;
+    padding: 15px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Base Styles */
+#alarmsList table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    background: #ffffff;
+}
+
+/* Header Styles */
+#alarmsList thead {
+    background-color: #f8f9fa;
+}
+
+#alarmsList th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #333333;
+    border-bottom: 2px solid #dee2e6;
+    text-transform: uppercase;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* Body Styles */
+#alarmsList td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6;
+    color: #555555;
+}
+
+/* Row Styles */
+#alarmsList tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+#alarmsList tbody tr:hover {
+    background-color: #f2f2f2;
+    transition: background-color 0.2s ease;
+}
+
+/* Status-specific styles */
+#alarmsList td:nth-child(2) {  /* Assuming State is the second column */
+    font-weight: 500;
+}
+#alarmsList td.red{
+    color: red;
+}
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    #alarmsList {
+        margin: 10px;
+        padding: 10px;
+        overflow-x: auto;
+    }
+    
+    #alarmsList table {
+        font-size: 13px;
+    }
+    
+    #alarmsList th,
+    #alarmsList td {
+        padding: 8px 10px;
+    }
+}
+
 @media (max-width: 768px) {
     .col {
         flex-direction: column;
