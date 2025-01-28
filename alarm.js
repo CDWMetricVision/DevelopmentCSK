@@ -7,7 +7,7 @@ function getAccountsAlarmsAPI() {
         },
         {
             "MAS Sandbox Test1": {
-                "cloudWatchAPI":"https://ownc55gea9.execute-api.us-east-1.amazonaws.com/test/GetAlarmCloudwatch_test1"
+                "cloudWatchAPI":"https://bjg478cmxc.execute-api.us-east-1.amazonaws.com/test/getalarm"
             }
         },
         {
