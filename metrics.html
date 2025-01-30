@@ -58,9 +58,9 @@
                 <ul class="dropdown-menu allMetrics" aria-labelledby="chosenMetrics">
                   <!-- Instance Metrics -->
                   <li class="dropdown-item">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="instanceMetrics">
-                      <label class="form-check-label font-weight-bold" for="instanceMetrics">Instance Metrics</label>
+                    <div class="form-check" id="selectAllMetrics">
+                      <input class="form-check-input" type="checkbox" id="instanceMetricsAll" onchange="selectAllConnectMetrics(event)">
+                      <label class="form-check-label font-weight-bold" for="instanceMetricsAll">Instance Metrics - Select All</label>
                     </div>
                     <div class="nested-menu">
                       <div class="form-check">
@@ -124,12 +124,16 @@
                     </select>
                     <div id="queueMetricsOptions" class="nested-menu mt-2" style="display: none;">
                       <div class="form-check">
-                        <input class="form-check-input queue-metrics" type="checkbox" id="queue_waiting_time">
-                        <label class="form-check-label" for="queue_waiting_time">QueueWaitingTime</label>
+                        <input class="form-check-input queue-metrics" type="checkbox" id="longest_queue_wait_time">
+                        <label class="form-check-label" for="longest_queue_wait_time">Longest Queue Wait Time</label>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input queue-metrics" type="checkbox" id="queue_abandon_rate">
-                        <label class="form-check-label" for="queue_abandon_rate">QueueAbandonRate</label>
+                        <input class="form-check-input queue-metrics" type="checkbox" id="queue_capacity_exceeded_error">
+                        <label class="form-check-label" for="queue_capacity_exceeded_error">Queue Capacity Exceeded Error</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input queue-metrics" type="checkbox" id="queue_size">
+                        <label class="form-check-label" for="queue_size">Queue Size</label>
                       </div>
                     </div>
                   </li>
