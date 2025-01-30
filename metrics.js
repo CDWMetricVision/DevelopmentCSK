@@ -6,8 +6,14 @@ async function getARNQueryParams() {
         "instanceId": instanceId
     }
 }
-
+function toggleSidePanel() {
+    const sidePanel = document.getElementById('sidePanel');
+    sidePanel.classList.toggle('active');
+}
 function sendInstanceId(event) {
+    $("#results").empty();
+    $("#sectionResults .loading").empty();
+    toggleSidePanel();
     let baseApiUrl = event.target.dataset.baseApiUrl;
     sessionStorage.setItem("baseApiUrl", baseApiUrl);
     let instanceId = event.target.dataset.instanceId;
@@ -562,6 +568,7 @@ async function submitCustomDateTimeframe() {
     let endUTC = localDateToUTC(endDate, endTime);
     let loadingModal = document.createElement("p");
     loadingModal.innerHTML = "loading . . .";
+    $("#sectionResults .loading").empty();
     let sectionHeader = document.querySelector(".loading");
     sectionHeader.append(loadingModal);
     let data = await customTimeFetchCloudWatchData(startUTC, endUTC, chosenMetrics['contactName'],chosenMetrics['queueName'],chosenMetrics['individualMetricsString']);
