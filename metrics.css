@@ -287,8 +287,12 @@ a:hover {
 #alarmsList td.red{
     color: red;
 }
-button {
+button:not([disabled]){
     background-color: #002D62 !important;
+}
+.result-table{
+    width: 95%;
+    margin: 0 auto 50px auto;
 }
 /* Responsive Design */
 @media screen and (max-width: 768px) {
