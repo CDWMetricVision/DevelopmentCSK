@@ -294,6 +294,39 @@ button:not([disabled]){
     width: 95%;
     margin: 0 auto 50px auto;
 }
+/* Dashboard Pages */
+.dashboard-header{
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+}
+.dashboard-header .title{
+    font-size: 1.7rem;
+    text-transform: capitalize;
+}
+.dashboard-header .cdw-logo{
+    width: 150px;
+    margin: 20px 0;
+}
+/* Create Dashboard Page */
+input[name='accountName']{
+    height: 40px;
+}
+.create-dashboard-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.create-dashboard-wrapper .create-options-wrapper{
+    gap: 10px;
+}
+.create-metrics-wrapper{
+    display: flex;
+    gap: 10px;
+}
+
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     #alarmsList {
