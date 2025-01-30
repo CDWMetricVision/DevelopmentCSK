@@ -45,7 +45,7 @@ function createTable(alarms) {
         bodyHtml += '<tr>';
         headers.forEach(header => {
             console.log(alarm[header].toLowerCase());
-            if (header.toLowerCase() === 'state' && alarm[header].toLowerCase() === 'in alarm') {
+            if (header.toLowerCase() === 'state' && alarm[header].toLowerCase() === 'alarm') {
                 bodyHtml += `<td class="red">${alarm[header]}</td>`;
             } else {
                 bodyHtml += `<td>${alarm[header]}</td>`;
