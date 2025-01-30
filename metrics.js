@@ -502,6 +502,13 @@ function createTable(data, container) {
     container.appendChild(tableWrapper);
 }
 
+function selectAllConnectMetrics(event) {
+    let instanceMetricsCheckboxes = document.querySelectorAll(".instance-metrics");
+    instanceMetricsCheckboxes.forEach(checkbox => {
+        checkbox.checked = event.target.checked;
+    })
+}
+
 function chooseMetrics(event) {
     let individualMetricsList = [];
     let contactName = '';
