@@ -51,53 +51,105 @@
                     <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Eastern Time</button>
                   </div>
             </div>
-            <div class="d-flex dropdown mr-3">
-                <button class="btn btn-info dropdown-toggle" type="button" id="timezoneButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Metrics</button>
-                <div class="dropdown-menu" aria-labelledby="timezoneButton">
-                    <div class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" id="alphaMetric1" value="Alpha">
-                        <label class="form-check-label" for="alphaMetric1">CallsPerInterval</label>
+            <div class="col d-flex dropdown">
+                <button class="btn btn-info dropdown-toggle" type="button" id="chosenMetrics" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Metrics
+                </button>
+                <ul class="dropdown-menu allMetrics" aria-labelledby="chosenMetrics">
+                  <!-- Instance Metrics -->
+                  <li class="dropdown-item">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="instanceMetrics">
+                      <label class="form-check-label font-weight-bold" for="instanceMetrics">Instance Metrics</label>
                     </div>
-                    <div class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" id="alphaMetric2" value="Alpha">
-                        <label class="form-check-label" for="alphaMetric2">MissedCalls</label>
+                    <div class="nested-menu">
+                      <div class="form-check">
+                        <input class="form-check-input instance-metrics" type="checkbox" id="calls_per_interval">
+                        <label class="form-check-label" for="calls_per_interval">Calls Per Interval</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input instance-metrics" type="checkbox" id="missed_calls">
+                        <label class="form-check-label" for="missed_calls">Missed Calls</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input instance-metrics" type="checkbox" id="concurrent_calls">
+                        <label class="form-check-label" for="concurrent_calls">Concurrent Calls</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input instance-metrics" type="checkbox" id="concurrent_calls_percentage">
+                        <label class="form-check-label" for="concurrent_calls_percentage">Concurrent Calls Percentage</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input instance-metrics" type="checkbox" id="calls_breaching_concurrency_quota">
+                        <label class="form-check-label" for="calls_breaching_concurrency_quota">Calls Breaching Concurrency Quota</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input instance-metrics" type="checkbox" id="call_recording_upload_error">
+                        <label class="form-check-label" for="call_recording_upload_error">Call Recording Upload Error</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input instance-metrics" type="checkbox" id="throttled_calls">
+                        <label class="form-check-label" for="throttled_calls">Throttled Calls</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input instance-metrics" type="checkbox" id="to_instance_packet_loss_rate">
+                        <label class="form-check-label" for="to_instance_packet_loss_rate">To Instance Packet Loss Rate</label>
+                      </div>
                     </div>
-                    <div class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" id="alphaMetric3" value="Alpha">
-                        <label class="form-check-label" for="alphaMetric3">ConcurrentCalls</label>
+                  </li>
+                  <hr>
+                  <!-- Dynamic Contact Metrics -->
+                  <li class="dropdown-item">
+                    <label class="font-weight-bold">Contact Metrics</label>
+                    <select class="form-control" id="contactSelect">
+                      <option value="">Select a Contact</option>
+                    </select>
+                    <div id="contactMetricsOptions" class="nested-menu mt-2" style="display: none;">
+                        <div class="form-check">
+                            <input class="form-check-input contact-metrics" type="checkbox" id="contact_flow_errors">
+                            <label class="form-check-label" for="contact_flow_errors">Contact Flow Errors</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input contact-metrics" type="checkbox" id="contact_flow_fatal_errors">
+                            <label class="form-check-label" for="contact_flow_fatal_errors">Contact Flow Fatal Errors</label>
+                        </div>
                     </div>
-                    <div class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" id="alphaMetric3" value="Alpha">
-                        <label class="form-check-label" for="alphaMetric3">ConcurrentCallsPercentage</label>
+                  </li>
+                  <hr>
+                  <!-- Dynamic Queue Metrics -->
+                  <li class="dropdown-item">
+                    <label class="font-weight-bold">Queue Metrics</label>
+                    <select class="form-control" id="queueSelect">
+                      <option value="">Select a Queue</option>
+                    </select>
+                    <div id="queueMetricsOptions" class="nested-menu mt-2" style="display: none;">
+                      <div class="form-check">
+                        <input class="form-check-input queue-metrics" type="checkbox" id="queue_waiting_time">
+                        <label class="form-check-label" for="queue_waiting_time">QueueWaitingTime</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input queue-metrics" type="checkbox" id="queue_abandon_rate">
+                        <label class="form-check-label" for="queue_abandon_rate">QueueAbandonRate</label>
+                      </div>
                     </div>
-                    <div class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" id="alphaMetric3" value="Alpha">
-                        <label class="form-check-label" for="alphaMetric3">CallsBreachingConcurrencyQuota</label>
-                    </div>
-                    <div class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" id="alphaMetric3" value="Alpha">
-                        <label class="form-check-label" for="alphaMetric3">CallRecordingUploadError</label>
-                    </div>
-                    <div class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" id="alphaMetric3" value="Alpha">
-                        <label class="form-check-label" for="alphaMetric3">ContactFlowErrors</label>
-                    </div>
-                    <div class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" id="alphaMetric3" value="Alpha">
-                        <label class="form-check-label" for="alphaMetric3">ContactFlowFatalErrors</label>
-                    </div>
-                    <div class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" id="alphaMetric3" value="Alpha">
-                        <label class="form-check-label" for="alphaMetric3">ThrottledCalls</label>
-                    </div>
-                    <div class="dropdown-item">
-                        <input class="form-check-input" type="checkbox" id="alphaMetric3" value="Alpha">
-                        <label class="form-check-label" for="alphaMetric3">ToInstancePacketLossRate</label>
-                    </div>
-                   
-                </div>
-            </div> 
-            <div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col d-flex dropdown">
+                <button class="btn btn-info dropdown-toggle" type="button" id="autoRefreshButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-solid fa-arrows-rotate fa-lg"></i> Off
+                </button>
+                  <div class="dropdown-menu" aria-labelledby="autoRefreshButton">
+                    <button class="dropdown-item"  type="button" onclick="refreshDropdownChoice(event)">Off</button>
+                    <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">1 Minute</button>
+                    <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">2 Minute</button>
+                    <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">5 Minute</button>
+                    <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">10 Minute</button>
+                  </div>
+                  
+            </div>
+            <div class="col" style="display: flex; justify-content: center;">
                 <button type="button" class="btn btn-secondary btn-block"  id="customDateTimeButton" onClick="submitCustomDateTimeframe()" disabled>Go</button>
             </div>
         </div>
@@ -150,6 +202,20 @@
 
     <script>
         
+        document.addEventListener("DOMContentLoaded", () => {
+            // Prevent dropdown from closing when interacting with select elements
+            document.querySelectorAll(".allMetrics").forEach(menu => {
+              menu.addEventListener("click", (e) => {
+                e.stopPropagation(); // Stop the click from propagating and closing the dropdown
+              });
+            });
+        });
+        function toggleSidePanel() {
+            const sidePanel = document.getElementById('sidePanel');
+            sidePanel.classList.toggle('active');
+        }
+
+
         function accountsAndConnectInstancesObject() {
             const allAccountsList = [
                 {
