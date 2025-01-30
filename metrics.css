@@ -287,6 +287,9 @@ a:hover {
 #alarmsList td.red{
     color: red;
 }
+button {
+    background-color: #002D62 !important;
+}
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     #alarmsList {
