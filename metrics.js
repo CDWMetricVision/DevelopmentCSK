@@ -192,7 +192,7 @@ function cleanMetricName(metricName) {
 
 async function displayMetricTableData() {
     let loadingModal = document.createElement("p");
-    loadingModal.innerHTML = "kjjjjjj";
+    loadingModal.innerHTML = "loading...";
     let sectionHeader = document.querySelector(".loading");
     sectionHeader.append(loadingModal);
     let data = await customTimeFetchCloudWatchData("", "");
