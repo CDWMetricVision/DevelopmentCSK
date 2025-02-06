@@ -636,7 +636,7 @@ function refreshDropdownChoice(event) {
         return
     }
     let timeAmount = event.target.innerHTML.split(" ")[0];
-    let milliseconds = parseInt(timeAmount);
+    let milliseconds = parseInt(timeAmount) * 60 * 1000;
     let currentDate = new Date();
     function formatDate(date) {
         const year = date.getFullYear();
