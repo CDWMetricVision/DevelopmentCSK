@@ -6,6 +6,7 @@ async function getARNQueryParams() {
         "instanceId": instanceId
     }
 }
+
 function toggleSidePanel() {
     const sidePanel = document.getElementById('sidePanel');
     sidePanel.classList.toggle('active');
@@ -37,9 +38,15 @@ async function getQueueNames() {
             }
         })
         if (!response.ok) {
-            console.log(response)
+            if (response.status === 401) {
+                let modalEl = document.querySelector("#signInAgainModal");
+                let modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            }
+            let failedResponse = await response.json();
             return {
-                "errorMessage": response,
+                "errorMessage": failedResponse,
+                "response": response,
                 "result": false
             }
         } else {
@@ -89,9 +96,15 @@ async function getContactFlowNames() {
             }
         })
         if (!response.ok) {
-            console.log(response)
+            if (response.status === 401) {
+                let modalEl = document.querySelector("#signInAgainModal");
+                let modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            }
+            let failedResponse = await response.json();
             return {
-                "errorMessage": response,
+                "errorMessage": failedResponse,
+                "response": response,
                 "result": false
             }
         } else {
@@ -162,9 +175,15 @@ async function customTimeFetchCloudWatchData(customStartTimeandDate, customEndTi
             }
         })
         if (!response.ok) {
-            console.log(response)
+            if (response.status === 401) {
+                let modalEl = document.querySelector("#signInAgainModal");
+                let modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            }
+            let failedResponse = await response.json();
             return {
-                "errorMessage": response,
+                "errorMessage": failedResponse,
+                "response": response,
                 "result": false
             }
         } else {
@@ -192,7 +211,7 @@ function cleanMetricName(metricName) {
 
 async function displayMetricTableData() {
     let loadingModal = document.createElement("p");
-    loadingModal.innerHTML = "loading . . .";
+    loadingModal.innerHTML = "loading...";
     let sectionHeader = document.querySelector(".loading");
     sectionHeader.append(loadingModal);
     let data = await customTimeFetchCloudWatchData("", "");
@@ -550,6 +569,14 @@ async function submitCustomDateTimeframe() {
     let endTime = document.querySelector("#endTime").value
     let timezoneChoice = document.querySelector("#timezoneButton").innerHTML
     let chosenMetrics = chooseMetrics();
+    let metricsInput = document.querySelector("#metricsInput");
+    if (startDate && endDate && startTime && endTime && chosenMetrics.individualMetricsString) {
+        metricsInput.innerHTML = '';
+    } else {
+        metricsInput.setAttribute("style", "color: red;")
+        metricsInput.innerHTML = "Please select a start time and date, an end time and date, and at least 1 metric from the dropdown"
+        return
+    }
     let localTimezoneChoice = timezoneChoice.split(" ")[0];
     let formatterOptions = {
         year: "numeric",
@@ -583,7 +610,7 @@ async function submitCustomDateTimeframe() {
     if (!data.result) {
         sectionHeader.removeChild(loadingModal);
         let error = document.createElement("p");
-        error.innerHTML = `Error: ${data.errorMessage.status}`;
+        error.innerHTML = `Error: ${data.response.status}\n ${data.errorMessage.message}`;
         sectionHeader.appendChild(error);
         return
     } else {
@@ -614,26 +641,124 @@ async function submitCustomDateTimeframe() {
     }
 }
 
-function enableCustomTimeframeButton() {
-    let customTimeButton = document.querySelector("#customDateTimeButton")
-    let startDate = document.querySelector("#customStartDate").value
-    let endDate = document.querySelector("#customEndDate").value
-    let startTime = document.querySelector("#startTime").value
-    let endTime = document.querySelector("#endTime").value
-    if (startDate && endDate && startTime && endTime) {
-        customTimeButton.disabled = false;
-        customTimeButton.classList.remove("btn-secondary")
-        customTimeButton.classList.add("btn-primary")
-    } else {
-        customTimeButton.disabled = true;
-        customTimeButton.classList.remove("btn-primary")
-        customTimeButton.classList.add("btn-secondary");
-    }
-}
-
 function refreshDropdownChoice(event) {
     let refreshDropdownButton = document.querySelector("#autoRefreshButton");
     refreshDropdownButton.innerHTML = `<i class="fa-solid fa-arrows-rotate fa-lg"></i> ${event.target.innerHTML}`;
+    if (refreshDropdownButton.dataset.intervalId) {
+        clearInterval(refreshDropdownButton.dataset.intervalId);
+        refreshDropdownButton.dataset.intervalId = "";
+    }
+    if (event.target.innerHTML === "Off") {
+        return
+    }
+    let timeAmount = event.target.innerHTML.split(" ")[0];
+    let milliseconds = parseInt(timeAmount) * 60 * 1000;
+    let currentDate = new Date();
+    function formatDate(date) {
+        const year = date.getFullYear();
+        let month = date.getMonth() + 1; // Months are 0-based
+        let day = date.getDate();
+
+        // Pad month and day with leading zeros if necessary
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? '0' + day : day;
+
+        return `${year}-${month}-${day}`;
+    }
+
+    // Helper function to format time to HH:MM
+    function formatTime(date) {
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+
+        // Pad hours and minutes with leading zeros if necessary
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+
+        return `${hours}:${minutes}`;
+    }
+
+    // Get the current formatted date and time
+    
+    //Now basically make a set timeout function, that for every value of the seconds variable, which is what client selected from dropdown, take all values of times, 
+    //dates, timezone, and metrics, and do a fetch request, then call the display graphs
+    let intervalId = setInterval(async () => {
+        const currentFormattedDate = formatDate(currentDate);
+        const currentFormattedTime = formatTime(currentDate);
+        let endDate = document.querySelector("#customEndDate");
+        let endTime = document.querySelector("#endTime");
+        endDate.value = currentFormattedDate;
+        endTime.value = currentFormattedTime;
+
+        let startDate = document.querySelector("#customStartDate").value
+        let startTime = document.querySelector("#startTime").value
+        let timezoneChoice = document.querySelector("#timezoneButton").innerHTML
+        let chosenMetrics = chooseMetrics();
+        let localTimezoneChoice = timezoneChoice.split(" ")[0];
+        let formatterOptions = {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+        }
+        let timezoneFormats = {
+            "Hawaii": "Pacific/Honolulu",
+            "Alaska": "America/Anchorage",
+            "Pacific": "America/Los_Angeles", 
+            "Mountain": "America/Denver",
+            "Central": "America/Chicago",
+            "Eastern": "America/New_York",
+            "UTC": "UTC"
+        }
+        if (localTimezoneChoice != "Local") {
+            formatterOptions.timeZone = timezoneFormats[localTimezoneChoice];
+        }
+        let startUTC = localDateToUTC(startDate, startTime);
+        let endUTC = localDateToUTC(currentFormattedDate, currentFormattedTime);
+        let loadingModal = document.createElement("p");
+        loadingModal.innerHTML = "loading . . .";
+        $("#sectionResults .loading").empty();
+        let sectionHeader = document.querySelector(".loading");
+        sectionHeader.append(loadingModal);
+        let data = await customTimeFetchCloudWatchData(startUTC, endUTC, chosenMetrics['contactName'],chosenMetrics['queueName'],chosenMetrics['individualMetricsString']);
+        if (!data.result) {
+            sectionHeader.removeChild(loadingModal);
+            let error = document.createElement("p");
+            error.innerHTML = `Error: ${data.errorMessage.status}`;
+            sectionHeader.appendChild(error);
+            return
+        } else {
+            for (let i = 0; i < data.data.MetricDataResults.length; i++) {
+                if (data.data.MetricDataResults[i]['Timestamps'].length > 0) {
+                    let timestampsArray = data.data.MetricDataResults[i]['Timestamps']
+                    for (let j = 0; j < timestampsArray.length; j++) {
+                        let formatter = new Intl.DateTimeFormat("en-US", formatterOptions)
+                        let UTCDate = timestampsArray[j] + " UTC";
+                        let UTCDateObject = new Date(UTCDate);
+                        let formattedDate = formatter.format(UTCDateObject);
+                        timestampsArray[j] = formattedDate;
+                    }
+                }
+            }
+            sessionStorage.setItem("MetricVisionData", JSON.stringify(data.data.MetricDataResults));
+            sectionHeader.removeChild(loadingModal);
+            let results = document.querySelector("#results");
+            results.remove();
+            let newResults = document.querySelector("#dataTables");
+            let section = document.createElement("div");
+            section.setAttribute("id", "results");
+            newResults.appendChild(section);
+            let metricDataResults = data.data.MetricDataResults.length;
+            for (let i = 0; i < metricDataResults; i++) {
+                createTableLineGauge(data.data.MetricDataResults[i])
+            }
+        }
+
+    }, milliseconds)
+    refreshDropdownButton.dataset.intervalId = intervalId;
+
 }
 
 function displayTimeandDates() {
@@ -698,12 +823,7 @@ function getFormattedDates() {
 
 function timezoneDropdownChoice(event) {
     let timezoneDropdownButtonText = document.querySelector("#timezoneButton")
-    timezoneDropdownButtonText.innerHTML = event.target.innerHTML
-}
- 
-function refreshDropdownChoice(event) {
-    let refreshDropdownButton = document.querySelector("#autoRefreshButton");
-    refreshDropdownButton.innerHTML = `<i class="fa-solid fa-arrows-rotate fa-lg"></i> ${event.target.innerHTML}`;
+    timezoneDropdownButtonText.innerHTML = event.target.innerHTML;
 }
  
 function localDateToUTC(rawDateInput, rawTimeInput) {
