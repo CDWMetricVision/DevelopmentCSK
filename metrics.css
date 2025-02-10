@@ -36,6 +36,7 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
+    margin-bottom: 50px;
 }
 
 .container {
@@ -424,4 +425,19 @@ input[name='accountName']{
     margin-top: 10px;
     font-size: 18px;
     color: #3498db;
+}
+.periodWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+.periodWrapper label{
+    margin: 0;
+    cursor: pointer;
+}
+.periodWrapper select{
+    height: 40px;
+    cursor: pointer;
 }
