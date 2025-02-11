@@ -58,6 +58,49 @@ function createTable(alarms) {
     table.append(bodyHtml);
 }
 
+function sortTable() {
+    const sortBy = $("#sortBy").val();  // Get the selected sort option
+    const table = $('#alarmsList table');
+    const rows = Array.from(table.find('tbody tr'));
+
+    let sortedRows = [];
+
+    switch(sortBy) {
+        case 'alarmNameAZ':
+            sortedRows = rows.sort((a, b) => {
+                const alarmA = $(a).find('td').eq(0).text().toLowerCase();  // Assuming AlarmName is in the first column
+                const alarmB = $(b).find('td').eq(0).text().toLowerCase();
+                return alarmA.localeCompare(alarmB);  // Sort A-Z
+            });
+            break;
+        case 'alarmNameZA':
+            sortedRows = rows.sort((a, b) => {
+                const alarmA = $(a).find('td').eq(0).text().toLowerCase();
+                const alarmB = $(b).find('td').eq(0).text().toLowerCase();
+                return alarmB.localeCompare(alarmA);  // Sort Z-A
+            });
+            break;
+        case 'stateInsufficient':
+            sortedRows = rows.sort((a, b) => {
+                const stateA = $(a).find('td').eq(1).text().toLowerCase();  // Assuming STATE is in the second column
+                const stateB = $(b).find('td').eq(1).text().toLowerCase();
+                return stateA === 'insufficient_data' ? -1 : 1;  // Sort INSUFFICIENT_DATA to top
+            });
+            break;
+        case 'stateAlarm':
+            sortedRows = rows.sort((a, b) => {
+                const stateA = $(a).find('td').eq(1).text().toLowerCase();
+                const stateB = $(b).find('td').eq(1).text().toLowerCase();
+                return stateA === 'alarm' ? -1 : 1;  // Sort ALARM to top
+            });
+            break;
+    }
+
+    // Reorder the rows in the table
+    table.find('tbody').empty().append(sortedRows);
+}
+
+
 async function getAlarmsData(){
     input = $("#customerAccounts").val();
     const accounts = getAccountsAlarmsAPI();
