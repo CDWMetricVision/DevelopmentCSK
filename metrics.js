@@ -518,11 +518,11 @@ function createGauge(data, container) {
     gauge.needle(0)
     .enabled(true)
     .startRadius('-5%')
-    .endRadius('65%')
+    .endRadius('60%')
     .middleRadius(0)
-    .startWidth('0.1%')
-    .endWidth('0.1%')
-    .middleWidth('5%')
+    .startWidth('0.05%')
+    .endWidth('0.05%')
+    .middleWidth('2%')
     
     // draw the chart
     let section = document.createElement("section");
