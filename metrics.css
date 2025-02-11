@@ -441,3 +441,29 @@ input[name='accountName']{
     height: 40px;
     cursor: pointer;
 }
+/* dashboard pages */
+.dashboard-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: .5%;
+    row-gap: 15px;
+}
+.chartContainer{
+    width: 95%;
+    background-color: #cecece;
+    padding: 10px 20px 50px;
+    margin: 20px auto;
+}
+.chart{
+    padding: 30px;
+    background: #fff;
+    border-radius: 5px;
+    width: 33%;
+}
+.dashboard-container p{ 
+    letter-spacing: 1px;
+    margin-top: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
