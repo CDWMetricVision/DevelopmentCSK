@@ -37,7 +37,14 @@ function createTable(alarms) {
     let headerHtml = '<thead><tr>';
     
     headers.forEach(headerText => {
-        headerHtml += `<th>${headerText}</th>`;
+        if (headerText === 'Alarm Name') {
+            headerHtml += `<th>${headerText} <select onchange="sortTable(event)">
+                                <option value="asc">A-Z</option>
+                                <option value="desc">Z-A</option>
+                            </select></th>`;
+        } else {
+            headerHtml += `<th>${headerText}</th>`;
+        }
     });
     
     headerHtml += '</tr></thead>';
@@ -87,7 +94,9 @@ async function getAlarmsData() {
     }
 }
 
-function sortTable(order) {
+function sortTable(event) {
+    const order = event.target.value;
+    
     // Sort alarmsData based on Alarm Name
     alarmsData.sort((a, b) => {
         const nameA = a["Alarm Name"].toLowerCase();
