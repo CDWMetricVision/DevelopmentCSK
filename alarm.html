@@ -32,51 +32,26 @@
                 <button type="button" class="btn btn-primary w-20" id="getAlarmsData" onClick="getAlarmsData()" disabled>Go</button>
             </div>
         </div>
-
-        <!-- Added Filter Section -->
-        <div class="d-flex justify-content-between mt-3">
-            <div class="filter-wrapper">
-                <label for="alarmnameFilter">Alarm Name:</label>
-                <select id="alarmnameFilter" class="p-2" onchange="applyFilters()">
-                    <option value="">--Select--</option>
-                    <option value="A-Z">A-Z</option>
-                    <option value="Z-A">Z-A</option>
-                </select>
-            </div>
-            <div class="filter-wrapper">
-                <label for="stateFilter">State:</label>
-                <select id="stateFilter" class="p-2" onchange="applyFilters()">
-                    <option value="">--Select--</option>
-                    <option value="ALARM">Alarm</option>
-                    <option value="INSUFFICIENT_DATA">Insufficient Data</option>
-                </select>
-            </div>
-            <div class="filter-wrapper">
-                <label for="metricFilter">Metric:</label>
-                <select id="metricFilter" class="p-2" onchange="applyFilters()">
-                    <option value="">--Select--</option>
-                    <option value="A-Z">A-Z</option>
-                    <option value="Z-A">Z-A</option>
-                </select>
-            </div>
+        <!-- Add Sort Buttons -->
+        <div class="d-flex justify-content-center mt-3">
+            <button type="button" class="btn btn-info" onClick="sortTable('asc')">Sort Alarm Name A-Z</button>
+            <button type="button" class="btn btn-info ml-2" onClick="sortTable('desc')">Sort Alarm Name Z-A</button>
         </div>
-
-        <!-- Alarms Table -->
         <div class="w-100" id="dataTables">
             <div class="alarms-container" id="alarmsList">
-                <table></table>
+                <table class="table">
+                </table>
             </div>
         </div>
     </div>
-
     <!-- Copyright and Powered by CDW -->
     <div class="powered-by-cdw">
         <span>© MetricVision 2025, Powered by</span>
         <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/cdw-2023-Red-Panel.png" alt="CDW Logo">
     </div>
-
+    
     <script>
-        window.onload = () => {
+         window.onload = () => {
             if (window.location.hash) {
                 let hash = window.location.hash;
                 let token = hash.split("access_token=")[1].split("&")[0];
