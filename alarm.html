@@ -32,11 +32,6 @@
                 <button type="button" class="btn btn-primary w-20" id="getAlarmsData" onClick="getAlarmsData()" disabled>Go</button>
             </div>
         </div>
-        <!-- Add Sort Buttons -->
-        <div class="d-flex justify-content-center mt-3">
-            <button type="button" class="btn btn-info" onClick="sortTable('asc')">Sort Alarm Name A-Z</button>
-            <button type="button" class="btn btn-info ml-2" onClick="sortTable('desc')">Sort Alarm Name Z-A</button>
-        </div>
         <div class="w-100" id="dataTables">
             <div class="alarms-container" id="alarmsList">
                 <table class="table">
@@ -51,7 +46,7 @@
     </div>
     
     <script>
-         window.onload = () => {
+        window.onload = () => {
             if (window.location.hash) {
                 let hash = window.location.hash;
                 let token = hash.split("access_token=")[1].split("&")[0];
