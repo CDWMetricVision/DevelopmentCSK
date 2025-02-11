@@ -18,9 +18,11 @@ function getAccountsAlarmsAPI() {
     ]
     return allAccountsAlarmsList;
 }
+
 function customerAccountChange(event){
-    $("#getAlarmsData").attr("disabled",false);
+    $("#getAlarmsData").attr("disabled", false);
 }
+
 function createTable(alarms) {
     const table = $('#alarmsList table');
     
@@ -44,7 +46,6 @@ function createTable(alarms) {
     alarms.forEach(alarm => {
         bodyHtml += '<tr>';
         headers.forEach(header => {
-            console.log(alarm[header].toLowerCase());
             if (header.toLowerCase() === 'state' && alarm[header].toLowerCase() === 'alarm') {
                 bodyHtml += `<td class="red">${alarm[header]}</td>`;
             } else {
@@ -58,30 +59,76 @@ function createTable(alarms) {
     table.append(bodyHtml);
 }
 
-async function getAlarmsData(){
-    input = $("#customerAccounts").val();
+function applyFilters() {
+    const alarmNameFilter = $("#alarmnameFilter").val();
+    const stateFilter = $("#stateFilter").val();
+    const metricFilter = $("#metricFilter").val();
+    
+    let filteredAlarms = [...window.alarmsData];  // Keep the original data to apply filters on it
+
+    // Apply Alarm Name filter (A-Z or Z-A)
+    if (alarmNameFilter) {
+        filteredAlarms = filteredAlarms.sort((a, b) => {
+            const alarmNameA = a['AlarmName'].toLowerCase();
+            const alarmNameB = b['AlarmName'].toLowerCase();
+            if (alarmNameFilter === 'A-Z') {
+                return alarmNameA < alarmNameB ? -1 : 1;
+            } else if (alarmNameFilter === 'Z-A') {
+                return alarmNameA > alarmNameB ? -1 : 1;
+            }
+            return 0;
+        });
+    }
+
+    // Apply State filter (ALARM, INSUFFICIENT_DATA)
+    if (stateFilter) {
+        filteredAlarms = filteredAlarms.filter(alarm => alarm['State'].toLowerCase() === stateFilter.toLowerCase());
+    }
+
+    // Apply Metric filter (A-Z or Z-A)
+    if (metricFilter) {
+        filteredAlarms = filteredAlarms.sort((a, b) => {
+            const metricA = a['MetricName'].toLowerCase();
+            const metricB = b['MetricName'].toLowerCase();
+            if (metricFilter === 'A-Z') {
+                return metricA < metricB ? -1 : 1;
+            } else if (metricFilter === 'Z-A') {
+                return metricA > metricB ? -1 : 1;
+            }
+            return 0;
+        });
+    }
+
+    // Re-create table with the filtered alarms
+    createTable(filteredAlarms);
+}
+
+async function getAlarmsData() {
+    const input = $("#customerAccounts").val();
     const accounts = getAccountsAlarmsAPI();
 
     let apiURL = accounts
-    .filter(account => account[input])
-    .map(account => account[input].cloudWatchAPI)[0];
-    try{
-        await fetch(apiURL).then(response =>{
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-            }).then(data=>{
+        .filter(account => account[input])
+        .map(account => account[input].cloudWatchAPI)[0];
+    
+    try {
+        await fetch(apiURL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
                 const body = JSON.parse(data.body); // Parse the body string into an array of objects
                 console.log(body);
-                createTable(body);
-
+                window.alarmsData = body;  // Store the alarms data for later filtering
+                createTable(body);  // Create the table with the full data
             })
-            .catch(error =>{
+            .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
             });
-    } catch(err){
+    } catch (err) {
         console.log(err);
     }
-
 }
