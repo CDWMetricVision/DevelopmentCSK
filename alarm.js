@@ -25,8 +25,8 @@ function customerAccountChange(event) {
     $("#getAlarmsData").attr("disabled", false);
 }
 
-// Existing function: createTable
-function createTable(alarms) {
+// Existing function: createTable (updated with state filtering)
+function createTable(alarms, stateFilter = "all") {
     const table = $('#alarmsList table');
     
     // Clear existing table content
@@ -47,9 +47,13 @@ function createTable(alarms) {
     let bodyHtml = '<tbody>';
     
     alarms.forEach(alarm => {
+        // Filter alarms by state
+        if (stateFilter !== "all" && alarm.state.toLowerCase() !== stateFilter.toLowerCase()) {
+            return; // Skip alarms that don't match the selected state
+        }
+        
         bodyHtml += '<tr>';
         headers.forEach(header => {
-            console.log(alarm[header].toLowerCase());
             if (header.toLowerCase() === 'state' && alarm[header].toLowerCase() === 'alarm') {
                 bodyHtml += `<td class="red">${alarm[header]}</td>`;
             } else {
@@ -63,7 +67,13 @@ function createTable(alarms) {
     table.append(bodyHtml);
 }
 
-// Function to get alarms data from CloudWatch API for selected account
+// Filter function for alarms by state
+function filterAlarmsByState() {
+    const stateFilter = $("#alarmState").val();  // Get selected state from the dropdown
+    const alarms = JSON.parse(sessionStorage.getItem("alarmsData") || "[]");  // Get previously fetched alarms from sessionStorage
+    
+    createTable(alarms, stateFilter);  // Re-create table with filtered alarms
+}
 
 // Function to get alarms data from CloudWatch API for selected account
 async function getAlarmsData() {
@@ -100,6 +110,8 @@ async function getAlarmsData() {
         .then(data => {
             const body = JSON.parse(data.body); // Parse the body string into an array of objects
             console.log(body);
+            
+            sessionStorage.setItem("alarmsData", JSON.stringify(body));  // Store fetched alarms in sessionStorage
             createTable(body);  // Display the data in a table
         })
         .catch(error => {
