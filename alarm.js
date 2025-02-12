@@ -20,8 +20,6 @@ function getAccountsAlarmsAPI() {
     return allAccountsAlarmsList;
 }
 
-// Function to fetch alarms data using access token
-
 // Existing function: customerAccountChange
 function customerAccountChange(event) {
     $("#getAlarmsData").attr("disabled", false);
