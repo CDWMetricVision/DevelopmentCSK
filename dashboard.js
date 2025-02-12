@@ -84,7 +84,7 @@ function createGauge(data, container) {
     // Compute min, max, sum, and avg
     let min, max, avg, sum;
 
-    if (data.Id.includes("percentage") || data.Id.includes("packet_loss")) {
+    if (data.Id && (data.Id.includes("percentage") || data.Id.includes("packet_loss"))) {
         min = 0;
         max = 100;
         sum = "N/A";
@@ -257,6 +257,7 @@ async function getSavedDashboards() {
                 let chartContainer = document.querySelector(".chartContainer");
                 $(".chartContainer").empty();
                 // chartContainer.empty();
+                $(".dashboard-container").empty();
 
                 for (const key in body.data) {
                     let div = document.createElement("div");
@@ -279,8 +280,8 @@ async function getSavedDashboards() {
 
                     if (parsedData.widgets && parsedData.widgets.length > 0) {
                         for (const widget of parsedData.widgets) {
-                            let innerDiv = document.createElement("div");
                             let id = 'id_' + Math.random().toString(36).substr(2, 9);
+                            let innerDiv = document.createElement("div");
                             innerDiv.id = id;
                             innerDiv.classList.add("chart");
                             dasboardContentWrapper.append(innerDiv);
@@ -288,15 +289,15 @@ async function getSavedDashboards() {
                                 createGauge({ Id: metrics[0].name, Values: timeSeriesData.map(d => d[1]) }, innerDiv);
                             }
                             else if(widget.properties.view && widget.properties.view == "bar"){
-                                renderChart(id, metrics[0].name, timeSeriesData);
+                                renderChart(id, widget["properties"]["title"], timeSeriesData);
                             }
                             else if(widget.properties.view && widget.properties.view == "table"){
                                 // need to change
                                 // createTable({ Id: metrics[0].name, Values: timeSeriesData, Timestamps: timeSeriesData }, innerDiv);
-                                renderChart(id, metrics[0].name, timeSeriesData); 
+                                renderChart(id, widget["properties"]["title"], timeSeriesData); 
                             }
                             else {
-                                renderChart(id, metrics[0].name, timeSeriesData);
+                                renderChart(id, widget["properties"]["title"], timeSeriesData);
                             }
                             console.log(`  Type: ${widget.type}`);
                             console.log(`  Position: (${widget.x}, ${widget.y})`);
