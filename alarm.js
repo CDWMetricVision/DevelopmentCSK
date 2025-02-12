@@ -25,7 +25,7 @@ function customerAccountChange(event) {
     $("#getAlarmsData").attr("disabled", false);
 }
 
-// Existing function: createTable (updated with state filtering)
+// Updated createTable function (with state filtering)
 function createTable(alarms, stateFilter = "all") {
     const table = $('#alarmsList table');
     
