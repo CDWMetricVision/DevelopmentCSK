@@ -15,8 +15,10 @@ window.onload = () => {
     
     if (token) {
         console.log("Access token loaded successfully:", token);
+        document.getElementById("tokenDisplay").textContent = `Access Token: ${token}`;
     } else {
         console.warn("No access token found!");
+        document.getElementById("tokenDisplay").textContent = "No Access Token Found!";
     }
 };
 
