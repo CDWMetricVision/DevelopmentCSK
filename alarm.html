@@ -29,6 +29,17 @@
                     <option value="MAS Sandbox Test2">MAS Sandbox Test2</option>
                 </select>
             </div>
+            <!-- Add a dropdown for "State" filter -->
+            <div class="d-flex">
+                <label for="alarmStateFilter" class="mt-2">State Filter : </label>
+                <select id="alarmStateFilter" class="p-2 cursor-pointer" onchange="applyStateFilter()">
+                    <option value="All" selected>All States</option>
+                    <option value="OK">OK</option>
+                    <option value="ALARM">ALARM</option>
+                    <option value="INSUFFICIENT_DATA">INSUFFICIENT DATA</option>
+                </select>
+            </div>
+
             <div class="col d-flex justify-content-center">
                 <button type="button" class="btn btn-primary w-20"  id="getAlarmsData" onClick="getAlarmsData()" disabled>Go</button>
             </div>
