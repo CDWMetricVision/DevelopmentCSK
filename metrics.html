@@ -349,7 +349,7 @@
             
            if (accessToken) {
                // Open the alarms page with the access token added in the URL as a query parameter
-               window.open(`/alarm.html?access_token=${accessToken}`, '_blank');
+               window.open(`/alarm.html?id_token=${accessToken}`, '_blank');
            } else {
                alert('Access token not found. Please sign in again.');
            }
