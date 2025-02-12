@@ -25,6 +25,7 @@ function customerAccountChange(event) {
     $("#getAlarmsData").attr("disabled", false);
 }
 
+
 // Updated createTable function (with state filtering)
 function createTable(alarms, stateFilter = "all") {
     const table = $('#alarmsList table');
@@ -55,7 +56,9 @@ function createTable(alarms, stateFilter = "all") {
         bodyHtml += '<tr>';
         headers.forEach(header => {
             if (header.toLowerCase() === 'state' && alarm[header].toLowerCase() === 'alarm') {
-                bodyHtml += `<td class="red">${alarm[header]}</td>`;
+                bodyHtml += `<td class="red">${alarm[header]}</td>`; // Highlight "ALARM" state
+            } else if (header.toLowerCase() === 'state' && alarm[header].toLowerCase() === 'ok') {
+                bodyHtml += `<td class="green">${alarm[header]}</td>`; // Highlight "OK" state
             } else {
                 bodyHtml += `<td>${alarm[header]}</td>`;
             }
@@ -65,14 +68,6 @@ function createTable(alarms, stateFilter = "all") {
     
     bodyHtml += '</tbody>';
     table.append(bodyHtml);
-}
-
-// Filter function for alarms by state
-function filterAlarmsByState() {
-    const stateFilter = $("#alarmState").val();  // Get selected state from the dropdown
-    const alarms = JSON.parse(sessionStorage.getItem("alarmsData") || "[]");  // Get previously fetched alarms from sessionStorage
-    
-    createTable(alarms, stateFilter);  // Re-create table with filtered alarms
 }
 
 // Function to get alarms data from CloudWatch API for selected account
@@ -112,7 +107,8 @@ async function getAlarmsData() {
             console.log(body);
             
             sessionStorage.setItem("alarmsData", JSON.stringify(body));  // Store fetched alarms in sessionStorage
-            createTable(body);  // Display the data in a table
+            const stateFilter = $("#alarmState").val();  // Get selected state from the dropdown
+            createTable(body, stateFilter);  // Display the data in a table with state filter
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
@@ -121,3 +117,10 @@ async function getAlarmsData() {
         console.log(err);
     }
 }
+
+// Automatically filter alarms when the dropdown state value is changed
+$("#alarmState").change(function() {
+    const alarms = JSON.parse(sessionStorage.getItem("alarmsData") || "[]");  // Get previously fetched alarms from sessionStorage
+    const stateFilter = $("#alarmState").val();  // Get selected state from the dropdown
+    createTable(alarms, stateFilter);  // Re-create table with filtered alarms
+});
