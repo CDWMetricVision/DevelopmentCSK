@@ -21,7 +21,7 @@ function getAccountsAlarmsAPI() {
 }
 
 // Function to fetch alarms data using access token
-function fetchAlarms() {
+function getAlarmsData() {
     let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
 
     if (accessToken) {
