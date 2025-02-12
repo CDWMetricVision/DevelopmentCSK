@@ -344,18 +344,18 @@
         }
 
         function showAlarms() {
-        // Get the access token from sessionStorage
-        let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
-    
-        if (accessToken) {
-            // Open the alarms page with the access token added in the URL as a query parameter
-            window.open(`/alarm.html?access_token=${accessToken}`, '_blank');
-         } else {
-            alert('Access token not found. Please sign in again.');
-            }
+           // Get the access token from sessionStorage
+           let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
+            
+           if (accessToken) {
+               // Open the alarms page with the access token added in the URL as a query parameter
+               window.open(`/alarm.html?access_token=${accessToken}`, '_blank');
+           } else {
+               alert('Access token not found. Please sign in again.');
+           }
         }
-
-
+             
+           
         function createNewAlarm() {
             alert('Creating a new alarm...');
         }
