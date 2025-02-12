@@ -21,30 +21,6 @@ function getAccountsAlarmsAPI() {
 }
 
 // Function to fetch alarms data using access token
-function fetchAlarms() {
-    let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
-
-    if (accessToken) {
-        fetch('/api/alarms', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data); // Process the alarms data from the /api/alarms endpoint
-            // Optionally, you can call createTable with this data
-            createTable(data);
-        })
-        .catch(error => {
-            console.error('Error fetching alarms:', error);
-        });
-    } else {
-        alert('Access token not found. Please sign in again.');
-    }
-}
 
 // Existing function: customerAccountChange
 function customerAccountChange(event) {
