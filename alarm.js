@@ -1,3 +1,53 @@
+// alarm.js
+
+window.onload = () => {
+    let token = sessionStorage.getItem("MetricVisionAccessToken");
+    
+    // If token is not in sessionStorage, try extracting it from URL hash
+    if (!token && window.location.hash) {
+        let hash = window.location.hash;
+        let extractedToken = hash.match(/access_token=([^&]*)/);
+        if (extractedToken) {
+            token = extractedToken[1];
+            sessionStorage.setItem("MetricVisionAccessToken", token);
+        }
+    }
+    
+    if (token) {
+        console.log("Access token loaded successfully:", token);
+    } else {
+        console.warn("No access token found!");
+    }
+};
+
+// Example API call function using the access token
+async function fetchAlarmsData() {
+    let token = sessionStorage.getItem("MetricVisionAccessToken");
+    if (!token) {
+        console.error("Access token missing! Cannot fetch alarm data.");
+        return;
+    }
+    
+    try {
+        let response = await fetch("YOUR_API_ENDPOINT", {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error("Failed to fetch alarm data");
+        }
+        
+        let data = await response.json();
+        console.log("Alarm Data:", data);
+        return data;
+    } catch (error) {
+        console.error("Error fetching alarm data:", error);
+    }
+}
+
 function getAccountsAlarmsAPI() {
     const allAccountsAlarmsList = [
         {
