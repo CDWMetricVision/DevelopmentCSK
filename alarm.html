@@ -14,10 +14,9 @@
 </head>
 <body>
     <!-- Existing Content -->
-    <div id="tokenDisplay" style="margin: 10px; font-weight: bold; color: blue;"></div>
-    <div class="customer-logo">
-        <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/custlogo.png" alt="CDW Logo">
-    </div>
+     <div class="customer-logo">
+         <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/custlogo.png" alt="CDW Logo">
+     </div>
     <div class="main-container-wrapper">
         <div class="d-flex flex-wrap alarm-options-wrapper">
             <div class="d-flex">
@@ -29,18 +28,6 @@
                     <option value="MAS Sandbox Test2">MAS Sandbox Test2</option>
                 </select>
             </div>
-            
-            <div class="d-flex">
-                <label for="alarmState" class="mt-2">State: </label>
-                <select id="alarmState" class="p-2 cursor-pointer">
-                    <option value="all">--All States--</option>
-                    <option value="ALARM">ALARM</option>
-                    <option value="OK">OK</option>
-                    <option value="INSUFFICIENT_DATA">INSUFFICIENT_DATA</option>
-                </select>
-            </div>
-
-            <!-- Go Button for fetching alarms -->
             <div class="col d-flex justify-content-center">
                 <button type="button" class="btn btn-primary w-20"  id="getAlarmsData" onClick="getAlarmsData()" disabled>Go</button>
             </div>
