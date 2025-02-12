@@ -64,6 +64,8 @@ function createTable(alarms) {
 }
 
 // Function to get alarms data from CloudWatch API for selected account
+
+// Function to get alarms data from CloudWatch API for selected account
 async function getAlarmsData() {
     input = $("#customerAccounts").val();
     const accounts = getAccountsAlarmsAPI();
@@ -71,16 +73,34 @@ async function getAlarmsData() {
     let apiURL = accounts
     .filter(account => account[input])
     .map(account => account[input].cloudWatchAPI)[0];
+
+    // Get the access token from sessionStorage
+    const token = sessionStorage.getItem("MetricVisionAccessToken");
+
+    if (!token) {
+        console.error("Access token is missing!");
+        return;
+    }
+
     try {
-        await fetch(apiURL).then(response => {
+        // Make the fetch request with the access token in headers
+        await fetch(apiURL, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,  // Add the token to the Authorization header
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             return response.json();
-        }).then(data => {
+        })
+        .then(data => {
             const body = JSON.parse(data.body); // Parse the body string into an array of objects
             console.log(body);
-            createTable(body);
+            createTable(body);  // Display the data in a table
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
