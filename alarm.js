@@ -1,12 +1,31 @@
-let currentStateFilter = "All"; // Track the selected state filter globally
-
-// Function to update the state filter when the user selects a new state
-function applyStateFilter() {
-    currentStateFilter = $("#alarmStateFilter").val(); // Capture the selected filter value
-    getAlarmsData(); // Reload the alarms with the new filter applied
+// Existing function: getAccountsAlarmsAPI
+function getAccountsAlarmsAPI() {
+    const allAccountsAlarmsList = [
+        {
+            "MAS Sandbox Development": {
+                "cloudWatchAPI":"https://szw9nl20j5.execute-api.us-east-1.amazonaws.com/test/getalarm"
+            }
+        },
+        {
+            "MAS Sandbox Test1": {
+                "cloudWatchAPI":"https://8vauowiu26.execute-api.us-east-1.amazonaws.com/test/getalarm"
+            }
+        },
+        {
+            "MAS Sandbox Test2": {
+                "cloudWatchAPI":"https://9v5jzdmc6a.execute-api.us-east-1.amazonaws.com/test/getalarm"
+            }
+        }
+    ]
+    return allAccountsAlarmsList;
 }
 
-// Modify the createTable function to apply the state filter
+// Existing function: customerAccountChange
+function customerAccountChange(event) {
+    $("#getAlarmsData").attr("disabled", false);
+}
+
+// Existing function: createTable
 function createTable(alarms) {
     const table = $('#alarmsList table');
     
@@ -28,23 +47,23 @@ function createTable(alarms) {
     let bodyHtml = '<tbody>';
     
     alarms.forEach(alarm => {
-        // Apply filter logic for state before adding row
-        if (currentStateFilter === "All" || alarm.state.toUpperCase() === currentStateFilter.toUpperCase()) {
-            bodyHtml += '<tr>';
-            headers.forEach(header => {
-                if (header.toLowerCase() === 'state' && alarm[header].toLowerCase() === 'alarm') {
-                    bodyHtml += `<td class="red">${alarm[header]}</td>`;
-                } else {
-                    bodyHtml += `<td>${alarm[header]}</td>`;
-                }
-            });
-            bodyHtml += '</tr>';
-        }
+        bodyHtml += '<tr>';
+        headers.forEach(header => {
+            console.log(alarm[header].toLowerCase());
+            if (header.toLowerCase() === 'state' && alarm[header].toLowerCase() === 'alarm') {
+                bodyHtml += `<td class="red">${alarm[header]}</td>`;
+            } else {
+                bodyHtml += `<td>${alarm[header]}</td>`;
+            }
+        });
+        bodyHtml += '</tr>';
     });
     
     bodyHtml += '</tbody>';
     table.append(bodyHtml);
 }
+
+// Function to get alarms data from CloudWatch API for selected account
 
 // Function to get alarms data from CloudWatch API for selected account
 async function getAlarmsData() {
