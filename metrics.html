@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="metrics.css">
+    <link rel="stylesheet" href="metricss.css">
     <script src="https://kit.fontawesome.com/2a56506141.js" crossorigin="anonymous"></script>
     <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-base.min.js" type="text/javascript"></script>
     <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-core.min.js"></script>
     <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-circular-gauge.min.js"></script>
-    <script src="metrics.js"></script>
+    <script src="metricss.js"></script>
     <title>Customer Home Page</title>
 </head>
 <body>
@@ -59,7 +59,7 @@
             <div class="d-flex align-items-center mr-3">
                 <label class="mr-2" style="font-size: 18px; font-weight: bold;" >Timezone</label>
                 <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="timezoneButton" style="font-size: 18px; padding: 5px; width: 180px; height: 45px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="timezoneButton" style="font-size: 18px; padding: 10px; width: 180px; height: 45px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select
                     </button>
                     <div class="dropdown-menu" aria-labelledby="timezoneButton">
@@ -77,7 +77,7 @@
             <div class="d-flex align-items-center mr-3">
                 <label class="mr-2" style="font-size: 18px; font-weight: bold;" >Metrics</label>
                 <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="chosenMetrics" style="font-size: 18px; padding: 5px; width: 360px; height: 45px;"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="chosenMetrics" style="font-size: 18px; padding: 10px; width: 360px; height: 45px;"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select
                     </button>
               <ul class="dropdown-menu allMetrics" aria-labelledby="chosenMetrics">
@@ -168,7 +168,7 @@
             <div class="d-flex align-items-center mr-3">
                 <label class="mr-2" style="font-size: 18px; font-weight: bold;">Auto Refresh</label>
                 <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="autoRefreshButton" style="font-size: 18px; padding: 5px; width: 145px; height: 45px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="autoRefreshButton" style="font-size: 18px; padding: 10px; width: 145px; height: 45px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Off
                     </button>
                     <div class="dropdown-menu" aria-labelledby="autoRefreshButton">
@@ -200,15 +200,15 @@
 
     
       
-           <div class="container">
+    <div class="container">
         <div class="row justify-content-center">
             <div id="metricsInput" class="col-12 text-center mb-3"></div>
-    
+
             <div class="w-75" id="dataTables">
                 <div class="row justify-content-center" id="sectionResults">
                     <section class="row loading text-center"></section>
                 </div>
-                <div class="results-container bg-light p-3 rounded" id="results"></div>
+                <div class="results-container" id="results"></div>
             </div>
         </div>
     </div>
