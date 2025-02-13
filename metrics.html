@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="metrics.css">
+    <link rel="stylesheet" href="metricss.css">
     <script src="https://kit.fontawesome.com/2a56506141.js" crossorigin="anonymous"></script>
     <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-base.min.js" type="text/javascript"></script>
     <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-core.min.js"></script>
     <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-circular-gauge.min.js"></script>
-    <script src="metrics.js"></script>
+    <script src="metricss.js"></script>
     <title>Customer Home Page</title>
 </head>
 <body>
@@ -187,11 +187,12 @@
             <br>
             <br>
             <br>
-            <button type="button" class="btn btn-primary" id="customDateTimeButton" 
-    style="font-size: 18px; padding: 10px; width: 150px; height: 45px;" 
-    onClick="submitCustomDateTimeframe()">
-    GO
-</button>
+            
+            <button type="button" class="btn" id="customDateTimeButton"
+                onclick="submitCustomDateTimeframe()">
+                GO
+            </button>
+
 
         </div>
     </div>
@@ -413,6 +414,51 @@
             background-color: #444;
             color: #ffffff;
         }
+        .dropdown-menu .dropdown-item:hover {
+            background-color: #d0e7ff !important; /* Pale blue */
+            color: #000 !important; /* Ensure text remains readable */
+        }
+        .dropdown-menu {
+            white-space: nowrap; /* Prevent text from wrapping */
+            overflow-x: hidden; /* Hide horizontal scrolling */
+            min-width: 100%; /* Ensure it fits the button width */
+        }
+        #timezoneButton, #chosenMetrics, #autoRefreshButton {
+            background-color: #f8c8dc !important; /* Pale pink */
+            border-color: #f8c8dc !important; /* Match border color */
+            color: #000 !important; /* Ensure text is readable */
+        }
+
+        #timezoneButton:hover, #chosenMetrics:hover, #autoRefreshButton:hover {
+            background-color: #f4a6c0 !important; /* Slightly darker pink on hover */
+            border-color: #f4a6c0 !important;
+        }
+        
+        /* GO Button - Pale Wine Color */
+        /* GO Button - Pale Wine Color with Bold & Highlighted Look */
+        #customDateTimeButton {
+            background-color: #7b506f !important; /* Pale wine */
+            border-color: #7b506f !important;
+            color: #fff !important; /* White text */
+            font-size: 18px;
+            font-weight: bold; /* Bold font */
+            padding: 10px;
+            width: 150px;
+            height: 45px;
+            box-shadow: 0px 0px 10px rgba(123, 80, 111, 0.8); /* Highlight effect */
+            text-transform: uppercase; /* Makes 'GO' more prominent */
+        }
+
+        #customDateTimeButton:hover {
+            background-color: #5e3b54 !important; /* Darker wine on hover */
+            border-color: #5e3b54 !important;
+            box-shadow: 0px 0px 15px rgba(94, 59, 84, 1); /* Stronger glow on hover */
+        }
+
+
+
+
+
   </style>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
