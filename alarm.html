@@ -14,10 +14,10 @@
 </head>
 <body>
     <!-- Existing Content -->
-     <div class="customer-logo">
-         <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/custlogo.png" alt="CDW Logo">
-     </div>
-     <div class="main-container-wrapper">
+    <div class="customer-logo">
+        <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/custlogo.png" alt="CDW Logo">
+    </div>
+    <div class="main-container-wrapper">
         <div class="d-flex flex-wrap alarm-options-wrapper">
             <div class="d-flex">
                 <label for="customerAccounts" class="mt-2">Accounts : </label>
@@ -27,9 +27,6 @@
                     <option value="MAS Sandbox Test1">MAS Sandbox Test1</option>
                     <option value="MAS Sandbox Test2">MAS Sandbox Test2</option>
                 </select>
-            </div>
-            <div class="col d-flex justify-content-center">
-                <button type="button" class="btn btn-primary w-20"  id="getAlarmsData" onClick="getAlarmsData()" disabled>Go</button>
             </div>
         </div>
         <div class="w-100" id="dataTables">
@@ -46,12 +43,28 @@
     </div>
     
     <script>
-         window.onload = () => {
+        window.onload = () => {
             if (window.location.hash) {
                 let hash = window.location.hash;
                 let token = hash.split("access_token=")[1].split("&")[0];
-                sessionStorage.setItem("MetricVisionAccessToken", token)
+                sessionStorage.setItem("MetricVisionAccessToken", token);
             }
+        }
+
+        // Modified function to show data when account is selected
+        function customerAccountChange(event) {
+            let selectedAccount = event.target.value;
+            if (selectedAccount !== "--Select--") {
+                getAlarmsData(selectedAccount); // Automatically fetch data when an account is selected
+            }
+        }
+
+        // Assuming you have this function already defined
+        function getAlarmsData(account) {
+            // Fetch the data for the selected account and show it in the table
+            // The data-fetching logic goes here
+            console.log("Fetching data for account:", account);
+            // Example: You can use AJAX or any other method to fetch and display the alarms
         }
     </script>
 
