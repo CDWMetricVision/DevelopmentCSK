@@ -1,3 +1,4 @@
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #ffffff;
@@ -325,12 +326,17 @@ a:hover {
 }
 
 .icon {
-    cursor: pointer;
+    color: grey; /* Sets the icon color to grey */
+    cursor: pointer; /* Makes it clear the icons are clickable */
+    transition: color 0.3s ease; /* Smooth color transition */
     margin: 10px
 }
+
 .icon:hover {
+    color: darkgrey; /* Slightly darker on hover */
     font-size: 30px
 }
+
 /* Powered by CDW Logo Styling */
 /* Powered by CDW Logo Styling */
 .powered-by-cdw {
