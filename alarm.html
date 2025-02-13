@@ -21,12 +21,15 @@
         <div class="d-flex flex-wrap alarm-options-wrapper">
             <div class="d-flex">
                 <label for="customerAccounts" class="mt-2">Accounts : </label>
-                <select id="customerAccounts" class="p-2 cursor-pointer" onchange="customerAccountChange(event)">
+                <select id="customerAccounts" class="p-2 cursor-pointer" onchange="enableGoButton()">
                     <option disabled selected hidden>--Select--</option>
                     <option value="MAS Sandbox Development">MAS Sandbox Development</option>
                     <option value="MAS Sandbox Test1">MAS Sandbox Test1</option>
                     <option value="MAS Sandbox Test2">MAS Sandbox Test2</option>
                 </select>
+            </div>
+            <div class="col d-flex justify-content-center">
+                <button type="button" class="btn btn-primary w-20" id="getAlarmsData" onclick="getAlarmsData()" disabled>Go</button>
             </div>
         </div>
         <div class="w-100" id="dataTables">
@@ -51,20 +54,36 @@
             }
         }
 
-        // Modified function to show data when account is selected
-        function customerAccountChange(event) {
-            let selectedAccount = event.target.value;
-            if (selectedAccount !== "--Select--") {
-                getAlarmsData(selectedAccount); // Automatically fetch data when an account is selected
+        // Function to enable the "Go" button when an account is selected
+        function enableGoButton() {
+            let account = document.getElementById('customerAccounts').value;
+            let goButton = document.getElementById('getAlarmsData');
+
+            // Enable the "Go" button when an account is selected
+            if (account !== "--Select--") {
+                goButton.disabled = false;  // Enable button when account is selected
+            } else {
+                goButton.disabled = true;  // Disable if no account selected
             }
         }
 
-        // Assuming you have this function already defined
-        function getAlarmsData(account) {
-            // Fetch the data for the selected account and show it in the table
-            // The data-fetching logic goes here
-            console.log("Fetching data for account:", account);
+        // The function triggered by the "Go" button (or automatic selection)
+        function getAlarmsData() {
+            let selectedAccount = document.getElementById('customerAccounts').value;
+
+            if (selectedAccount !== "--Select--") {
+                // Fetch and display the data for the selected account
+                console.log("Fetching alarms for:", selectedAccount);
+                // Example of fetching data - replace with your actual data fetch logic
+                fetchAlarmsData(selectedAccount);
+            }
+        }
+
+        // Function to fetch the alarms data
+        function fetchAlarmsData(account) {
             // Example: You can use AJAX or any other method to fetch and display the alarms
+            console.log("Data being fetched for account:", account);
+            // After fetching data, you can display it in the table (example implementation)
         }
     </script>
 
