@@ -14,10 +14,11 @@
 </head>
 <body>
     <!-- Existing Content -->
-     <div class="customer-logo">
-         <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/custlogo.png" alt="CDW Logo">
-     </div>
-     <div class="main-container-wrapper">
+    <div class="customer-logo">
+        <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/custlogo.png" alt="CDW Logo">
+    </div>
+
+    <div class="main-container-wrapper">
         <div class="d-flex flex-wrap alarm-options-wrapper">
             <div class="d-flex">
                 <label for="customerAccounts" class="mt-2">Accounts : </label>
@@ -29,28 +30,29 @@
                 </select>
             </div>
             <div class="col d-flex justify-content-center">
-                <button type="button" class="btn btn-primary w-20"  id="getAlarmsData" onClick="getAlarmsData()" disabled>Go</button>
+                <button type="button" class="btn btn-primary w-20" id="getAlarmsData" onClick="getAlarmsData()" disabled>Go</button>
             </div>
         </div>
+
         <div class="w-100" id="dataTables">
             <div class="alarms-container" id="alarmsList">
-                <table>
-                </table>
+                <table></table>
             </div>
         </div>
     </div>
+
     <!-- Copyright and Powered by CDW -->
     <div class="powered-by-cdw">
         <span>© MetricVision 2025, Powered by</span>
         <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/cdw-2023-Red-Panel.png" alt="CDW Logo">
     </div>
-    
+
     <script>
-         window.onload = () => {
+        window.onload = () => {
             if (window.location.hash) {
                 let hash = window.location.hash;
                 let token = hash.split("access_token=")[1].split("&")[0];
-                sessionStorage.setItem("MetricVisionAccessToken", token)
+                sessionStorage.setItem("MetricVisionAccessToken", token);
             }
         }
     </script>
