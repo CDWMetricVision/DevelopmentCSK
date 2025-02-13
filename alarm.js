@@ -1,12 +1,3 @@
-// Function to handle when the page is loaded
-window.onload = () => {
-    if (window.location.hash) {
-        let hash = window.location.hash;
-        let token = hash.split("access_token=")[1].split("&")[0];
-        sessionStorage.setItem("MetricVisionAccessToken", token);
-    }
-}
-
 // Function to get available accounts and their respective API URLs
 function getAccountsAlarmsAPI() {
     const allAccountsAlarmsList = [
