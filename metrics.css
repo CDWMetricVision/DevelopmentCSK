@@ -35,7 +35,6 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
-    margin-bottom: 50px;
 }
 
 .container {
@@ -58,14 +57,14 @@ button {
 }
 
 button {
-    background-color: #007bff;
+    background-color: #f8f8f9;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #eff0f2;
 }
 
 button:disabled {
@@ -287,43 +286,6 @@ a:hover {
 #alarmsList td.red{
     color: red;
 }
-.result-table{
-    width: 95%;
-    margin: 0 auto 50px auto;
-}
-/* Dashboard Pages */
-.dashboard-header{
-    width: 95%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 auto;
-}
-.dashboard-header .title{
-    font-size: 1.7rem;
-    text-transform: capitalize;
-}
-.dashboard-header .cdw-logo{
-    width: 150px;
-    margin: 20px 0;
-}
-/* Create Dashboard Page */
-input[name='accountName']{
-    height: 40px;
-}
-.create-dashboard-wrapper{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.create-dashboard-wrapper .create-options-wrapper{
-    gap: 10px;
-}
-.create-metrics-wrapper{
-    display: flex;
-    gap: 10px;
-}
-
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     #alarmsList {
@@ -364,6 +326,7 @@ input[name='accountName']{
     font-size: 30px
 }
 /* Powered by CDW Logo Styling */
+/* Powered by CDW Logo Styling */
 .powered-by-cdw {
     position: fixed;
     bottom: 10px;
@@ -389,80 +352,83 @@ input[name='accountName']{
     color: #333;
     font-weight: normal; /* Remove bold if desired */
 }
-/* Loader Container */
-#loader {
+
+#clientsButton, #awsAccountName {
+    display: block;
+    width: 100%;
+}
+    
+#accountsDropdown {
+        min-width: 300px; /* Set your desired width */
+}
+
+.custom-box {
+    border: 2px solid #e74c3c;
+    border-radius: 15px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    margin-top: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-box .btn {
+    margin-top: 8px;
+}
+body {
+    font-family: Arial, sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+}
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+.toggle-container {
     position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+}
+.toggle-label {
+    margin-right: 8px;
+}
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+}
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 1000; /* Ensure it's on top of other content */
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 20px;
 }
-
-/* Spinner Animation */
-.spinner {
-    border: 8px solid #f3f3f3; /* Light grey */
-    border-top: 8px solid #3498db; /* Blue */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite; /* Spin animation */
+}
+input:checked + .slider {
+    background-color: #ebeff3;
+}
+input:checked + .slider:before {
+    transform: translateX(14px);
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Loading Text */
-#loader p {
-    margin-top: 10px;
-    font-size: 18px;
-    color: #3498db;
-}
-.periodWrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-}
-.periodWrapper label{
-    margin: 0;
-    cursor: pointer;
-}
-.periodWrapper select{
-    height: 40px;
-    cursor: pointer;
-}
-/* dashboard pages */
-.dashboard-wrapper{
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    gap: .5%;
-    row-gap: 15px;
-}
-.chartContainer{
-    width: 95%;
-    background-color: #cecece;
-    padding: 10px 20px 50px;
-    margin: 20px auto;
-}
-.chart{
-    padding: 30px;
-    background: #fff;
-    border-radius: 5px;
-    width: 33%;
-}
-.dashboard-container p{ 
-    letter-spacing: 1px;
-    margin-top: 10px;
-    text-transform: uppercase;
-    font-weight: 600;
-}
