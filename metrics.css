@@ -98,16 +98,28 @@ button:disabled {
     font-weight: bold;
 }
 #results {
-    display: block; /* or flex, depending on your structure */
+    display: block;
     width: 100%;
     background-color: white;
     margin-top: 20px;
     padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    overflow-x: auto; /* Ensures table remains responsive */
+    border-radius: 12px; /* Slightly increased for a softer look */
+    border: 1px solid #ccc;
+    box-shadow: 
+        0px 4px 8px rgba(0, 0, 0, 0.2),  /* Main shadow */
+        0px 2px 4px rgba(0, 0, 0, 0.15), /* Inner subtle shadow */
+        inset 0px 2px 4px rgba(255, 255, 255, 0.5); /* Slight inner glow */
+    transition: all 0.3s ease-in-out;
 }
+
+#results:hover {
+    box-shadow: 
+        0px 6px 12px rgba(0, 0, 0, 0.25), 
+        0px 3px 6px rgba(0, 0, 0, 0.2), 
+        inset 0px 3px 6px rgba(255, 255, 255, 0.6); /* Enhances 3D effect */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
 
  /* Header and content styles */
 .header {
