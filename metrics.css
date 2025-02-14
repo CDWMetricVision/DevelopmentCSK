@@ -97,17 +97,18 @@ button:disabled {
     font-size: 18px;
     font-weight: bold;
 }
-#results{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+#results {
+    display: block; /* or flex, depending on your structure */
+    width: 100%;
     background-color: white;
     margin-top: 20px;
     padding: 20px;
     border-radius: 8px;
     border: 1px solid #ddd;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-x: auto; /* Ensures table remains responsive */
 }
+
  /* Header and content styles */
 .header {
     font-size: 40px;
