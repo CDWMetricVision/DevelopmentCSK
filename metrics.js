@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
       e.stopPropagation(); // Stop the click from propagating and closing the dropdown
     });
   });
-  createIcons();
 });
 
 async function getARNQueryParams() {
@@ -27,10 +26,10 @@ async function getARNQueryParams() {
     }
 }
 
-function toggleSidePanel() {
-    const sidePanel = document.getElementById('sidePanel');
-    sidePanel.classList.toggle('active');
-}
+// function toggleSidePanel() {
+//     const sidePanel = document.getElementById('sidePanel');
+//     sidePanel.classList.toggle('active');
+// }
 function sendInstanceId(event) {
     $("#results").empty();
     $("#sectionResults .loading").empty();
@@ -268,7 +267,7 @@ function createTableLineGauge(data) {
         let rowDiv = document.createElement("div");
         rowDiv.classList.add("row")
         section = document.createElement("section")
-        section.classList.add("col", "d-flex");
+        section.classList.add("col-12");
         section.setAttribute("id", data.Id)
         let results = document.querySelector("#results");
         rowDiv.appendChild(section)
@@ -291,9 +290,9 @@ function createIcons() {
     chartIcon.classList.add("lineChart", "fa-solid", "fa-chart-line", "fa-xl", "icon")
     let gaugeIcon = document.createElement("i")
     gaugeIcon.classList.add("gaugeChart","fa-solid", "fa-gauge", "fa-xl", "icon")
-    chartIcon.addEventListener("click", hideOtherCharts)
-    tableIcon.addEventListener("click", hideOtherCharts)
-    gaugeIcon.addEventListener("click", hideOtherCharts)
+    chartIcon.addEventListener("click", showLineCharts);
+    tableIcon.addEventListener("click", showTables);
+    gaugeIcon.addEventListener("click", showGauges);
     let selectWrapper = document.createElement("div");
     selectWrapper.classList.add("periodWrapper");
     let label = document.createElement("label");
@@ -370,6 +369,46 @@ function createIcons() {
     const container = document.querySelector("#chart-edit-container");
     container.append(chartIcon, tableIcon, gaugeIcon, selectWrapper,editBtn);
 }
+
+function hideTables() {
+    const tableCharts = document.querySelectorAll(".table-responsive");
+    tableCharts.forEach((chart) => chart.setAttribute("style", "display: none !important"));
+}
+
+function hideLineCharts() {
+    const tableCharts = document.querySelectorAll(".line-chart");
+    tableCharts.forEach((chart) => chart.setAttribute("style", "display: none !important"));
+}
+
+function hideGauges() {
+    const tableCharts = document.querySelectorAll(".guage-metric");
+    tableCharts.forEach((chart) => chart.setAttribute("style", "display: none !important"));
+}
+
+function showTables() {
+    hideEveryMetrics();
+    const tableCharts = document.querySelectorAll(".table-responsive");
+    tableCharts.forEach((chart) => chart.setAttribute("style", "display: block !important"));
+}
+
+function showLineCharts() {
+    hideEveryMetrics();
+    const tableCharts = document.querySelectorAll(".line-chart");
+    tableCharts.forEach((chart) => chart.setAttribute("style", "display: block !important"));
+}
+
+function showGauges() {
+    hideEveryMetrics();
+    const tableCharts = document.querySelectorAll(".guage-metric");
+    tableCharts.forEach((chart) => chart.setAttribute("style", "display: block !important"));
+}
+
+function hideEveryMetrics() {
+  hideTables();
+  hideLineCharts();
+  hideGauges();
+}
+
 function hideOtherCharts(e) {
     let target = e.target.classList[0].replace("Chart",'');
     let parentNodeList = e.target.parentElement.childNodes;
@@ -544,7 +583,7 @@ function createGauge(data, container) {
     
     // draw the chart
     let section = document.createElement("section");
-    section.classList.add("flex-grow-1", "d-flex", "justify-content-around", "flex-wrap", "align-items-center");
+    section.classList.add("flex-grow-1", "d-flex", "justify-content-around", "flex-wrap", "align-items-center", "guage-metric");
     section.setAttribute("Id", `gauge_${data.Id}`);
 
     //metric name column
@@ -627,6 +666,7 @@ function chartLineGraph(graphData, container) {
     flexDiv.classList.add("flex-grow-1");
     let flexDivId = `lineChart_${title}`;
     flexDiv.setAttribute("id", flexDivId);
+    flexDiv.setAttribute("class", "line-chart");
 
     // Step 6: Display the chart
     chart.container(flexDiv);
@@ -1106,7 +1146,11 @@ function selectInstance(event) {
 }
 
 function showDashboards() {
-    window.open('/dashboard.html', '_blank');
+    window.location.href = "./dashboard.html";
+}
+
+function showMetrics() {
+    window.location.href = "./metrics.html";
 }
 
 function createNewDashboard() {
@@ -1120,7 +1164,7 @@ function showAlarms() {
 
     if (accessToken) {
         // Open the alarms page with the access token added in the URL as a query parameter
-        window.open(`/alarm.html?access_token=${accessToken}`, '_blank');
+        window.location.href = `/alarm.html?access_token=${accessToken}`;
     } else {
         alert('Access token not found. Please sign in again.');
     }
