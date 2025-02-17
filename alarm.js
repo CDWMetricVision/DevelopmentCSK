@@ -38,10 +38,17 @@ function filterByState(event) {
     if (!selectedState) {
         displayTable(alarmsData); // Display all data if no filter is selected
     } else {
+        // Filter alarms based on the selected state
         const filteredAlarms = alarmsData.filter(alarm => 
             alarm.state && alarm.state.toLowerCase() === selectedState // Check if alarm.state exists and matches selectedState
         );
-        displayTable(filteredAlarms); // Display the filtered table
+
+        if (filteredAlarms.length > 0) {
+            displayTable(filteredAlarms); // Display the filtered table
+        } else {
+            // If no alarms match the selected state, show a message
+            displayTable([]);
+        }
     }
 }
 
@@ -60,6 +67,7 @@ function displayTable(alarms) {
     // Clear existing table content
     table.empty();
     
+    // If no alarms are available
     if (alarms.length === 0) {
         table.append('<tbody><tr><td colspan="5">No alarms found for the selected state.</td></tr></tbody>');
         return;
