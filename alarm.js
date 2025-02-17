@@ -45,7 +45,6 @@ function filterByState(event) {
     }
 }
 
-
 // Function to create a table from the alarms data
 function createTable(alarms) {
     alarmsData = alarms; // Store alarms globally
