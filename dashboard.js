@@ -57,6 +57,7 @@ function generateDataWithTimeZone() {
         ]);
         time += 60000;
     }
+    data = [];
     return data;
 }
 function renderChart(container, metricName, seriesData) {
@@ -279,7 +280,8 @@ async function getSavedDashboards() {
                         instanceId: widget.properties.metrics[0][3], // Instance ID
                         region: widget.properties.region
                     }));
-                    const timeSeriesData = generateDataWithTimeZone();
+                    // const timeSeriesData = generateDataWithTimeZone();
+                    timeSeriesData = []; // need to change accordingly for the data recieved
 
                     if (parsedData.widgets && parsedData.widgets.length > 0) {
                         for (const widget of parsedData.widgets) {

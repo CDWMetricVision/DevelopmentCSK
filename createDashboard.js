@@ -39,6 +39,7 @@ function getCreateWidgetRequestBody(dashboardName,metrics,instanceId,view) {
               "width": 12,
               "height": 6,
               "properties": {
+                "view": view,
                 "metrics": [
                   [ "AWS/Connect", metrics, "InstanceId", instanceId ]
                 ],
@@ -327,7 +328,8 @@ async function createWidgets(){
                     instanceId: widget.properties.metrics[0][3], // Instance ID
                     region: widget.properties.region
                 }));
-                const timeSeriesData = generateDataWithTimeZone();
+                // const timeSeriesData = generateDataWithTimeZone();
+                timeSeriesData = []; // need to change accordingly for the data recieved
 
                 if (body.dashboardBody.widgets && body.dashboardBody.widgets.length > 0) {
                     for (const widget of body.dashboardBody.widgets) {
