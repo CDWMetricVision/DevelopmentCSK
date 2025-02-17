@@ -8,12 +8,6 @@ window.onload = () => {
   }
 };
 
-document
-  .getElementById("darkModeToggle")
-  .addEventListener("click", function () {
-    document.body.classList.toggle("dark-mode");
-  });
-
 document.addEventListener("DOMContentLoaded", () => {
   // Prevent dropdown from closing when interacting with select elements
   document.querySelectorAll(".allMetrics").forEach((menu) => {
