@@ -32,16 +32,19 @@ function customerAccountChange(event) {
 
 // Function to filter the table based on selected state
 function filterByState(event) {
-    const selectedState = event.target.value.toLowerCase();
+    const selectedState = event.target.value.trim().toLowerCase(); // Get and trim the selected state value
     
     // If no state is selected, show all alarms
     if (!selectedState) {
-        displayTable(alarmsData);
+        displayTable(alarmsData); // Display all data if no filter is selected
     } else {
-        const filteredAlarms = alarmsData.filter(alarm => alarm.state.toLowerCase() === selectedState);
-        displayTable(filteredAlarms);
+        const filteredAlarms = alarmsData.filter(alarm => 
+            alarm.state && alarm.state.toLowerCase() === selectedState // Check if alarm.state exists and matches selectedState
+        );
+        displayTable(filteredAlarms); // Display the filtered table
     }
 }
+
 
 // Function to create a table from the alarms data
 function createTable(alarms) {
