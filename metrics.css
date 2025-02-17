@@ -447,6 +447,11 @@ body {
     transition: .4s;
     border-radius: 50%;
 }
+.dashboard-container p{ 
+    letter-spacing: 1px;
+    margin-top: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
 input:checked + .slider {
     background-color: #ebeff3;
 }
