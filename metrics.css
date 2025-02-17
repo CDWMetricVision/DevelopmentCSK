@@ -285,6 +285,43 @@ a:hover {
     border-bottom: 1px solid #dee2e6;
     color: #555555;
 }
+.result-table{
+    width: 95%;
+    margin: 0 auto 50px auto;
+}
+/* Dashboard Pages */
+.dashboard-header{
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+}
+.dashboard-header .title{
+    font-size: 1.7rem;
+    text-transform: capitalize;
+}
+.dashboard-header .cdw-logo{
+    width: 150px;
+    margin: 20px 0;
+}
+/* Create Dashboard Page */
+input[name='accountName']{
+    height: 40px;
+}
+.create-dashboard-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.create-dashboard-wrapper .create-options-wrapper{
+    gap: 10px;
+}
+.create-metrics-wrapper{
+    display: flex;
+    gap: 10px;
+}
+
 
 /* Row Styles */
 #alarmsList tbody tr:nth-child(even) {
@@ -425,6 +462,25 @@ body {
     width: 0;
     height: 0;
 }
+/* dashboard pages */
+.dashboard-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: .5%;
+    row-gap: 15px;
+}
+.chartContainer{
+    width: 95%;
+    background-color: #cecece;
+    padding: 10px 20px 50px;
+    margin: 20px auto;
+}
+.chart{
+    padding: 30px;
+    background: #fff;
+    border-radius: 5px;
+    width: 33%;
 .slider {
     position: absolute;
     cursor: pointer;
