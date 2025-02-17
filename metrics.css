@@ -481,6 +481,7 @@ body {
     background: #fff;
     border-radius: 5px;
     width: 33%;
+}
 .slider {
     position: absolute;
     cursor: pointer;
@@ -508,6 +509,7 @@ body {
     margin-top: 10px;
     text-transform: uppercase;
     font-weight: 600;
+}
 input:checked + .slider {
     background-color: #ebeff3;
 }
