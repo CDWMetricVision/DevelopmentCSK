@@ -43,67 +43,30 @@
         </div>
     </nav>
 
-    <div id="loader" style="display: none;">
-        <div class="spinner"></div>
-        <p>Loading...</p>
-    </div>
-
     <!-- Existing Content -->
-    <div class="filter-container container-fluid d-flex flex-column align-items-center">
-        <div class="row container-row">
-            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
-                <label for="customStartDate" style="font-size: 16px; font-weight: bold;">Start Date</label>
-                <input type="date" id="customStartDate"
-                    style="font-size: 16px; padding: 5px; width: 220px; height: 30px;">
+    <div class="filteration-container">
+        <div class="accounts-options-wrapper">
+            <!-- Accounts Section -->
+            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" id="awsAccountName">Accounts</button>
+            <div class="dropdown-menu">
+                <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Development</button>
+                <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Test1</button>
+                <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Test2</button>
             </div>
-
-            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
-                <label for="startTime" style="font-size: 16px; font-weight: bold;">Start Time</label>
-                <input type="time" id="startTime" style="font-size: 16px; padding: 10px; width: 220px; height: 40px;">
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
-                <label for="customEndDate" style="font-size: 16px; font-weight: bold;">End Date</label>
-                <input type="date" id="customEndDate"
-                    style="font-size: 16px; padding: 10px; width: 220px; height: 40px;">
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
-                <label for="endTime" style="font-size: 16px; font-weight: bold;">End Time</label>
-                <input type="time" id="endTime" style="font-size: 16px; padding: 10px; width: 220px; height: 40px;">
-            </div>
-            <!-- Timezone Dropdown -->
-            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
-                <label class="mr-3" style="font-size: 16px; font-weight: bold;">Timezone</label>
-                <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="timezoneButton"
-                        style="font-size: 16px; padding: 5px; width: 140px; height: 38px;" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        Select
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="timezoneButton">
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">UTC
-                            Timezone</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Local
-                            Timezone</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Hawaii
-                            Time</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Alaska
-                            Time</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Pacific
-                            Time</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Mountain
-                            Time</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Central
-                            Time</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Eastern
-                            Time</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
+            <div id="connectInstances" class="w-100"></div>
+            <p id="awsConnectInstanceName" class="text-center" class=""></p>
+    
+            <button class="btn btn-primary btn-block mt-2" id="getMetricsButton" onclick="sendInstanceId(event)"
+                disabled>Apply</button>
+        </div>
+        <div class="filter-content-wrapper">
+            <!-- Metrics Dropdown -->
+            <div class="d-flex justify-content-start input-wrapper metrics-dropdown">
                 <label class="mr-1" style="font-size: 16px; font-weight: bold;">Metrics</label>
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="chosenMetrics"
-                        style="font-size: 16px; padding: 5px; width: 140px; height: 38px;" data-toggle="dropdown"
+                        style="font-size: 16px; padding: 5px; width: 330px; height: 38px;" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         Select
                     </button>
@@ -213,11 +176,41 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
+            <!-- Timezone Dropdown -->
+            <div class="d-flex justify-content-start input-wrapper timezone-dropdown">
+                <label class="mr-1" style="font-size: 16px; font-weight: bold;">Timezone</label>
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="timezoneButton"
+                        style="font-size: 16px; padding: 5px; width: 160px; height: 38px;" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Select
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="timezoneButton">
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">UTC
+                            Timezone</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Local
+                            Timezone</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Hawaii
+                            Time</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Alaska
+                            Time</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Pacific
+                            Time</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Mountain
+                            Time</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Central
+                            Time</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Eastern
+                            Time</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Refreesh Dropdown -->
+            <div class="d-flex justify-content-start input-wrapper">
                 <label class="mr-1" style="font-size: 16px; font-weight: bold;">Auto Refresh</label>
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="autoRefreshButton"
-                        style="font-size: 16px; padding: 5px; width: 140px; height: 38px;" data-toggle="dropdown"
+                        style="font-size: 16px; padding: 5px; width: 120px; height: 38px;" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         Off
                     </button>
@@ -243,46 +236,68 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn" id="customDateTimeButton" onclick="submitCustomDateTimeframe()">
-                GO
-            </button>
+        </div>
+        <div class="filter-content-wrapper-2">
+            <div class="d-flex justify-content-start input-wrapper">
+                <label for="customStartDate" style="font-size: 16px; font-weight: bold;">Start Date</label>
+                <input type="date" id="customStartDate"
+                    style="font-size: 16px; padding: 5px; width: 220px; height: 30px;">
+            </div>
+
+            <div class="d-flex justify-content-start input-wrapper">
+                <label for="startTime" style="font-size: 16px; font-weight: bold;">Start Time</label>
+                <input type="time" id="startTime" style="font-size: 16px; padding: 10px; width: 220px; height: 40px;">
+            </div>
+            <div class="d-flex justify-content-start input-wrapper">
+                <label for="customEndDate" style="font-size: 16px; font-weight: bold;">End Date</label>
+                <input type="date" id="customEndDate"
+                    style="font-size: 16px; padding: 10px; width: 220px; height: 40px;">
+            </div>
+            <div class="d-flex justify-content-start input-wrapper">
+                <label for="endTime" style="font-size: 16px; font-weight: bold;">End Time</label>
+                <input type="time" id="endTime" style="font-size: 16px; padding: 10px; width: 220px; height: 40px;">
+            </div>
         </div>
     </div>
+    <button type="button" class="btn" id="customDateTimeButton" onclick="submitCustomDateTimeframe()">
+        GO
+    </button>
 
+    <div id="loader" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <div class="chart-edit-container" id="chart-edit-container">
+    </div>
+    <!-- <div class="chart-edit-container" id="chart-edit-container">
+        <i class="lineChart fa-solid fa-chart-line fa-xl icon" aria-hidden="true"></i>
+        <i class="tableChart fa-solid fa-table fa-xl icon" aria-hidden="true"></i>
+        <i class="gaugeChart fa-solid fa-gauge fa-xl icon" aria-hidden="true"></i>
+        <div class="periodWrapper"><label>Interval: </label>
+            <select disabled="true">
+                <option value="" disabled="">Select</option>
+                <option value="1">1 Seconds</option>
+                <option value="5">5 Seconds</option>
+                <option value="10">10 Seconds</option>
+                <option value="60">1 Minutes</option>
+                <option value="300">5 Minutes</option>
+                <option value="900">15 Minutes</option>
+                <option value="3600">1 hours</option>
+                <option value="21600">6 hours</option>
+                <option value="86400">1 day</option>
+                <option value="604800">7 days</option>
+                <option value="2592000">30 days</option>
+            </select>
+        </div>
+        <button class="edit-btn" onclick="handleEditBtn()">Edit</button>
+    </div> -->
     <div id="metricsInput"></div>
     <div class="w-75" id="dataTables">
-        <div class="row justify-content-center" id="sectionResults"><br><br>
+        <div class="row justify-content-center" id="sectionResults">
             <section style="text-align: center" class="row loading"></section>
         </div>
         <div class="results-container" id="results"></div>
-    </div>
-
-    <!-- New Left Panel Feature -->
-    <div class="toggle-btn" onclick="toggleSidePanel()">☰</div>
-    <div class="side-panel" id="sidePanel">
-        <div class="panel-options-wrapper">
-            <!-- Accounts Section -->
-            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false" id="awsAccountName">Accounts</button>
-            <div class="dropdown-menu">
-                <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Development</button>
-                <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Test1</button>
-                <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Test2</button>
-            </div>
-            <div id="connectInstances" class="w-100"></div>
-            <p id="awsConnectInstanceName" class="text-center" class=""></p>
-
-            <button class="btn btn-primary btn-block mt-2" id="getMetricsButton" onclick="sendInstanceId(event)"
-                disabled>Apply</button>
-
-            <!-- Dashboards Section -->
-            <button class="btn btn-secondary btn-block mt-3" onclick="showDashboards()">Dashboards</button>
-            <!-- <i class="fas fa-plus add-icon d-flex" onclick="createNewDashboard()"></i> -->
-
-            <!-- Alarms Section -->
-            <button class="btn btn-secondary btn-block mt-3" onclick="showAlarms()">Alarms</button>
-            <!-- <i class="fas fa-plus add-icon d-flex" onclick="createNewAlarm()" style="text-align:center"></i> -->
-        </div>
     </div>
     <!-- Copyright and Powered by CDW -->
     <div class="powered-by-cdw">

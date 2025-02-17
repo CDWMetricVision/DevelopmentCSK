@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
       e.stopPropagation(); // Stop the click from propagating and closing the dropdown
     });
   });
+  createIcons();
 });
 
 async function getARNQueryParams() {
@@ -33,7 +34,6 @@ function toggleSidePanel() {
 function sendInstanceId(event) {
     $("#results").empty();
     $("#sectionResults .loading").empty();
-    toggleSidePanel();
     let baseApiUrl = event.target.dataset.baseApiUrl;
     sessionStorage.setItem("baseApiUrl", baseApiUrl);
     let instanceId = event.target.dataset.instanceId;
@@ -253,6 +253,7 @@ async function displayMetricTableData() {
         for (let i = 0; i < metricDataResults; i++) {
             createTableLineGauge(data.data.MetricDataResults[i])
         }
+        createIcons();
     }
 }
 
@@ -281,11 +282,9 @@ function createTableLineGauge(data) {
     createLineGraphNew(data, section)
     createTable(data, section)
     createGauge(data, section)
-    createIcons(section)
-    
 }
 
-function createIcons(container) {
+function createIcons() {
     let tableIcon = document.createElement("i")
     tableIcon.classList.add("tableChart", "fa-solid", "fa-table", "fa-xl", "icon")
     let chartIcon = document.createElement("i")
@@ -368,6 +367,7 @@ function createIcons(container) {
     editBtn.innerHTML = "Edit";
     editBtn.classList.add("edit-btn");
     editBtn.addEventListener("click", handleEditBtn);
+    const container = document.querySelector("#chart-edit-container");
     container.append(chartIcon, tableIcon, gaugeIcon, selectWrapper,editBtn);
 }
 function hideOtherCharts(e) {
@@ -446,12 +446,11 @@ async function handlePeriodChange(e) {
         for (let i = 0; i < metricDataResults; i++) {
             createTableLineGauge(data.data.MetricDataResults[i])
         }
+        createIcons();
     }
 }
 function handleEditBtn(e) {
-    const section = e.target.closest('section');
-    if(!section) return;
-    const select = section.querySelector('.periodWrapper select');
+    const select = document.querySelector('.periodWrapper select');
     if (select) {
         select.removeAttribute('disabled');
     }
@@ -809,6 +808,7 @@ async function submitCustomDateTimeframe() {
         for (let i = 0; i < metricDataResults; i++) {
             createTableLineGauge(data.data.MetricDataResults[i])
         }
+        createIcons();
     }
 }
 
@@ -925,6 +925,7 @@ function refreshDropdownChoice(event) {
             for (let i = 0; i < metricDataResults; i++) {
                 createTableLineGauge(data.data.MetricDataResults[i])
             }
+            createIcons();
         }
 
     }, milliseconds)

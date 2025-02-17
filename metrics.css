@@ -29,15 +29,6 @@ body {
     /* Ensure text remains readable */
 }
 
-.dropdown-menu {
-    white-space: nowrap;
-    /* Prevent text from wrapping */
-    overflow-x: hidden;
-    /* Hide horizontal scrolling */
-    min-width: 100%;
-    /* Ensure it fits the button width */
-}
-
 #timezoneButton,
 #chosenMetrics,
 #autoRefreshButton {
@@ -164,7 +155,7 @@ button:disabled {
 }
 
 #dataTables {
-    margin-top: 40px;
+    margin-top: 20px;
 }
 .loading {
     font-size: 18px;
@@ -266,12 +257,13 @@ a:hover {
 }
 
 .dropdown-menu {
-    max-height: 200px;
+    max-height: 250px;
     overflow-y: auto;
 }
 
 .dropdown-item {
     color: black;
+    width: fit-content;
 }
 .cdw-logo img,.customer-logo img{
     width: 100%;
@@ -305,11 +297,32 @@ a:hover {
     text-transform: capitalize;
     color: red;
 }
-.panel-options-wrapper{
+
+.filteration-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 220px;
+    flex-wrap: wrap;
 }
+
+.accounts-options-wrapper,
+.filter-content-wrapper,
+.filter-content-wrapper-2 {
+    padding: 1rem;
+    width: fit-content;
+}
+
+.accounts-options-wrapper > button {
+    width: 220px;
+}
+
+.dropdown-menu {
+    position: relative;
+    min-width: 0;
+}
+
 /* alarm page */
 .alarm-options-wrapper{
     gap: 10px;
@@ -602,8 +615,10 @@ input:checked + .slider:before {
     width: 100%;
 }
 
-.input-wrapper label{
-    width: 25%;
+.input-wrapper>label{
+    min-width: 100px;
+    width: 120px;
+    max-width: 150px;
 }
 
 /* Navigation bar styles */
@@ -614,6 +629,7 @@ input:checked + .slider:before {
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 9;
 }
 
 .navigation-wrapper {
@@ -701,4 +717,32 @@ input:checked + .slider:before {
     transform: translateX(25px);
     background-color: #fff;
     color: #202123;
+}
+
+/* Styles for chart edit icons */
+.chart-edit-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-edit-container i {
+    padding: 0.25rem;
+}
+
+.periodWrapper {
+    background: white;
+}
+
+.periodWrapper > label {
+    margin: 0;
+}
+
+.edit-btn {
+    padding: 5px 10px;
+    color: black;
+}
+
+.dark-mode .edit-btn {
+    color: white;
 }
