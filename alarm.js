@@ -40,7 +40,7 @@ function filterByState(event) {
     } else {
         // Filter alarms based on the selected state
         const filteredAlarms = alarmsData.filter(alarm => 
-            alarm.state && alarm.state.toLowerCase() === selectedState // Check if alarm.state exists and matches selectedState
+            alarm.State && alarm.State.toLowerCase() === selectedState // Match based on the 'State' field
         );
 
         if (filteredAlarms.length > 0) {
