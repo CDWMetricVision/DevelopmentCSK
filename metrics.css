@@ -606,3 +606,36 @@ input:checked + .slider:before {
     color: white;
     background: #202123;;
 }
+
+.toggle-container2 {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background-color: #444;
+    padding: 4px;
+    border-radius: 30px;
+    width: 55px;
+    transition: background-color 0.3s ease;
+}
+
+.dark-mode .toggle-container2 {
+    background-color: #ccc;
+}
+
+.toggle-btn2 {
+    width: 25px;
+    height: 25px;
+    background-color: #202123;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.dark-mode .toggle-btn2 {
+    transform: translateX(25px);
+    background-color: #fff;
+    color: #202123;
+}
