@@ -12,6 +12,79 @@ body {
     background-size: cover;
     background-position: center;
 }
+
+.togglee-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #d0e7ff !important;
+    /* Pale blue */
+    color: #000 !important;
+    /* Ensure text remains readable */
+}
+
+.dropdown-menu {
+    white-space: nowrap;
+    /* Prevent text from wrapping */
+    overflow-x: hidden;
+    /* Hide horizontal scrolling */
+    min-width: 100%;
+    /* Ensure it fits the button width */
+}
+
+#timezoneButton,
+#chosenMetrics,
+#autoRefreshButton {
+    background-color: #f8c8dc !important;
+    /* Pale pink */
+    border-color: #f8c8dc !important;
+    /* Match border color */
+    color: #000 !important;
+    /* Ensure text is readable */
+}
+
+#timezoneButton:hover,
+#chosenMetrics:hover,
+#autoRefreshButton:hover {
+    background-color: #f4a6c0 !important;
+    /* Slightly darker pink on hover */
+    border-color: #f4a6c0 !important;
+}
+
+/* GO Button - Pale Wine Color */
+/* GO Button - Pale Wine Color with Bold & Highlighted Look */
+#customDateTimeButton {
+    background-color: #7b506f !important;
+    /* Pale wine */
+    border-color: #7b506f !important;
+    color: #fff !important;
+    /* White text */
+    font-size: 18px;
+    font-weight: bold;
+    /* Bold font */
+    padding: 10px;
+    width: 150px;
+    height: 45px;
+    box-shadow: 0px 0px 10px rgba(123, 80, 111, 0.8);
+    /* Highlight effect */
+    text-transform: uppercase;
+    /* Makes 'GO' more prominent */
+}
+
+#customDateTimeButton:hover {
+    background-color: #5e3b54 !important;
+    /* Darker wine on hover */
+    border-color: #5e3b54 !important;
+    box-shadow: 0px 0px 15px rgba(94, 59, 84, 1);
+    /* Stronger glow on hover */
+}
+
 .logout-button {
     position: absolute;
     top: 20px;  /* Adjust the distance from the top */
@@ -100,7 +173,6 @@ button:disabled {
 #results {
     display: block;
     width: 100%;
-    background-color: white;
     margin-top: 20px;
     padding: 20px;
     border-radius: 12px; /* Slightly increased for a softer look */
@@ -172,18 +244,19 @@ button:disabled {
 a {
     display: inline-block;
     text-decoration: none;
-    background-color: #ff4d4d;
-    color: white;
-    padding: 15px 30px;
+    /* background-color: #ff4d4d; */
+    color: black;
+    padding: 10px 20px;
     border-radius: 50px;
-    font-size: 18px;
-    margin: 20px 10px;
+    font-size: 16px;
+    /* margin: 20px 10px; */
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 a:hover {
-    background-color: #c0392b;
+    /* background-color: #c0392b; */
     transform: scale(1.05);
+    text-decoration: none;
 }
 
 .footer {
@@ -515,3 +588,115 @@ input:checked + .slider:before {
     transform: translateX(14px);
 }
 
+.filter-container {
+    margin-top: 5rem;
+}
+
+.container-row {
+    width:80%;
+}
+
+.input-wrapper {
+    width: 100%;
+}
+
+.input-wrapper label{
+    width: 25%;
+}
+
+/* Navigation bar styles */
+.navigation-bar {
+    width: 100%;
+    background: #eff0f2;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.navigation-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navigation-left-content,
+.navigation-right-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
+
+.navigation-left-content .cdw-logo {
+    width: 100%;
+    height: 50px;
+    margin: 0.5rem 1rem;
+}
+
+.nav-links {
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-links:hover {
+    background: #dddddd83;
+}
+
+.navigation-wrapper .active {
+    background: #dddddd83;
+    border-radius: 0;
+}
+
+/* Dark mode styles */
+.dark-mode {
+    background: #202123;
+    color: #ffffff;
+}
+
+.dark-mode .togglee-btn {
+    background-color: #444;
+    color: #ffffff;
+}
+
+.dark-mode * {
+    color: white;
+    background: #202123;;
+}
+
+.toggle-container2 {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background-color: #444;
+    padding: 4px;
+    border-radius: 30px;
+    width: 55px;
+    transition: background-color 0.3s ease;
+}
+
+.dark-mode .toggle-container2 {
+    background-color: #ccc;
+}
+
+.toggle-btn2 {
+    width: 25px;
+    height: 25px;
+    background-color: #202123;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.dark-mode .toggle-btn2 {
+    transform: translateX(25px);
+    background-color: #fff;
+    color: #202123;
+}

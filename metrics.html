@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="metrics.css">
     <script src="https://kit.fontawesome.com/2a56506141.js" crossorigin="anonymous"></script>
     <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-base.min.js" type="text/javascript"></script>
@@ -12,224 +14,254 @@
     <script src="metrics.js"></script>
     <title>Customer Home Page</title>
 </head>
+
 <body>
-    <div class="toggle-container2" onclick="toggleDarkMode()">
-        <div class="toggle-btn2">🌙</div>
-    </div> 
+    <nav class="navigation-bar">
+        <div class="navigation-wrapper">
+            <div class="navigation-left-content">
+                <div class="cdw-logo">
+                    <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/cdw-2023-Red-Panel.png" alt="CDW Logo">
+                </div>
+                <div class="nav-links" onclick="showDashboards()">Dashboards</div>
+                <div class="nav-links active">Metrics</div>
+                <div class="nav-links" onclick="showAlarms()">Alarms</div>
+            </div>
+            <div class="navigation-right-content">
+                <!-- Existing Logout Link -->
+                 <div>
+                    <!-- <div onclick="toggleDarkMode()" class="togglee-btn" id="darkModeToggle">🌙</div> -->
+                    <div class="toggle-container2" onclick="toggleDarkMode()">
+                        <div class="toggle-btn2">🌙</div>
+                    </div> 
+                 </div>
+                <div>
+                    <a class="nav-links" href="https://cskcustomer1.s3.us-east-1.amazonaws.com/logged_out.html" class="text-center">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-
-  
-  <div id="loader" style="display: none;">
-      <div class="spinner"></div>
-      <p>Loading...</p>
-  </div>
-  <br>
-  <br>
-  <br>
-  
-  
-  <br>
-  <br>
-  <br>
-  
+    <div id="loader" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
 
     <!-- Existing Content -->
-    <div class="d-flex flex-column align-items-center">
-        <div class="d-flex justify-content-center mb-3">
-            <div class="d-flex align-items-center mr-3">
-                <label for="customStartDate" class="mr-2" style="font-size: 18px; font-weight: bold;">Start Date</label>
-                <input type="date" id="customStartDate" style="font-size: 18px; padding: 10px; width: 220px; height: 40px;">
+    <div class="filter-container container-fluid d-flex flex-column align-items-center">
+        <div class="row container-row">
+            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
+                <label for="customStartDate" style="font-size: 16px; font-weight: bold;">Start Date</label>
+                <input type="date" id="customStartDate"
+                    style="font-size: 16px; padding: 5px; width: 220px; height: 30px;">
             </div>
-            
-            <div class="d-flex align-items-center mr-3">
-                <label for="startTime" class="mr-2" style="font-size: 18px; font-weight: bold;">Start Time</label>
-                <input type="time" id="startTime" style="font-size: 18px; padding: 10px; width: 220px; height: 40px;">
+
+            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
+                <label for="startTime" style="font-size: 16px; font-weight: bold;">Start Time</label>
+                <input type="time" id="startTime" style="font-size: 16px; padding: 10px; width: 220px; height: 40px;">
             </div>
-            <div class="d-flex align-items-center mr-3">
-                <label for="customEndDate" class="mr-2" style="font-size: 18px; font-weight: bold;">End Date</label>
-                <input type="date" id="customEndDate" style="font-size: 18px; padding: 10px; width: 220px; height: 40px;">
+            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
+                <label for="customEndDate" style="font-size: 16px; font-weight: bold;">End Date</label>
+                <input type="date" id="customEndDate"
+                    style="font-size: 16px; padding: 10px; width: 220px; height: 40px;">
             </div>
-            <div class="d-flex align-items-center">
-                <label for="endTime" class="mr-2" style="font-size: 18px; font-weight: bold;">End Time</label>
-                <input type="time" id="endTime" style="font-size: 18px; padding: 10px; width: 220px; height: 40px;">
+            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
+                <label for="endTime" style="font-size: 16px; font-weight: bold;">End Time</label>
+                <input type="time" id="endTime" style="font-size: 16px; padding: 10px; width: 220px; height: 40px;">
             </div>
-            
-            
-        </div>
-        <div class="d-flex align-items-center">
             <!-- Timezone Dropdown -->
-            <div class="d-flex align-items-center mr-3">
-                <label class="mr-2" style="font-size: 18px; font-weight: bold;" >Timezone</label>
+            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
+                <label class="mr-3" style="font-size: 16px; font-weight: bold;">Timezone</label>
                 <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="timezoneButton" style="font-size: 18px; padding: 10px; width: 180px; height: 45px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="timezoneButton"
+                        style="font-size: 16px; padding: 5px; width: 140px; height: 38px;" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
                         Select
                     </button>
                     <div class="dropdown-menu" aria-labelledby="timezoneButton">
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">UTC Timezone</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Local Timezone</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Hawaii Time</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Alaska Time</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Pacific Time</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Mountain Time</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Central Time</button>
-                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Eastern Time</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">UTC
+                            Timezone</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Local
+                            Timezone</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Hawaii
+                            Time</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Alaska
+                            Time</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Pacific
+                            Time</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Mountain
+                            Time</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Central
+                            Time</button>
+                        <button class="dropdown-item" type="button" onclick="timezoneDropdownChoice(event)">Eastern
+                            Time</button>
                     </div>
                 </div>
             </div>
-            <div class="d-flex align-items-center mr-3">
-                <label class="mr-2" style="font-size: 18px; font-weight: bold;" >Metrics</label>
+            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
+                <label class="mr-1" style="font-size: 16px; font-weight: bold;">Metrics</label>
                 <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="chosenMetrics" style="font-size: 18px; padding: 10px; width: 360px; height: 45px;"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="chosenMetrics"
+                        style="font-size: 16px; padding: 5px; width: 140px; height: 38px;" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
                         Select
                     </button>
-              <ul class="dropdown-menu allMetrics" aria-labelledby="chosenMetrics">
-                <!-- Instance Metrics -->
-                <li class="dropdown-item">
-                  <div class="form-check" id="selectAllMetrics">
-                    <input class="form-check-input" type="checkbox" id="instanceMetricsAll" onchange="selectAllConnectMetrics(event)">
-                    <label class="form-check-label font-weight-bold" for="instanceMetricsAll">Instance Metrics - Select All</label>
-                  </div>
-                  <div class="nested-menu">
-                    <div class="form-check">
-                      <input class="form-check-input instance-metrics" type="checkbox" id="calls_per_interval">
-                      <label class="form-check-label" for="calls_per_interval">Calls Per Interval</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input instance-metrics" type="checkbox" id="missed_calls">
-                      <label class="form-check-label" for="missed_calls">Missed Calls</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input instance-metrics" type="checkbox" id="concurrent_calls">
-                      <label class="form-check-label" for="concurrent_calls">Concurrent Calls</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input instance-metrics" type="checkbox" id="concurrent_calls_percentage">
-                      <label class="form-check-label" for="concurrent_calls_percentage">Concurrent Calls Percentage</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input instance-metrics" type="checkbox" id="calls_breaching_concurrency_quota">
-                      <label class="form-check-label" for="calls_breaching_concurrency_quota">Calls Breaching Concurrency Quota</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input instance-metrics" type="checkbox" id="call_recording_upload_error">
-                      <label class="form-check-label" for="call_recording_upload_error">Call Recording Upload Error</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input instance-metrics" type="checkbox" id="throttled_calls">
-                      <label class="form-check-label" for="throttled_calls">Throttled Calls</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input instance-metrics" type="checkbox" id="to_instance_packet_loss_rate">
-                      <label class="form-check-label" for="to_instance_packet_loss_rate">To Instance Packet Loss Rate</label>
-                    </div>
-                  </div>
-                </li>
-                <hr>
-                <!-- Dynamic Contact Metrics -->
-                <li class="dropdown-item">
-                  <label class="font-weight-bold">Contact Metrics</label>
-                  <select class="form-control" id="contactSelect">
-                    <option value="">Select a Contact</option>
-                  </select>
-                  <div id="contactMetricsOptions" class="nested-menu mt-2" style="display: none;">
-                      <div class="form-check">
-                          <input class="form-check-input contact-metrics" type="checkbox" id="contact_flow_errors">
-                          <label class="form-check-label" for="contact_flow_errors">Contact Flow Errors</label>
-                      </div>
-                      <div class="form-check">
-                          <input class="form-check-input contact-metrics" type="checkbox" id="contact_flow_fatal_errors">
-                          <label class="form-check-label" for="contact_flow_fatal_errors">Contact Flow Fatal Errors</label>
-                      </div>
-                  </div>
-                </li>
-                <hr>
-                <!-- Dynamic Queue Metrics -->
-                <li class="dropdown-item">
-                  <label class="font-weight-bold">Queue Metrics</label>
-                  <select class="form-control" id="queueSelect">
-                    <option value="">Select a Queue</option>
-                  </select>
-                  <div id="queueMetricsOptions" class="nested-menu mt-2" style="display: none;">
-                    <div class="form-check">
-                      <input class="form-check-input queue-metrics" type="checkbox" id="longest_queue_wait_time">
-                      <label class="form-check-label" for="longest_queue_wait_time">Longest Queue Wait Time</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input queue-metrics" type="checkbox" id="queue_capacity_exceeded_error">
-                      <label class="form-check-label" for="queue_capacity_exceeded_error">Queue Capacity Exceeded Error</label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input queue-metrics" type="checkbox" id="queue_size">
-                      <label class="form-check-label" for="queue_size">Queue Size</label>
-                    </div>
-                  </div>
-                </li>
-              </ul>
+                    <ul class="dropdown-menu allMetrics" aria-labelledby="chosenMetrics">
+                        <!-- Instance Metrics -->
+                        <li class="dropdown-item">
+                            <div class="form-check" id="selectAllMetrics">
+                                <input class="form-check-input" type="checkbox" id="instanceMetricsAll"
+                                    onchange="selectAllConnectMetrics(event)">
+                                <label class="form-check-label font-weight-bold" for="instanceMetricsAll">Instance
+                                    Metrics - Select All</label>
+                            </div>
+                            <div class="nested-menu">
+                                <div class="form-check">
+                                    <input class="form-check-input instance-metrics" type="checkbox"
+                                        id="calls_per_interval">
+                                    <label class="form-check-label" for="calls_per_interval">Calls Per Interval</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input instance-metrics" type="checkbox" id="missed_calls">
+                                    <label class="form-check-label" for="missed_calls">Missed Calls</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input instance-metrics" type="checkbox"
+                                        id="concurrent_calls">
+                                    <label class="form-check-label" for="concurrent_calls">Concurrent Calls</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input instance-metrics" type="checkbox"
+                                        id="concurrent_calls_percentage">
+                                    <label class="form-check-label" for="concurrent_calls_percentage">Concurrent Calls
+                                        Percentage</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input instance-metrics" type="checkbox"
+                                        id="calls_breaching_concurrency_quota">
+                                    <label class="form-check-label" for="calls_breaching_concurrency_quota">Calls
+                                        Breaching Concurrency Quota</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input instance-metrics" type="checkbox"
+                                        id="call_recording_upload_error">
+                                    <label class="form-check-label" for="call_recording_upload_error">Call Recording
+                                        Upload Error</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input instance-metrics" type="checkbox"
+                                        id="throttled_calls">
+                                    <label class="form-check-label" for="throttled_calls">Throttled Calls</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input instance-metrics" type="checkbox"
+                                        id="to_instance_packet_loss_rate">
+                                    <label class="form-check-label" for="to_instance_packet_loss_rate">To Instance
+                                        Packet Loss Rate</label>
+                                </div>
+                            </div>
+                        </li>
+                        <hr>
+                        <!-- Dynamic Contact Metrics -->
+                        <li class="dropdown-item">
+                            <label class="font-weight-bold">Contact Metrics</label>
+                            <select class="form-control" id="contactSelect">
+                                <option value="">Select a Contact</option>
+                            </select>
+                            <div id="contactMetricsOptions" class="nested-menu mt-2" style="display: none;">
+                                <div class="form-check">
+                                    <input class="form-check-input contact-metrics" type="checkbox"
+                                        id="contact_flow_errors">
+                                    <label class="form-check-label" for="contact_flow_errors">Contact Flow
+                                        Errors</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input contact-metrics" type="checkbox"
+                                        id="contact_flow_fatal_errors">
+                                    <label class="form-check-label" for="contact_flow_fatal_errors">Contact Flow Fatal
+                                        Errors</label>
+                                </div>
+                            </div>
+                        </li>
+                        <hr>
+                        <!-- Dynamic Queue Metrics -->
+                        <li class="dropdown-item">
+                            <label class="font-weight-bold">Queue Metrics</label>
+                            <select class="form-control" id="queueSelect">
+                                <option value="">Select a Queue</option>
+                            </select>
+                            <div id="queueMetricsOptions" class="nested-menu mt-2" style="display: none;">
+                                <div class="form-check">
+                                    <input class="form-check-input queue-metrics" type="checkbox"
+                                        id="longest_queue_wait_time">
+                                    <label class="form-check-label" for="longest_queue_wait_time">Longest Queue Wait
+                                        Time</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input queue-metrics" type="checkbox"
+                                        id="queue_capacity_exceeded_error">
+                                    <label class="form-check-label" for="queue_capacity_exceeded_error">Queue Capacity
+                                        Exceeded Error</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input queue-metrics" type="checkbox" id="queue_size">
+                                    <label class="form-check-label" for="queue_size">Queue Size</label>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <br>
-            <div class="d-flex align-items-center mr-3">
-                <label class="mr-2" style="font-size: 18px; font-weight: bold;">Auto Refresh</label>
+            <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-start input-wrapper">
+                <label class="mr-1" style="font-size: 16px; font-weight: bold;">Auto Refresh</label>
                 <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="autoRefreshButton" style="font-size: 18px; padding: 10px; width: 145px; height: 45px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="autoRefreshButton"
+                        style="font-size: 16px; padding: 5px; width: 140px; height: 38px;" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
                         Off
                     </button>
                     <div class="dropdown-menu" aria-labelledby="autoRefreshButton">
-                      <button class="dropdown-item"  type="button" onclick="refreshDropdownChoice(event)">Off</button>
-                      <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">1 Minute</button>
-                      <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">2 Minutes</button>
-                      <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">5 Minutes</button>
-                      <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">10 Minutes</button>
-                      <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">20 Minutes</button>
-                      <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">30 Minutes</button>
-                      <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">40 Minutes</button>
-                      <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">50 Minutes</button>
+                        <button class="dropdown-item" type="button"
+                            onclick="refreshDropdownChoice(event)">Off</button>
+                        <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">1
+                            Minute</button>
+                        <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">2
+                            Minutes</button>
+                        <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">5
+                            Minutes</button>
+                        <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">10
+                            Minutes</button>
+                        <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">20
+                            Minutes</button>
+                        <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">30
+                            Minutes</button>
+                        <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">40
+                            Minutes</button>
+                        <button class="dropdown-item" type="button" onclick="refreshDropdownChoice(event)">50
+                            Minutes</button>
                     </div>
                 </div>
-            </div> 
-            <br>
-            <br>
-            <br>
-            
-            <button type="button" class="btn" id="customDateTimeButton"
-                onclick="submitCustomDateTimeframe()">
+            </div>
+            <button type="button" class="btn" id="customDateTimeButton" onclick="submitCustomDateTimeframe()">
                 GO
             </button>
-
-
         </div>
     </div>
-    
-</div>
 
-    
-      
     <div id="metricsInput"></div>
-      <div class="w-75" id="dataTables">
-          <div class="row justify-content-center" id="sectionResults"><br><br>
-              <section style="text-align: center" class="row loading"></section>
-          </div>
-          <div class="results-container" id="results"></div>
-      </div>
-  </div>
+    <div class="w-75" id="dataTables">
+        <div class="row justify-content-center" id="sectionResults"><br><br>
+            <section style="text-align: center" class="row loading"></section>
         </div>
+        <div class="results-container" id="results"></div>
     </div>
 
-
-    
     <!-- New Left Panel Feature -->
     <div class="toggle-btn" onclick="toggleSidePanel()">☰</div>
     <div class="side-panel" id="sidePanel">
         <div class="panel-options-wrapper">
-            <div class="cdw-logo">
-                <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/cdw-2023-Red-Panel.png" alt="CDW Logo">
-            </div>
-     <!-- Copyright and Powered by CDW -->
-    <div class="powered-by-cdw">
-        <span>© MetricVision 2025, Powered by</span>
-        <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/cdw-2023-Red-Panel.png" alt="CDW Logo">
-    </div>
             <!-- Accounts Section -->
-            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="awsAccountName">Accounts</button>
+            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" id="awsAccountName">Accounts</button>
             <div class="dropdown-menu">
                 <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Development</button>
                 <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Test1</button>
@@ -237,260 +269,38 @@
             </div>
             <div id="connectInstances" class="w-100"></div>
             <p id="awsConnectInstanceName" class="text-center" class=""></p>
-    
-            <button class="btn btn-primary btn-block mt-2" id="getMetricsButton" onclick="sendInstanceId(event)" disabled>Apply</button>
-    
+
+            <button class="btn btn-primary btn-block mt-2" id="getMetricsButton" onclick="sendInstanceId(event)"
+                disabled>Apply</button>
+
             <!-- Dashboards Section -->
             <button class="btn btn-secondary btn-block mt-3" onclick="showDashboards()">Dashboards</button>
             <!-- <i class="fas fa-plus add-icon d-flex" onclick="createNewDashboard()"></i> -->
-    
+
             <!-- Alarms Section -->
             <button class="btn btn-secondary btn-block mt-3" onclick="showAlarms()">Alarms</button>
             <!-- <i class="fas fa-plus add-icon d-flex" onclick="createNewAlarm()" style="text-align:center"></i> -->
         </div>
-        
-        <!-- Existing Logout Link -->
-        <a href="https://cskcustomer1.s3.us-east-1.amazonaws.com/logged_out.html" class="text-center" >Logout</a>
+    </div>
+    <!-- Copyright and Powered by CDW -->
+    <div class="powered-by-cdw">
+        <div>© MetricVision 2025, Powered by</div>
+        <img src="https://cskcustomer1.s3.us-east-1.amazonaws.com/cdw-2023-Red-Panel.png" alt="CDW Logo">
     </div>
 
-    
-
-    <script>
-        
-        document.addEventListener("DOMContentLoaded", () => {
-            // Prevent dropdown from closing when interacting with select elements
-            document.querySelectorAll(".allMetrics").forEach(menu => {
-              menu.addEventListener("click", (e) => {
-                e.stopPropagation(); // Stop the click from propagating and closing the dropdown
-              });
-            });
-        });
-        function toggleSidePanel() {
-            const sidePanel = document.getElementById('sidePanel');
-            sidePanel.classList.toggle('active');
-        }
-
-
-        function accountsAndConnectInstancesObject() {
-            const allAccountsList = [
-                {
-                    "MAS Sandbox Development": {
-                        "connectInstances": {
-                            "masdevelopment": "08aaaa8c-2bbf-4571-8570-f853f6b7dba0",
-                            "masdevelopmentinstance2": "5c1408e0-cd47-4ba9-9b0c-c168752e2285"
-                        },
-                        "baseAPIGatewayURL": "https://szw9nl20j5.execute-api.us-east-1.amazonaws.com/test"
-                    }
-                },
-                {
-                    "MAS Sandbox Test1": {
-                        "connectInstances": {
-                            "mastest1instance2": "921b9e21-6d50-4365-b861-297f61227bb8",
-                            "mastest1": "cd54d26a-fee3-4645-87da-6acae50962a5"
-                        },
-                        "baseAPIGatewayURL": "https://8vauowiu26.execute-api.us-east-1.amazonaws.com/test"
-                    }
-                },
-                {
-                    "MAS Sandbox Test2": {
-                        "connectInstances": {
-                            "mastest2instance2": "d8445c54-35f2-4e65-ab0f-9c98889bdb0c",
-                            "mastest2": "ce2575a1-6ad8-4694-abd6-53acf392c698"
-                        },
-                        "baseAPIGatewayURL": "https://9v5jzdmc6a.execute-api.us-east-1.amazonaws.com/test"
-                    }
-                }
-            ]
-            return allAccountsList;
-        }
-
-        function selectAccount(event) {
-            const connectInstances = document.getElementById('connectInstances');
-            let instanceName = document.querySelector("#awsConnectInstanceName");
-            instanceName.innerHTML = "";
-            let finalAccountAndInstanceButton = document.querySelector("#getMetricsButton");
-            finalAccountAndInstanceButton.disabled = true;
-            let title = event.target.innerHTML;
-            connectInstances.innerHTML = `
-            <p class="mt-3 text-center" id="awsAccountName">${title} </p>
-            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Instances</button>
-            <div class="dropdown-menu instanceList"></div>
-            `;
-            $("#selected-account").text(title);
-            let allAccountsList = accountsAndConnectInstancesObject();
-            let instanceList = document.querySelector(".instanceList");
-            for (let i = 0; i < allAccountsList.length; i ++) {
-                let accountName = Object.keys(allAccountsList[i])[0]
-                if (accountName === title) {
-                    for (let [connectInstanceName, connectInstanceId] of Object.entries(allAccountsList[i][accountName]["connectInstances"])) {
-                        let button = document.createElement("button");
-                        button.classList.add("dropdown-item");
-                        button.classList.add("connectInstance")
-                        button.innerHTML = connectInstanceName;
-                        button.dataset.instanceId = connectInstanceId;
-                        button.dataset.baseApiUrl = allAccountsList[i][accountName]["baseAPIGatewayURL"];
-                        button.addEventListener("click", selectInstance)
-                        instanceList.appendChild(button)
-                    }
-                }
-            }
-        }
-
-        
-
-        function selectInstance(event) {
-            let instanceNameSpace = document.querySelector("#awsConnectInstanceName");
-            let instanceId = event.target.dataset.instanceId
-            let apiUrl = event.target.dataset.baseApiUrl;
-            instanceNameSpace.innerHTML = event.target.innerHTML;
-            $("#selected-instance").text(event.target.innerHTML);
-            let finalAccountAndInstanceButton = document.querySelector("#getMetricsButton");
-            finalAccountAndInstanceButton.dataset.instanceId = instanceId
-            finalAccountAndInstanceButton.dataset.baseApiUrl = apiUrl
-            finalAccountAndInstanceButton.disabled = false;
-        }
-
-        function showDashboards() {
-            window.open('/dashboard.html', '_blank');
-        }
-
-         function createNewDashboard() {
-            // Redirect to the desired URL
-            alert('Creating a new dashboard...');
-       
-        }
-
-        function showAlarms() {
-           // Get the access token from sessionStorage
-           let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
-            
-           if (accessToken) {
-               // Open the alarms page with the access token added in the URL as a query parameter
-               window.open(`/alarm.html?access_token=${accessToken}`, '_blank');
-           } else {
-               alert('Access token not found. Please sign in again.');
-           }
-        }
-             
-           
-        function createNewAlarm() {
-            alert('Creating a new alarm...');
-        }
-        window.onload = () => {
-            if (window.location.hash) {
-                let hash = window.location.hash;
-                let token = hash.split("access_token=")[1].split("&")[0];
-                sessionStorage.setItem("MetricVisionAccessToken", token)
-            }
-        }
-        document.getElementById("darkModeToggle").addEventListener("click", function() {
-            document.body.classList.toggle("dark-mode");
-        });
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            const toggleBtn = document.querySelector(".toggle-btn2");
-
-            if (document.body.classList.contains("dark-mode")) {
-                toggleBtn.innerHTML = "☀️"; // Switch to sun
-            } else {
-                toggleBtn.innerHTML = "🌙"; // Switch to moon
-            }
-        }
-
-    
-    </script>
-    <style>
-    
-        .dropdown-menu .dropdown-item:hover {
-            background-color: #d0e7ff !important; /* Pale blue */
-            color: #000 !important; /* Ensure text remains readable */
-        }
-        .dropdown-menu {
-            white-space: nowrap; /* Prevent text from wrapping */
-            overflow-x: hidden; /* Hide horizontal scrolling */
-            min-width: 100%; /* Ensure it fits the button width */
-        }
-        #timezoneButton, #chosenMetrics, #autoRefreshButton {
-            background-color: #f8c8dc !important; /* Pale pink */
-            border-color: #f8c8dc !important; /* Match border color */
-            color: #000 !important; /* Ensure text is readable */
-        }
-
-        #timezoneButton:hover, #chosenMetrics:hover, #autoRefreshButton:hover {
-            background-color: #f4a6c0 !important; /* Slightly darker pink on hover */
-            border-color: #f4a6c0 !important;
-        }
-        
-        /* GO Button - Pale Wine Color */
-        /* GO Button - Pale Wine Color with Bold & Highlighted Look */
-        #customDateTimeButton {
-            background-color: #7b506f !important; /* Pale wine */
-            border-color: #7b506f !important;
-            color: #fff !important; /* White text */
-            font-size: 18px;
-            font-weight: bold; /* Bold font */
-            padding: 10px;
-            width: 150px;
-            height: 45px;
-            box-shadow: 0px 0px 10px rgba(123, 80, 111, 0.8); /* Highlight effect */
-            text-transform: uppercase; /* Makes 'GO' more prominent */
-        }
-
-        #customDateTimeButton:hover {
-            background-color: #5e3b54 !important; /* Darker wine on hover */
-            border-color: #5e3b54 !important;
-            box-shadow: 0px 0px 15px rgba(94, 59, 84, 1); /* Stronger glow on hover */
-        }
-
-        .dark-mode {
-            background-color: #202123;
-            color: #ffffff;
-        }
-
-        .toggle-container2 {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            background-color: #444;
-            padding: 4px;
-            border-radius: 30px;
-            width: 55px;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            transition: background-color 0.3s ease;
-        }
-
-        .dark-mode .toggle-container2 {
-            background-color: #ccc;
-        }
-
-        .toggle-btn2 {
-            width: 25px;
-            height: 25px;
-            background-color: #202123;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        .dark-mode .toggle-btn2 {
-            transform: translateX(25px);
-            background-color: #fff;
-            color: #202123;
-        }
-
-
-
-
-
-  </style>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
+
 </html>

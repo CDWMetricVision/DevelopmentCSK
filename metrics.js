@@ -1,3 +1,28 @@
+
+
+window.onload = () => {
+  if (window.location.hash) {
+    let hash = window.location.hash;
+    let token = hash.split("access_token=")[1].split("&")[0];
+    sessionStorage.setItem("MetricVisionAccessToken", token);
+  }
+};
+
+document
+  .getElementById("darkModeToggle")
+  .addEventListener("click", function () {
+    document.body.classList.toggle("dark-mode");
+  });
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Prevent dropdown from closing when interacting with select elements
+  document.querySelectorAll(".allMetrics").forEach((menu) => {
+    menu.addEventListener("click", (e) => {
+      e.stopPropagation(); // Stop the click from propagating and closing the dropdown
+    });
+  });
+});
+
 async function getARNQueryParams() {
     let queryString = window.location.search;
     let urlParams = new URLSearchParams(queryString);
@@ -1000,8 +1025,116 @@ document.addEventListener("DOMContentLoaded", function () {
 // }
 
 // sessionStorage.setItem("fakeMetricVisionData", JSON.stringify(completeFakeData))
-  
 
 
+// function toggleSidePanel() {
+//     const sidePanel = document.getElementById('sidePanel');
+//     sidePanel.classList.toggle('active');
+// }
 
 
+function accountsAndConnectInstancesObject() {
+    const allAccountsList = [
+        {
+            "MAS Sandbox Development": {
+                "connectInstances": {
+                    "masdevelopment": "08aaaa8c-2bbf-4571-8570-f853f6b7dba0",
+                    "masdevelopmentinstance2": "5c1408e0-cd47-4ba9-9b0c-c168752e2285"
+                },
+                "baseAPIGatewayURL": "https://szw9nl20j5.execute-api.us-east-1.amazonaws.com/test"
+            }
+        },
+        {
+            "MAS Sandbox Test1": {
+                "connectInstances": {
+                    "mastest1instance2": "921b9e21-6d50-4365-b861-297f61227bb8",
+                    "mastest1": "cd54d26a-fee3-4645-87da-6acae50962a5"
+                },
+                "baseAPIGatewayURL": "https://8vauowiu26.execute-api.us-east-1.amazonaws.com/test"
+            }
+        },
+        {
+            "MAS Sandbox Test2": {
+                "connectInstances": {
+                    "mastest2instance2": "d8445c54-35f2-4e65-ab0f-9c98889bdb0c",
+                    "mastest2": "ce2575a1-6ad8-4694-abd6-53acf392c698"
+                },
+                "baseAPIGatewayURL": "https://9v5jzdmc6a.execute-api.us-east-1.amazonaws.com/test"
+            }
+        }
+    ]
+    return allAccountsList;
+}
+
+function selectAccount(event) {
+    const connectInstances = document.getElementById('connectInstances');
+    let instanceName = document.querySelector("#awsConnectInstanceName");
+    instanceName.innerHTML = "";
+    let finalAccountAndInstanceButton = document.querySelector("#getMetricsButton");
+    finalAccountAndInstanceButton.disabled = true;
+    let title = event.target.innerHTML;
+    connectInstances.innerHTML = `
+    <p class="mt-3 text-center" id="awsAccountName">${title} </p>
+    <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Instances</button>
+    <div class="dropdown-menu instanceList"></div>
+    `;
+    $("#selected-account").text(title);
+    let allAccountsList = accountsAndConnectInstancesObject();
+    let instanceList = document.querySelector(".instanceList");
+    for (let i = 0; i < allAccountsList.length; i++) {
+        let accountName = Object.keys(allAccountsList[i])[0]
+        if (accountName === title) {
+            for (let [connectInstanceName, connectInstanceId] of Object.entries(allAccountsList[i][accountName]["connectInstances"])) {
+                let button = document.createElement("button");
+                button.classList.add("dropdown-item");
+                button.classList.add("connectInstance")
+                button.innerHTML = connectInstanceName;
+                button.dataset.instanceId = connectInstanceId;
+                button.dataset.baseApiUrl = allAccountsList[i][accountName]["baseAPIGatewayURL"];
+                button.addEventListener("click", selectInstance)
+                instanceList.appendChild(button)
+            }
+        }
+    }
+}
+
+function selectInstance(event) {
+    let instanceNameSpace = document.querySelector("#awsConnectInstanceName");
+    let instanceId = event.target.dataset.instanceId
+    let apiUrl = event.target.dataset.baseApiUrl;
+    instanceNameSpace.innerHTML = event.target.innerHTML;
+    $("#selected-instance").text(event.target.innerHTML);
+    let finalAccountAndInstanceButton = document.querySelector("#getMetricsButton");
+    finalAccountAndInstanceButton.dataset.instanceId = instanceId
+    finalAccountAndInstanceButton.dataset.baseApiUrl = apiUrl
+    finalAccountAndInstanceButton.disabled = false;
+}
+
+function showDashboards() {
+    window.open('/dashboard.html', '_blank');
+}
+
+function createNewDashboard() {
+    // Redirect to the desired URL
+    alert('Creating a new dashboard...');
+}
+
+function showAlarms() {
+    // Get the access token from sessionStorage
+    let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
+
+    if (accessToken) {
+        // Open the alarms page with the access token added in the URL as a query parameter
+        window.open(`/alarm.html?access_token=${accessToken}`, '_blank');
+    } else {
+        alert('Access token not found. Please sign in again.');
+    }
+}
+
+function createNewAlarm() {
+    alert('Creating a new alarm...');
+}
+
+function toggleDarkMode() {
+    document.getElementsByTagName("body")[0].classList.toggle("dark-mode");
+}
