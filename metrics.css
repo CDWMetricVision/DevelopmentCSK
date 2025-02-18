@@ -1,7 +1,55 @@
+:root {
+
+    /* https://colorffy.com/dark-theme-generator?colors=abc0f3-121212 */
+
+    /** Base colors */
+    --clr-dark-a: #000000;
+    --clr-light-a0: #ffffff;
+
+    /** Dark theme primary colors */
+    --clr-primary-a0: #abc0f3;
+    --clr-primary-a10: #b5c7f4;
+    --clr-primary-a20: #becef6;
+    --clr-primary-a30: #c8d5f7;
+    --clr-primary-a40: #d1dcf9;
+    --clr-primary-a50: #dae3fa;
+
+    /** Dark theme surface colors */
+    --clr-surface-a0: #121212;
+    --clr-surface-a10: #282828;
+    --clr-surface-a20: #3f3f3f;
+    --clr-surface-a30: #575757;
+    --clr-surface-a40: #717171;
+    --clr-surface-a50: #8b8b8b;
+
+    /** Dark theme tonal surface colors */
+    --clr-surface-tonal-a0: #2d3038;
+    --clr-surface-tonal-a10: #41444b;
+    --clr-surface-tonal-a20: #565960;
+    --clr-surface-tonal-a30: #6c6e74;
+    --clr-surface-tonal-a40: #83858a;
+    --clr-surface-tonal-a50: #9b9ca0;
+
+    /* CSS Variables for Light Mode (Default) */
+    --background-color: #ffffff;  /* White */
+    --text-color: #000000;      /* Black */
+    --button-background: #007bff; /* Blue */
+    --button-text: #ffffff;      /* White */
+    --nav-background: var(--clr-primary-a50);
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  --background-color: var(--clr-dark-a); /* Dark Gray */
+  --text-color: #ffffff;      /* White */
+  --button-background: #0056b3;
+  --button-text: #ffffff;
+  --nav-background: var(--clr-surface-a40);
+}
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #ffffff;
+    background-color: var(--background-color);
     margin: 0;
     padding: 0;
     color: #f75115;
@@ -243,13 +291,13 @@ a {
     padding: 10px 20px;
     border-radius: 50px;
     font-size: 16px;
-    /* margin: 20px 10px; */
+    margin-left: 10px;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 a:hover {
     /* background-color: #c0392b; */
-    transform: scale(1.05);
+    /* transform: scale(1.05); */
     text-decoration: none;
 }
 
@@ -627,12 +675,13 @@ input:checked + .slider:before {
 /* Navigation bar styles */
 .navigation-bar {
     width: 100%;
-    background: #eff0f2;
+    background: var(--nav-background);
     position: sticky;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 9;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .navigation-wrapper {
@@ -657,6 +706,7 @@ input:checked + .slider:before {
 
 .nav-links {
     cursor: pointer;
+    margin: 0 2px;
     padding: 0.75rem 1rem;
     border-radius: 5px;
     height: 100%;
@@ -665,28 +715,26 @@ input:checked + .slider:before {
 }
 
 .nav-links:hover {
-    background: #dddddd83;
+    background-color: #fbfeffc9;
+    color: var(--clr-dark-a);
+    /* background-color: var(--nav-background); */
 }
 
 .navigation-wrapper .active {
-    background: #dddddd83;
+    background: #ffffffb5;
+    color: var(--clr-dark-a);
     border-radius: 0;
 }
 
 /* Dark mode styles */
 .dark-mode {
-    background: #202123;
-    color: #ffffff;
+    background: var(--background-color);
+    color: var(--text-color);
 }
 
 .dark-mode .togglee-btn {
     background-color: #444;
     color: #ffffff;
-}
-
-.dark-mode * {
-    color: white;
-    background: #202123;;
 }
 
 .toggle-container2 {
@@ -734,7 +782,7 @@ input:checked + .slider:before {
 }
 
 .periodWrapper {
-    background: white;
+    background: var(--clr-light-a0);
 }
 
 .periodWrapper > label {
@@ -747,5 +795,5 @@ input:checked + .slider:before {
 }
 
 .dark-mode .edit-btn {
-    color: white;
+    color: var(--clr-light-a0);
 }
