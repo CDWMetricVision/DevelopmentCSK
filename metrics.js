@@ -401,7 +401,12 @@ function showLineCharts() {
 function showGauges() {
     hideEveryMetrics();
     const tableCharts = document.querySelectorAll(".guage-metric");
-    tableCharts.forEach((chart) => chart.setAttribute("style", "display: block !important"));
+    tableCharts.forEach((chart) =>
+      chart.setAttribute(
+        "style",
+        "display: grid !important; grid-template-columns: 1fr 1fr 1fr 1fr"
+      )
+    );
 }
 
 function hideEveryMetrics() {
