@@ -1145,17 +1145,17 @@ function selectInstance(event) {
     finalAccountAndInstanceButton.disabled = false;
 }
 
+function createNewDashboard() {
+  // Redirect to the desired URL
+  alert("Creating a new dashboard...");
+}
+
 function showDashboards() {
     window.location.href = "./dashboard.html";
 }
 
 function showMetrics() {
     window.location.href = "./metrics.html";
-}
-
-function createNewDashboard() {
-    // Redirect to the desired URL
-    alert('Creating a new dashboard...');
 }
 
 function showAlarms() {

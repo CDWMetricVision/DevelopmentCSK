@@ -109,3 +109,15 @@ async function getAlarmsData(selectedAccount) {
         console.log(err);
     }
 }
+
+function showMetrics() {
+  window.location.href = "./metrics.html";
+}
+
+function showDashboards() {
+  window.location.href = "./dashboard.html";
+}
+
+function toggleDarkMode() {
+  document.getElementsByTagName("body")[0].classList.toggle("dark-mode");
+}
