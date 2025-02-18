@@ -1,7 +1,55 @@
+:root {
+
+    /* https://colorffy.com/dark-theme-generator?colors=abc0f3-121212 */
+
+    /** Base colors */
+    --clr-dark-a: #000000;
+    --clr-light-a0: #ffffff;
+
+    /** Dark theme primary colors */
+    --clr-primary-a0: #abc0f3;
+    --clr-primary-a10: #b5c7f4;
+    --clr-primary-a20: #becef6;
+    --clr-primary-a30: #c8d5f7;
+    --clr-primary-a40: #d1dcf9;
+    --clr-primary-a50: #dae3fa;
+
+    /** Dark theme surface colors */
+    --clr-surface-a0: #121212;
+    --clr-surface-a10: #282828;
+    --clr-surface-a20: #3f3f3f;
+    --clr-surface-a30: #575757;
+    --clr-surface-a40: #717171;
+    --clr-surface-a50: #8b8b8b;
+
+    /** Dark theme tonal surface colors */
+    --clr-surface-tonal-a0: #2d3038;
+    --clr-surface-tonal-a10: #41444b;
+    --clr-surface-tonal-a20: #565960;
+    --clr-surface-tonal-a30: #6c6e74;
+    --clr-surface-tonal-a40: #83858a;
+    --clr-surface-tonal-a50: #9b9ca0;
+
+    /* CSS Variables for Light Mode (Default) */
+    --background-color: #ffffff;  /* White */
+    --text-color: #000000;      /* Black */
+    --button-background: #007bff; /* Blue */
+    --button-text: #ffffff;      /* White */
+    --nav-background: var(--clr-primary-a50);
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  --background-color: var(--clr-dark-a); /* Dark Gray */
+  --text-color: #ffffff;      /* White */
+  --button-background: #0056b3;
+  --button-text: #ffffff;
+  --nav-background: var(--clr-surface-a40);
+}
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #ffffff;
+    background-color: var(--background-color);
     margin: 0;
     padding: 0;
     color: #f75115;
@@ -12,6 +60,70 @@ body {
     background-size: cover;
     background-position: center;
 }
+
+.togglee-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #d0e7ff !important;
+    /* Pale blue */
+    color: #000 !important;
+    /* Ensure text remains readable */
+}
+
+#timezoneButton,
+#chosenMetrics,
+#autoRefreshButton {
+    background-color: #f8c8dc !important;
+    /* Pale pink */
+    border-color: #f8c8dc !important;
+    /* Match border color */
+    color: #000 !important;
+    /* Ensure text is readable */
+}
+
+#timezoneButton:hover,
+#chosenMetrics:hover,
+#autoRefreshButton:hover {
+    background-color: #f4a6c0 !important;
+    /* Slightly darker pink on hover */
+    border-color: #f4a6c0 !important;
+}
+
+/* GO Button - Pale Wine Color */
+/* GO Button - Pale Wine Color with Bold & Highlighted Look */
+#customDateTimeButton {
+    background-color: #7b506f !important;
+    /* Pale wine */
+    border-color: #7b506f !important;
+    color: #fff !important;
+    /* White text */
+    font-size: 18px;
+    font-weight: bold;
+    /* Bold font */
+    padding: 10px;
+    width: 150px;
+    height: 45px;
+    box-shadow: 0px 0px 10px rgba(123, 80, 111, 0.8);
+    /* Highlight effect */
+    text-transform: uppercase;
+    /* Makes 'GO' more prominent */
+}
+
+#customDateTimeButton:hover {
+    background-color: #5e3b54 !important;
+    /* Darker wine on hover */
+    border-color: #5e3b54 !important;
+    box-shadow: 0px 0px 15px rgba(94, 59, 84, 1);
+    /* Stronger glow on hover */
+}
+
 .logout-button {
     position: absolute;
     top: 20px;  /* Adjust the distance from the top */
@@ -91,8 +203,10 @@ button:disabled {
 }
 
 #dataTables {
-    margin-top: 40px;
+    margin-top: 20px;
+    width: 94%;
 }
+
 .loading {
     font-size: 18px;
     font-weight: bold;
@@ -100,7 +214,6 @@ button:disabled {
 #results {
     display: block;
     width: 100%;
-    background-color: white;
     margin-top: 20px;
     padding: 20px;
     border-radius: 12px; /* Slightly increased for a softer look */
@@ -117,7 +230,8 @@ button:disabled {
         0px 6px 12px rgba(0, 0, 0, 0.25), 
         0px 3px 6px rgba(0, 0, 0, 0.2), 
         inset 0px 3px 6px rgba(255, 255, 255, 0.6); /* Enhances 3D effect */
-    transform: translateY(-2px); /* Slight lift on hover */
+    /* Slight lift on hover */
+    /* transform: translateY(-2px);  */
 }
 
 
@@ -172,18 +286,19 @@ button:disabled {
 a {
     display: inline-block;
     text-decoration: none;
-    background-color: #ff4d4d;
-    color: white;
-    padding: 15px 30px;
+    /* background-color: #ff4d4d; */
+    color: black;
+    padding: 10px 20px;
     border-radius: 50px;
-    font-size: 18px;
-    margin: 20px 10px;
+    font-size: 16px;
+    margin-left: 10px;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 a:hover {
-    background-color: #c0392b;
-    transform: scale(1.05);
+    /* background-color: #c0392b; */
+    /* transform: scale(1.05); */
+    text-decoration: none;
 }
 
 .footer {
@@ -193,12 +308,13 @@ a:hover {
 }
 
 .dropdown-menu {
-    max-height: 200px;
+    max-height: 250px;
     overflow-y: auto;
 }
 
 .dropdown-item {
     color: black;
+    width: fit-content;
 }
 .cdw-logo img,.customer-logo img{
     width: 100%;
@@ -232,11 +348,32 @@ a:hover {
     text-transform: capitalize;
     color: red;
 }
-.panel-options-wrapper{
+
+.filteration-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 220px;
+    flex-wrap: wrap;
 }
+
+.accounts-options-wrapper,
+.filter-content-wrapper,
+.filter-content-wrapper-2 {
+    padding: 1rem;
+    width: fit-content;
+}
+
+.accounts-options-wrapper > button {
+    width: 220px;
+}
+
+.dropdown-menu {
+    position: relative;
+    min-width: 0;
+}
+
 /* alarm page */
 .alarm-options-wrapper{
     gap: 10px;
@@ -544,6 +681,150 @@ input:checked + .slider:before {
     display: inline-block;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
+}
+
+.filter-container {
+    margin-top: 5rem;
+}
+
+.container-row {
+    width:80%;
+}
+
+.input-wrapper {
+    width: 100%;
+}
+
+.input-wrapper>label{
+    min-width: 100px;
+    width: 120px;
+    max-width: 150px;
+}
+
+/* Navigation bar styles */
+.navigation-bar {
+    width: 100%;
+    background: var(--nav-background);
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.navigation-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navigation-left-content,
+.navigation-right-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
+
+.navigation-left-content .cdw-logo {
+    width: 100%;
+    height: 50px;
+    margin: 0.5rem 1rem;
+}
+
+.nav-links {
+    cursor: pointer;
+    margin: 0 2px;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-links:hover {
+    background-color: #fbfeffc9;
+    color: var(--clr-dark-a);
+    /* background-color: var(--nav-background); */
+}
+
+.navigation-wrapper .active {
+    background: #ffffffb5;
+    color: var(--clr-dark-a);
+    border-radius: 0;
+}
+
+/* Dark mode styles */
+.dark-mode {
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+.dark-mode .togglee-btn {
+    background-color: #444;
+    color: #ffffff;
+}
+
+.toggle-container2 {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background-color: #444;
+    padding: 4px;
+    border-radius: 30px;
+    width: 55px;
+    transition: background-color 0.3s ease;
+}
+
+.dark-mode .toggle-container2 {
+    background-color: #ccc;
+}
+
+.toggle-btn2 {
+    width: 25px;
+    height: 25px;
+    background-color: #202123;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.dark-mode .toggle-btn2 {
+    transform: translateX(25px);
+    background-color: #fff;
+    color: #202123;
+}
+
+/* Styles for chart edit icons */
+.chart-edit-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-edit-container i {
+    padding: 0.25rem;
+}
+
+.periodWrapper {
+    background: var(--clr-light-a0);
+}
+
+.periodWrapper > label {
+    margin: 0;
+}
+
+.edit-btn {
+    padding: 5px 10px;
+    color: black;
+}
+
+.dark-mode .edit-btn {
+    color: var(--clr-light-a0);
 }
 
 @keyframes rotation {

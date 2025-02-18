@@ -1,3 +1,22 @@
+
+
+window.onload = () => {
+  if (window.location.hash) {
+    let hash = window.location.hash;
+    let token = hash.split("access_token=")[1].split("&")[0];
+    sessionStorage.setItem("MetricVisionAccessToken", token);
+  }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Prevent dropdown from closing when interacting with select elements
+  document.querySelectorAll(".allMetrics").forEach((menu) => {
+    menu.addEventListener("click", (e) => {
+      e.stopPropagation(); // Stop the click from propagating and closing the dropdown
+    });
+  });
+});
+
 async function getARNQueryParams() {
     let queryString = window.location.search;
     let urlParams = new URLSearchParams(queryString);
@@ -7,14 +26,13 @@ async function getARNQueryParams() {
     }
 }
 
-function toggleSidePanel() {
-    const sidePanel = document.getElementById('sidePanel');
-    sidePanel.classList.toggle('active');
-}
+// function toggleSidePanel() {
+//     const sidePanel = document.getElementById('sidePanel');
+//     sidePanel.classList.toggle('active');
+// }
 function sendInstanceId(event) {
     $("#results").empty();
     $("#sectionResults .loading").empty();
-    toggleSidePanel();
     let baseApiUrl = event.target.dataset.baseApiUrl;
     sessionStorage.setItem("baseApiUrl", baseApiUrl);
     let instanceId = event.target.dataset.instanceId;
@@ -234,6 +252,7 @@ async function displayMetricTableData() {
         for (let i = 0; i < metricDataResults; i++) {
             createTableLineGauge(data.data.MetricDataResults[i])
         }
+        createIcons();
     }
 }
 
@@ -248,7 +267,7 @@ function createTableLineGauge(data) {
         let rowDiv = document.createElement("div");
         rowDiv.classList.add("row")
         section = document.createElement("section")
-        section.classList.add("col", "d-flex");
+        section.classList.add("col-12");
         section.setAttribute("id", data.Id)
         let results = document.querySelector("#results");
         rowDiv.appendChild(section)
@@ -262,20 +281,18 @@ function createTableLineGauge(data) {
     createLineGraphNew(data, section)
     createTable(data, section)
     createGauge(data, section)
-    createIcons(section)
-    
 }
 
-function createIcons(container) {
+function createIcons() {
     let tableIcon = document.createElement("i")
     tableIcon.classList.add("tableChart", "fa-solid", "fa-table", "fa-xl", "icon")
     let chartIcon = document.createElement("i")
     chartIcon.classList.add("lineChart", "fa-solid", "fa-chart-line", "fa-xl", "icon")
     let gaugeIcon = document.createElement("i")
     gaugeIcon.classList.add("gaugeChart","fa-solid", "fa-gauge", "fa-xl", "icon")
-    chartIcon.addEventListener("click", hideOtherCharts)
-    tableIcon.addEventListener("click", hideOtherCharts)
-    gaugeIcon.addEventListener("click", hideOtherCharts)
+    chartIcon.addEventListener("click", showLineCharts);
+    tableIcon.addEventListener("click", showTables);
+    gaugeIcon.addEventListener("click", showGauges);
     let selectWrapper = document.createElement("div");
     selectWrapper.classList.add("periodWrapper");
     let label = document.createElement("label");
@@ -349,8 +366,49 @@ function createIcons(container) {
     editBtn.innerHTML = "Edit";
     editBtn.classList.add("edit-btn");
     editBtn.addEventListener("click", handleEditBtn);
+    const container = document.querySelector("#chart-edit-container");
     container.append(chartIcon, tableIcon, gaugeIcon, selectWrapper,editBtn);
 }
+
+function hideTables() {
+    const tableCharts = document.querySelectorAll(".table-responsive");
+    tableCharts.forEach((chart) => chart.setAttribute("style", "display: none !important"));
+}
+
+function hideLineCharts() {
+    const tableCharts = document.querySelectorAll(".line-chart");
+    tableCharts.forEach((chart) => chart.setAttribute("style", "display: none !important"));
+}
+
+function hideGauges() {
+    const tableCharts = document.querySelectorAll(".guage-metric");
+    tableCharts.forEach((chart) => chart.setAttribute("style", "display: none !important"));
+}
+
+function showTables() {
+    hideEveryMetrics();
+    const tableCharts = document.querySelectorAll(".table-responsive");
+    tableCharts.forEach((chart) => chart.setAttribute("style", "display: block !important"));
+}
+
+function showLineCharts() {
+    hideEveryMetrics();
+    const tableCharts = document.querySelectorAll(".line-chart");
+    tableCharts.forEach((chart) => chart.setAttribute("style", "display: block !important"));
+}
+
+function showGauges() {
+    hideEveryMetrics();
+    const tableCharts = document.querySelectorAll(".guage-metric");
+    tableCharts.forEach((chart) => chart.setAttribute("style", "display: block !important"));
+}
+
+function hideEveryMetrics() {
+  hideTables();
+  hideLineCharts();
+  hideGauges();
+}
+
 function hideOtherCharts(e) {
     let target = e.target.classList[0].replace("Chart",'');
     let parentNodeList = e.target.parentElement.childNodes;
@@ -427,12 +485,11 @@ async function handlePeriodChange(e) {
         for (let i = 0; i < metricDataResults; i++) {
             createTableLineGauge(data.data.MetricDataResults[i])
         }
+        createIcons();
     }
 }
 function handleEditBtn(e) {
-    const section = e.target.closest('section');
-    if(!section) return;
-    const select = section.querySelector('.periodWrapper select');
+    const select = document.querySelector('.periodWrapper select');
     if (select) {
         select.removeAttribute('disabled');
     }
@@ -526,7 +583,7 @@ function createGauge(data, container) {
     
     // draw the chart
     let section = document.createElement("section");
-    section.classList.add("flex-grow-1", "d-flex", "justify-content-around", "flex-wrap", "align-items-center");
+    section.classList.add("flex-grow-1", "d-flex", "justify-content-around", "flex-wrap", "align-items-center", "guage-metric");
     section.setAttribute("Id", `gauge_${data.Id}`);
 
     //metric name column
@@ -609,6 +666,7 @@ function chartLineGraph(graphData, container) {
     flexDiv.classList.add("flex-grow-1");
     let flexDivId = `lineChart_${title}`;
     flexDiv.setAttribute("id", flexDivId);
+    flexDiv.setAttribute("class", "line-chart");
 
     // Step 6: Display the chart
     chart.container(flexDiv);
@@ -790,6 +848,7 @@ async function submitCustomDateTimeframe() {
         for (let i = 0; i < metricDataResults; i++) {
             createTableLineGauge(data.data.MetricDataResults[i])
         }
+        createIcons();
     }
 }
 
@@ -906,6 +965,7 @@ function refreshDropdownChoice(event) {
             for (let i = 0; i < metricDataResults; i++) {
                 createTableLineGauge(data.data.MetricDataResults[i])
             }
+            createIcons();
         }
 
     }, milliseconds)
@@ -1000,8 +1060,120 @@ document.addEventListener("DOMContentLoaded", function () {
 // }
 
 // sessionStorage.setItem("fakeMetricVisionData", JSON.stringify(completeFakeData))
-  
 
 
+// function toggleSidePanel() {
+//     const sidePanel = document.getElementById('sidePanel');
+//     sidePanel.classList.toggle('active');
+// }
 
 
+function accountsAndConnectInstancesObject() {
+    const allAccountsList = [
+        {
+            "MAS Sandbox Development": {
+                "connectInstances": {
+                    "masdevelopment": "08aaaa8c-2bbf-4571-8570-f853f6b7dba0",
+                    "masdevelopmentinstance2": "5c1408e0-cd47-4ba9-9b0c-c168752e2285"
+                },
+                "baseAPIGatewayURL": "https://szw9nl20j5.execute-api.us-east-1.amazonaws.com/test"
+            }
+        },
+        {
+            "MAS Sandbox Test1": {
+                "connectInstances": {
+                    "mastest1instance2": "921b9e21-6d50-4365-b861-297f61227bb8",
+                    "mastest1": "cd54d26a-fee3-4645-87da-6acae50962a5"
+                },
+                "baseAPIGatewayURL": "https://8vauowiu26.execute-api.us-east-1.amazonaws.com/test"
+            }
+        },
+        {
+            "MAS Sandbox Test2": {
+                "connectInstances": {
+                    "mastest2instance2": "d8445c54-35f2-4e65-ab0f-9c98889bdb0c",
+                    "mastest2": "ce2575a1-6ad8-4694-abd6-53acf392c698"
+                },
+                "baseAPIGatewayURL": "https://9v5jzdmc6a.execute-api.us-east-1.amazonaws.com/test"
+            }
+        }
+    ]
+    return allAccountsList;
+}
+
+function selectAccount(event) {
+    const connectInstances = document.getElementById('connectInstances');
+    let instanceName = document.querySelector("#awsConnectInstanceName");
+    instanceName.innerHTML = "";
+    let finalAccountAndInstanceButton = document.querySelector("#getMetricsButton");
+    finalAccountAndInstanceButton.disabled = true;
+    let title = event.target.innerHTML;
+    connectInstances.innerHTML = `
+    <p class="mt-3 text-center" id="awsAccountName">${title} </p>
+    <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Instances</button>
+    <div class="dropdown-menu instanceList"></div>
+    `;
+    $("#selected-account").text(title);
+    let allAccountsList = accountsAndConnectInstancesObject();
+    let instanceList = document.querySelector(".instanceList");
+    for (let i = 0; i < allAccountsList.length; i++) {
+        let accountName = Object.keys(allAccountsList[i])[0]
+        if (accountName === title) {
+            for (let [connectInstanceName, connectInstanceId] of Object.entries(allAccountsList[i][accountName]["connectInstances"])) {
+                let button = document.createElement("button");
+                button.classList.add("dropdown-item");
+                button.classList.add("connectInstance")
+                button.innerHTML = connectInstanceName;
+                button.dataset.instanceId = connectInstanceId;
+                button.dataset.baseApiUrl = allAccountsList[i][accountName]["baseAPIGatewayURL"];
+                button.addEventListener("click", selectInstance)
+                instanceList.appendChild(button)
+            }
+        }
+    }
+}
+
+function selectInstance(event) {
+    let instanceNameSpace = document.querySelector("#awsConnectInstanceName");
+    let instanceId = event.target.dataset.instanceId
+    let apiUrl = event.target.dataset.baseApiUrl;
+    instanceNameSpace.innerHTML = event.target.innerHTML;
+    $("#selected-instance").text(event.target.innerHTML);
+    let finalAccountAndInstanceButton = document.querySelector("#getMetricsButton");
+    finalAccountAndInstanceButton.dataset.instanceId = instanceId
+    finalAccountAndInstanceButton.dataset.baseApiUrl = apiUrl
+    finalAccountAndInstanceButton.disabled = false;
+}
+
+function createNewDashboard() {
+  // Redirect to the desired URL
+  alert("Creating a new dashboard...");
+}
+
+function showDashboards() {
+    window.location.href = "./dashboard.html";
+}
+
+function showMetrics() {
+    window.location.href = "./metrics.html";
+}
+
+function showAlarms() {
+    // Get the access token from sessionStorage
+    let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
+
+    if (accessToken) {
+        // Open the alarms page with the access token added in the URL as a query parameter
+        window.location.href = `/alarm.html?access_token=${accessToken}`;
+    } else {
+        alert('Access token not found. Please sign in again.');
+    }
+}
+
+function createNewAlarm() {
+    alert('Creating a new alarm...');
+}
+
+function toggleDarkMode() {
+    document.getElementsByTagName("body")[0].classList.toggle("dark-mode");
+}
