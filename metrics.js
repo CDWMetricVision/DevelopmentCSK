@@ -367,7 +367,8 @@ function createIcons() {
     editBtn.classList.add("edit-btn");
     editBtn.addEventListener("click", handleEditBtn);
     const container = document.querySelector("#chart-edit-container");
-    container.append(chartIcon, tableIcon, gaugeIcon, selectWrapper,editBtn);
+    container.innerHTML = "";
+    container.append(chartIcon, tableIcon, gaugeIcon, selectWrapper, editBtn);
 }
 
 function hideTables() {

@@ -144,7 +144,7 @@ body {
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    background-color: var(--background-color);
     color: #333;
     margin: 0;
     padding: 0;
@@ -811,7 +811,8 @@ input:checked + .slider:before {
 }
 
 .periodWrapper {
-    background: var(--clr-light-a0);
+    background: var(--background-color);
+    color: var(--text-color);
 }
 
 .periodWrapper > label {
@@ -820,11 +821,8 @@ input:checked + .slider:before {
 
 .edit-btn {
     padding: 5px 10px;
-    color: black;
-}
-
-.dark-mode .edit-btn {
-    color: var(--clr-light-a0);
+    background: var(--background-color);
+    color: var(--text-color);
 }
 
 @keyframes rotation {
