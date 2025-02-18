@@ -77,17 +77,21 @@ function generateDataWithTimeZone() {
         ]);
         time += 60000;
     }
+    data = [];
     return data;
 }
-function renderChart(containerId, metricName, seriesData) {
-    anychart.onDocumentReady(function () {
+function renderChart(container, metricName, seriesData) {
         let chart = anychart.line();
         let series = chart.line(seriesData);
         series.name(metricName);
         chart.title(metricName + " Over Time");
-        chart.container(containerId);
+        let flexDiv = document.createElement("section");
+        flexDiv.classList.add("flex-grow-1");
+        let flexDivId = `lineChart_${metricName}`;
+        flexDiv.setAttribute("id", flexDivId);
+        chart.container(flexDiv);
         chart.draw();
-    });
+        container.appendChild(flexDiv);
 }
 function cleanMetricName(metricId) {
     return metricId
@@ -296,7 +300,8 @@ async function getSavedDashboards() {
                         instanceId: widget.properties.metrics[0][3], // Instance ID
                         region: widget.properties.region
                     }));
-                    const timeSeriesData = generateDataWithTimeZone();
+                    // const timeSeriesData = generateDataWithTimeZone();
+                    timeSeriesData = []; // need to change accordingly for the data recieved
 
                     if (parsedData.widgets && parsedData.widgets.length > 0) {
                         for (const widget of parsedData.widgets) {
@@ -309,15 +314,15 @@ async function getSavedDashboards() {
                                 createGauge({ Id: metrics[0].name, Values: timeSeriesData.map(d => d[1]) }, innerDiv);
                             }
                             else if(widget.properties.view && widget.properties.view == "bar"){
-                                renderChart(id, widget["properties"]["title"], timeSeriesData);
+                                renderChart(innerDiv, widget["properties"]["title"], timeSeriesData);
                             }
                             else if(widget.properties.view && widget.properties.view == "table"){
                                 // need to change
                                 // createTable({ Id: metrics[0].name, Values: timeSeriesData, Timestamps: timeSeriesData }, innerDiv);
-                                renderChart(id, widget["properties"]["title"], timeSeriesData); 
+                                renderChart(innerDiv, widget["properties"]["title"], timeSeriesData); 
                             }
                             else {
-                                renderChart(id, widget["properties"]["title"], timeSeriesData);
+                                renderChart(innerDiv, widget["properties"]["title"], timeSeriesData);
                             }
                             console.log(`  Type: ${widget.type}`);
                             console.log(`  Position: (${widget.x}, ${widget.y})`);

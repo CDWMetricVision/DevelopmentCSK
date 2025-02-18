@@ -1,3 +1,5 @@
+let alarmsData = []; // Global variable to store alarms data
+
 // Function to get available accounts and their respective API URLs
 function getAccountsAlarmsAPI() {
     const allAccountsAlarmsList = [
@@ -16,7 +18,7 @@ function getAccountsAlarmsAPI() {
                 "cloudWatchAPI": "https://9v5jzdmc6a.execute-api.us-east-1.amazonaws.com/test/getalarm"
             }
         }
-    ]
+    ];
     return allAccountsAlarmsList;
 }
 
@@ -28,13 +30,49 @@ function customerAccountChange(event) {
     }
 }
 
+// Function to filter the table based on selected state
+function filterByState(event) {
+    const selectedState = event.target.value.trim().toLowerCase(); // Get and trim the selected state value
+    
+    // If no state is selected, show all alarms
+    if (!selectedState) {
+        displayTable(alarmsData); // Display all data if no filter is selected
+    } else {
+        // Filter alarms based on the selected state
+        const filteredAlarms = alarmsData.filter(alarm => 
+            alarm.State && alarm.State.toLowerCase() === selectedState // Match based on the 'State' field
+        );
+
+        if (filteredAlarms.length > 0) {
+            displayTable(filteredAlarms); // Display the filtered table
+        } else {
+            // If no alarms match the selected state, show a message
+            displayTable([]);
+        }
+    }
+}
+
 // Function to create a table from the alarms data
 function createTable(alarms) {
+    alarmsData = alarms; // Store alarms globally
+
+    // Display the table based on filtered data
+    displayTable(alarms);
+}
+
+// Function to display the table
+function displayTable(alarms) {
     const table = $('#alarmsList table');
     
     // Clear existing table content
     table.empty();
     
+    // If no alarms are available
+    if (alarms.length === 0) {
+        table.append('<tbody><tr><td colspan="5">No alarms found for the selected state.</td></tr></tbody>');
+        return;
+    }
+
     // Create table header
     const headers = Object.keys(alarms[0]);
     let headerHtml = '<thead><tr>';
@@ -52,7 +90,6 @@ function createTable(alarms) {
     alarms.forEach(alarm => {
         bodyHtml += '<tr>';
         headers.forEach(header => {
-            console.log(alarm[header].toLowerCase());
             if (header.toLowerCase() === 'state' && alarm[header].toLowerCase() === 'alarm') {
                 bodyHtml += `<td class="red">${alarm[header]}</td>`;
             } else {
