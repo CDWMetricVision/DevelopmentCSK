@@ -24,9 +24,15 @@ function customerAccountChange(event) {
 }
 
 function createDashboards() {
-    const selectedAcc = $("#customerAccounts").val();
-    const navURL = '/createDashboard.html?' + 'customerAccount='+selectedAcc;
-    window.open(navURL, '_blank');
+    let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
+  
+    if (accessToken) {
+      const selectedAcc = $("#customerAccounts").val();
+      const navURL = '/createDashboard.html?' + 'customerAccount='+selectedAcc;
+      window.open(navURL, '_blank');
+    } else {
+      alert("Access token not found. Please sign in again.");
+    }
 }
 
 function handleInputChange(event) {
