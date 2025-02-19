@@ -1,3 +1,36 @@
+function showMetrics() {
+    window.location.href = "./metrics.html";
+  }
+  
+  function showAlarms() {
+    // Get the access token from sessionStorage
+    let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
+  
+    if (accessToken) {
+      // Open the alarms page with the access token added in the URL as a query parameter
+      window.location.href = `/alarm.html?access_token=${accessToken}`;
+    } else {
+      alert("Access token not found. Please sign in again.");
+    }
+  }
+  
+  function toggleDarkMode() {
+    document.getElementsByTagName("body")[0].classList.toggle("dark-mode");
+  }
+  function getDashboardsAPI() {
+    const savedDashboardsAPI = [
+        {
+            "MAS Sandbox Development":"https://szw9nl20j5.execute-api.us-east-1.amazonaws.com/test",
+        },
+        {
+            "MAS Sandbox Test1":"https://8vauowiu26.execute-api.us-east-1.amazonaws.com/test",
+        },
+        {
+            "MAS Sandbox Test2":"https://9v5jzdmc6a.execute-api.us-east-1.amazonaws.com/test",
+        }
+    ]
+    return savedDashboardsAPI;
+}
 function accountsAndConnectInstancesObject() {
     const allAccountsList = [
         {
@@ -59,46 +92,193 @@ window.addEventListener("load",() => {
 
 
     if (params.has("customerAccount")) {
-        console.log("Query parameter 'product' exists!"); 
         const selectedAcc = params.get("customerAccount");
         let allAccountsList = accountsAndConnectInstancesObject();
-        let instanceList = $("#instances");
-        $("#instances").empty();
-        let option = $("<option>", {
-            text: "--Select--",
-            value: "",
-            disabled: true,
-            selected: true,
-            hidden: true
-        });
-        instanceList.append(option);
-
+        const connectInstances = document.getElementById('connectInstances');
+        connectInstances.innerHTML = `
+        <button class="btn btn-secondary dropdown-toggle w-100" id="instancesId" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Instances</button>
+        <div class="dropdown-menu instanceList"></div>
+        `;
+        let instanceList = document.querySelector(".instanceList");
         for (let i = 0; i < allAccountsList.length; i ++) {
             let accountName = Object.keys(allAccountsList[i])[0]
             if (accountName.toLowerCase() === selectedAcc.toLowerCase()) {
                 for (let [connectInstanceName, connectInstanceId] of Object.entries(allAccountsList[i][accountName]["connectInstances"])) {
-                    option = $("<option>", {
-                        text: connectInstanceName,
-                        value: connectInstanceId,
-                    });
-                    instanceList.append(option);
+                    let button = document.createElement("button");
+                    button.classList.add("dropdown-item");
+                    button.classList.add("connectInstance")
+                    button.innerHTML = connectInstanceName;
+                    button.dataset.instanceId = connectInstanceId;
+                    button.addEventListener("click", selectInstance)
+                    instanceList.appendChild(button)
                 }
             }
         }
     }
+    if (params.has("access_token")) {
+        const token = params.get("access_token");
+        sessionStorage.setItem('MetricVisionAccessToken',token);
+    }
 })
-function renderChart(container, metricName, seriesData) {
-    let chart = anychart.line();
-        let series = chart.line(seriesData);
-        series.name(metricName);
-        chart.title(metricName + " Over Time");
-        let flexDiv = document.createElement("section");
-        flexDiv.classList.add("flex-grow-1");
-        let flexDivId = `lineChart_${metricName}`;
-        flexDiv.setAttribute("id", flexDivId);
-        chart.container(flexDiv);
-        chart.draw();
-        container.appendChild(flexDiv);
+function localDateToUTC(rawDateInput, rawTimeInput) {
+    let [year, month, day] = rawDateInput.split("-");
+    month = parseInt(month) - 1;
+    let [hours, minutes] = rawTimeInput.split(":");
+    let UTCDate = new Date(year, month, day, hours, minutes).toISOString()
+    return UTCDate;
+}
+function timezoneDropdownChoice(event) {
+    let timezoneDropdownButtonText = document.querySelector("#timezoneButton")
+    timezoneDropdownButtonText.innerHTML = event.target.innerHTML;
+}
+async function getContactFlowNames() {
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    let baseURL;
+    if (params.has("customerAccount")) {
+        const selectedAcc = params.get("customerAccount");
+        const apis = getDashboardsAPI();
+        baseURL = apis
+        .filter(account => account[selectedAcc])
+        .map(account => account[selectedAcc])[0];
+    }
+    // let baseURL = sessionStorage.getItem("baseApiUrl");
+    let instanceId = $("#instancesId").data('instance-id');
+    let paramURL = `${baseURL}/contactFlows/?instanceId=${instanceId}`;
+    try {
+        let token = sessionStorage.getItem("MetricVisionAccessToken");
+        let response = await fetch(paramURL, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        if (!response.ok) {
+            if (response.status === 401) {
+                let modalEl = document.querySelector("#signInAgainModal");
+                let modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            }
+            let failedResponse = await response.json();
+            return {
+                "errorMessage": failedResponse,
+                "response": response,
+                "result": false
+            }
+        } else {
+            let contactFlowNames = await response.json();
+            let contactSelect = document.getElementById("contactSelect");
+            contactSelect.innerHTML = `<option value="">Select a Contact</option>`;
+            let contactMetricsOptions = document.getElementById("contactMetricsOptions");
+            contactMetricsOptions.style.display = 'none';
+            contactFlowNames.forEach(contact => {
+                const option = document.createElement("option");
+                option.value = contact;
+                option.textContent = contact;
+                contactSelect.appendChild(option);
+              });
+              contactSelect.addEventListener("change", () => {
+                if (contactSelect.value) {
+                  contactMetricsOptions.style.display = "block";
+                } else {
+                  contactMetricsOptions.style.display = "none";
+                }
+              });
+            sessionStorage.setItem("contactFlowNames", contactFlowNames)
+            return {
+                "contactFlowNames": contactFlowNames,
+                "result": true
+            }
+        }
+    } catch(err) {
+        console.log(err)
+        return {
+            "errorMessage": err,
+            "result": false
+        }
+    }
+}
+async function getQueueNames() {
+    let baseURL;
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    if (params.has("customerAccount")) {
+        const selectedAcc = params.get("customerAccount");
+        const apis = getDashboardsAPI();
+        baseURL = apis
+        .filter(account => account[selectedAcc])
+        .map(account => account[selectedAcc])[0];
+    }
+    // let baseURL = sessionStorage.getItem("baseApiUrl");
+    let instanceId = $("#instancesId").data('instance-id');
+    let paramURL = `${baseURL}/queues/?instanceId=${instanceId}`;
+    try {
+        let token = sessionStorage.getItem("MetricVisionAccessToken");
+        let response = await fetch(paramURL, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        if (!response.ok) {
+            if (response.status === 401) {
+                let modalEl = document.querySelector("#signInAgainModal");
+                let modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            }
+            let failedResponse = await response.json();
+            return {
+                "errorMessage": failedResponse,
+                "response": response,
+                "result": false
+            }
+        } else {
+            let queueNames = await response.json();
+            let queueSelect = document.getElementById("queueSelect");
+            queueSelect.innerHTML = `<option value="">Select a Queue</option>`;
+            let queueMetricsOptions = document.getElementById("queueMetricsOptions");
+            queueMetricsOptions.style.display = "none";
+            queueNames.forEach(queue => {
+                const option = document.createElement("option");
+                option.value = queue;
+                option.textContent = queue;
+                queueSelect.appendChild(option);
+              });
+              queueSelect.addEventListener("change", () => {
+                if (queueSelect.value) {
+                  queueMetricsOptions.style.display = "block";
+                } else {
+                  queueMetricsOptions.style.display = "none";
+                }
+              });
+            sessionStorage.setItem("queueNames", queueNames)
+            return {
+                "queueNames": queueNames,
+                "result": true
+            }
+        }
+    } catch(err) {
+        console.log(err)
+        return {
+            "errorMessage": err,
+            "result": false
+        }
+    }
+}
+function selectInstance(event) {
+    let instanceNameSpace = document.querySelector("#awsConnectInstanceName");
+    let instanceId = event.target.dataset.instanceId;
+    instanceNameSpace.innerHTML = event.target.innerHTML;
+    $("#selected-instance").text(event.target.innerHTML);
+    let finalAccountAndInstanceButton = document.querySelector("#instancesId");
+    finalAccountAndInstanceButton.dataset.instanceId = instanceId
+}
+function handleWidgetSelection(event) {
+    let finalAccountAndInstanceButton = document.querySelector("#widgetSelection");
+    document.querySelector("#widgetSelection").innerHTML = event.target.dataset.value;
+    finalAccountAndInstanceButton.dataset.selectedwidget = event.target.dataset.value;
+    getContactFlowNames();
+    getQueueNames();
 }
 function cleanMetricName(metricId) {
     return metricId
@@ -261,7 +441,6 @@ function createTable(data, container) {
         })
     }
     table.appendChild(tableBody);
-    tableWrapper.setAttribute("style", "display: none !important");
     container.appendChild(tableWrapper);
 }
 function generateDataWithTimeZone() {
@@ -287,87 +466,255 @@ function generateDataWithTimeZone() {
     }
     return data;
 }
-async function createWidgets(){
-    let selectedMetrics = $("#selctedMetrics").val();
+async function customTimeFetchCloudWatchData(customStartTimeandDate, customEndTimeandDate, contactFlowName, queueName, individualMetrics, period = null) {
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    let baseURL;
+    if (params.has("customerAccount")) {
+        const selectedAcc = params.get("customerAccount");
+        const apis = getDashboardsAPI();
+        baseURL = apis
+        .filter(account => account[selectedAcc])
+        .map(account => account[selectedAcc])[0];
+    }
+    let customStartTimeParam = '';
+    let customEndTimeParam = '';
+    let contactFlowNameParam = '';
+    let queueNameParam = '';
+    let individualMetricsParam = '';
+    if (customStartTimeandDate && customEndTimeandDate) {
+        customStartTimeParam = `&customStartTimeandDate=${customStartTimeandDate}`;
+        customEndTimeParam = `&customEndTimeandDate=${customEndTimeandDate}`;
+    }
+    if (contactFlowName) {
+        contactFlowNameParam = `&contactFlowName=${contactFlowName}`
+    }
+    if (queueName) {
+        queueNameParam = `&queueName=${queueName}`
+    }
+    if (individualMetrics) {
+        individualMetricsParam = `&individualMetrics=${individualMetrics}`
+    }
+    let instanceId = $("#instancesId").data('instance-id');
+    let paramURL = `${baseURL}/Any/?instanceId=${instanceId}${customStartTimeParam}${customEndTimeParam}${contactFlowNameParam}${queueNameParam}${individualMetricsParam}`;
+    try {
+        let token = sessionStorage.getItem("MetricVisionAccessToken");
+        let response = await fetch(paramURL, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        if (!response.ok) {
+            if (response.status === 401) {
+                let modalEl = document.querySelector("#signInAgainModal");
+                let modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            }
+            let failedResponse = await response.json();
+            return {
+                "errorMessage": failedResponse,
+                "response": response,
+                "result": false
+            }
+        } else {
+            let cloudWatchData = await response.json();
+            sessionStorage.setItem("MetricVisionDashboardData", JSON.stringify(cloudWatchData));
+            return {
+                "data": cloudWatchData,
+                "result": true
+            }
+        }
+    } catch (err) {
+        console.log(err)
+        return {
+            "errorMessage": err,
+            "result": false
+        }
+    }
+}
+function chooseMetrics(event) {
+    let individualMetricsList = [];
+    let contactName = '';
+    let queueName = '';
+    let instanceMetricsCheckboxes = document.querySelectorAll(".instance-metrics");
+    let contactMetricsCheckboxes = document.querySelectorAll(".contact-metrics");
+    let contactNameDropdown = document.querySelector("#contactSelect");
+    let queueNameDropdown = document.querySelector("#queueSelect");
+    let queueMetricsCheckboxes = document.querySelectorAll(".queue-metrics");
+    instanceMetricsCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            individualMetricsList.push(checkbox.id)
+        }
+    });
+    contactMetricsCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            individualMetricsList.push(checkbox.id);
+            contactName = contactNameDropdown.value
+        }
+    });
+    queueMetricsCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            individualMetricsList.push(checkbox.id);
+            queueName = queueNameDropdown.value;
+        }
+    })
+    let individualMetricsString = individualMetricsList.toString();
+    return {
+        "individualMetricsString": individualMetricsString,
+        "contactName": contactName,
+        "queueName": queueName
+    }
+}
+function createLineGraphNew(data, container) {
+    let metric = data.Id;
+    let chartMetricData = [];
+    for (let i = 0; i < data["Timestamps"].length; i++) {
+        let chartData = [];
+        if (metric === "to_instance_packet_loss_rate") {
+            chartData.push(data["Timestamps"][i], data["Values"][i].toFixed(3))
+            chartMetricData.push(chartData)
+            continue
+        } else {
+            chartData.push(data["Timestamps"][i], data["Values"][i])
+            chartMetricData.push(chartData)
+        }
+    }
+    let graphData = {
+        "title": metric,
+        "xAxis": "Interval",
+        "yAxis": metric,
+        "data": chartMetricData
+    }
+    chartLineGraph(graphData, container)
+}
+function chartLineGraph(graphData, container) {
+    let {title, xAxis, yAxis, data} = graphData;
+    let chart = anychart.line();
+    chart.data(data);
+    chart.title(cleanMetricName(title));
+    
+    // Step 5: Customize axes
+    chart.xAxis().title(xAxis);
+
+    let flexDiv = document.createElement("section");
+    flexDiv.classList.add("flex-grow-1");
+    let flexDivId = `lineChart_${title}`;
+    flexDiv.setAttribute("id", flexDivId);
+    flexDiv.setAttribute("class", "line-chart");
+
+    // Step 6: Display the chart
+    chart.container(flexDiv);
+    chart.draw();
+    container.appendChild(flexDiv);
+
+}
+function createTableLineGauge(data,container) {
+    if (data.Id.includes("percentage")) {
+        data.Values.forEach(function(value, index) {
+            data.Values[index] = Math.floor(value * 100)
+        })
+    }
+    createLineGraphNew(data, container);
+}
+async function getWidgets(){
     let instanceId = $("#instances").val();
-    let dashboardName = $("#dashboardName").val().trim();
-    let widgetView = $("#widgets").val();
-    // console.log(getCreateWidgetRequestBody(dashboardName,selectedMetrics,instanceId));
-    const apiURL = 'https://uptqippqj5.execute-api.us-east-1.amazonaws.com/test/put_dashboard';
+    let startDate = document.querySelector("#customStartDate").value
+    let endDate = document.querySelector("#customEndDate").value
+    let startTime = document.querySelector("#startTime").value
+    let endTime = document.querySelector("#endTime").value
+    let timezoneChoice = document.querySelector("#timezoneButton").innerHTML
+    let chosenMetrics = chooseMetrics();
+    let metricsInput = document.querySelector("#metricsInput");
+    if (startDate && endDate && startTime && endTime && chosenMetrics.individualMetricsString) {
+        metricsInput.innerHTML = '';
+    } else {
+        metricsInput.setAttribute("style", "color: red;")
+        metricsInput.innerHTML = "Please select a start time and date, an end time and date, and at least 1 metric from the dropdown"
+        return
+    }
+    let localTimezoneChoice = timezoneChoice.split(" ")[0];
+    let formatterOptions = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    }
+    let timezoneFormats = {
+        "Hawaii": "Pacific/Honolulu",
+        "Alaska": "America/Anchorage",
+        "Pacific": "America/Los_Angeles", 
+        "Mountain": "America/Denver",
+        "Central": "America/Chicago",
+        "Eastern": "America/New_York",
+        "UTC": "UTC"
+    }
+    if (localTimezoneChoice != "Local") {
+        formatterOptions.timeZone = timezoneFormats[localTimezoneChoice];
+    }
+    let startUTC = localDateToUTC(startDate, startTime);
+    let endUTC = localDateToUTC(endDate, endTime);
     $("#loader").show();
     try{
-        await fetch(apiURL,
-            {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(getCreateWidgetRequestBody(dashboardName,selectedMetrics,instanceId,widgetView)),
-            }
-        ).then(response =>{
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-            }).then(data=>{
-                const body = JSON.parse(data.body);
-                console.log(body);
-                console.log(body.dashboardBody);
-                $(".chartContainer").show();
-                let chartContainer = document.querySelector(".chartContainer");
-                $(".chartContainer").empty();
-                let div = document.createElement("div");
-                    div.classList.add("dashboard-container");
-                    let dasboardContentWrapper = document.createElement("div");
-                    dasboardContentWrapper.classList.add("dashboard-wrapper");
-                    let p = document.createElement("p");
-                    p.innerHTML = `${body.dashboardName} Dashboard`;
-                    div.append(p);
-                const metrics = body.dashboardBody.widgets.map(widget => ({
-                    name: widget.properties.metrics[0][1], // Metric name
-                    instanceId: widget.properties.metrics[0][3], // Instance ID
-                    region: widget.properties.region
-                }));
-                // const timeSeriesData = generateDataWithTimeZone();
-                timeSeriesData = []; // need to change accordingly for the data recieved
-
-                if (body.dashboardBody.widgets && body.dashboardBody.widgets.length > 0) {
-                    for (const widget of body.dashboardBody.widgets) {
-                        let innerDiv = document.createElement("div");
-                        let id = 'id_' + Math.random().toString(36).substr(2, 9);
-                        innerDiv.id = id;
-                        innerDiv.classList.add("chart");
-                        dasboardContentWrapper.append(innerDiv);
-                        if(widget.properties.view && widget.properties.view == "gauge") {
-                            createGauge({ Id: metrics[0].name, Values: timeSeriesData.map(d => d[1]) }, innerDiv);
-                        }
-                        else if(widget.properties.view && widget.properties.view == "bar"){
-                            renderChart(innerDiv, widget["properties"]["title"], timeSeriesData);
-                        }
-                        else if(widget.properties.view && widget.properties.view == "table"){
-                            // need to change
-                            // createTable({ Id: metrics[0].name, Values: timeSeriesData, Timestamps: timeSeriesData }, innerDiv);
-                            renderChart(innerDiv, widget["properties"]["title"], timeSeriesData); 
-                        }
-                        else {
-                            renderChart(innerDiv, widget["properties"]["title"], timeSeriesData);
-                        }
-                        console.log(`  Type: ${widget.type}`);
-                        console.log(`  Position: (${widget.x}, ${widget.y})`);
-                        console.log(`  Size: ${widget.width}x${widget.height}`);
-                        console.log(`  Properties:`, widget.properties);
+        
+        let data = await customTimeFetchCloudWatchData(startUTC, endUTC, chosenMetrics['contactName'],chosenMetrics['queueName'],chosenMetrics['individualMetricsString'])
+        if (!data.result) {
+            $("#loader").hide();
+            let sectionHeader = document.querySelector("#metricsInput");
+            $("#metricsInput").empty();
+            let error = document.createElement("p");
+            error.innerHTML = `Error: ${data.errorMessage.status}`;
+            sectionHeader.appendChild(error);
+        } else {
+            $("#loader").hide();
+            let metricDataResults = data.data.MetricDataResults.length;
+            for (let i = 0; i < metricDataResults; i++) {
+                if (data.data.MetricDataResults[i]['Timestamps'].length > 0) {
+                    let timestampsArray = data.data.MetricDataResults[i]['Timestamps']
+                    for (let j = 0; j < timestampsArray.length; j++) {
+                        let formatter = new Intl.DateTimeFormat("en-US", formatterOptions)
+                        let UTCDate = timestampsArray[j] + " UTC";
+                        let UTCDateObject = new Date(UTCDate);
+                        let formattedDate = formatter.format(UTCDateObject);
+                        timestampsArray[j] = formattedDate;
                     }
-                    div.append(dasboardContentWrapper);
                 }
-                chartContainer.append(div);
-                // createTable(body);
-                $("#loader").hide();
-
-            })
-            .catch(error =>{
-                $("#loader").hide();
-                console.error('There was a problem with the fetch operation:', error);
-            });
+            }
+            $(".chartContainer").show();
+            let chartContainer = document.querySelector(".chartContainer");
+            $(".chartContainer").empty();
+            let div = document.createElement("div");
+            div.classList.add("dashboard-container");
+            let dasboardContentWrapper = document.createElement("div");
+            dasboardContentWrapper.classList.add("dashboard-wrapper");
+            let p = document.createElement("p");
+            div.append(p);
+            for (let i = 0; i < metricDataResults; i++) {
+                let innerDiv = document.createElement("div");
+                let id = 'id_' + Math.random().toString(36).substr(2, 9);
+                innerDiv.id = id;
+                innerDiv.classList.add("chart");
+                dasboardContentWrapper.append(innerDiv);
+                div.append(dasboardContentWrapper);
+                if (data.data.MetricDataResults[i].Id.includes("percentage")) {
+                    data.data.MetricDataResults[i].Values.forEach(function(value, index) {
+                        data.data.MetricDataResults[i].Values[index] = Math.floor(value * 100)
+                    })
+                }
+                if(document.querySelector("#widgetSelection").dataset.selectedwidget.toLowerCase() == 'line') {
+                    createTableLineGauge(data.data.MetricDataResults[i], innerDiv);
+                }
+                if(document.querySelector("#widgetSelection").dataset.selectedwidget.toLowerCase() == 'numberchart') {
+                    createTable(data.data.MetricDataResults[i], innerDiv);
+                }
+                if(document.querySelector("#widgetSelection").dataset.selectedwidget.toLowerCase() == 'gauge') {
+                    createGauge(data.data.MetricDataResults[i], innerDiv);
+                }
+            }
+            chartContainer.append(div);
+        }
     } catch(err){
         console.log(err);
     }

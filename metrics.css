@@ -79,7 +79,7 @@ body {
 
 #timezoneButton,
 #chosenMetrics,
-#autoRefreshButton {
+#autoRefreshButton, #widgetSelection {
     background-color: #f8c8dc !important;
     /* Pale pink */
     border-color: #f8c8dc !important;
@@ -98,7 +98,7 @@ body {
 
 /* GO Button - Pale Wine Color */
 /* GO Button - Pale Wine Color with Bold & Highlighted Look */
-#customDateTimeButton {
+#customDateTimeButton,#getWidgets {
     background-color: #7b506f !important;
     /* Pale wine */
     border-color: #7b506f !important;
@@ -337,6 +337,7 @@ a:hover {
 }
 .main-container-wrapper{
     width: 100%;
+    margin: 30px 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -365,7 +366,7 @@ a:hover {
     width: fit-content;
 }
 
-.accounts-options-wrapper > button {
+.accounts-options-wrapper > button, .instances-content-container {
     width: 220px;
 }
 
@@ -448,11 +449,15 @@ input[name='accountName']{
 }
 .create-dashboard-wrapper{
     display: flex;
+    margin: 30px 0;
     flex-direction: column;
     gap: 15px;
 }
 .create-dashboard-wrapper .create-options-wrapper{
     gap: 10px;
+}
+.create-options-wrapper{
+    margin: 20px 0;
 }
 .create-metrics-wrapper{
     display: flex;
@@ -618,6 +623,10 @@ body {
     background: #fff;
     border-radius: 5px;
     width: 33%;
+}
+/* dark mode */
+body.dark-mode .chart{
+    color: #000;
 }
 .slider {
     position: absolute;

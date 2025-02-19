@@ -1,3 +1,11 @@
+window.addEventListener("load",() => {
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    if (params.has("access_token")) {
+        const token = params.get("access_token");
+        sessionStorage.setItem('MetricVisionAccessToken',token);
+    }
+})
 function showMetrics() {
   window.location.href = "./metrics.html";
 }
@@ -24,9 +32,15 @@ function customerAccountChange(event) {
 }
 
 function createDashboards() {
-    const selectedAcc = $("#customerAccounts").val();
-    const navURL = '/createDashboard.html?' + 'customerAccount='+selectedAcc;
-    window.open(navURL, '_blank');
+    let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
+  
+    if (accessToken) {
+      const selectedAcc = $("#customerAccounts").val();
+      const navURL = `/createDashboard.html?customerAccount=${selectedAcc}&access_token=${accessToken}`;
+      window.open(navURL, '_blank');
+    } else {
+      alert("Access token not found. Please sign in again.");
+    }
 }
 
 function handleInputChange(event) {
@@ -34,13 +48,7 @@ function handleInputChange(event) {
     $("#createDashboards").attr("disabled", false);
 }
 
-function saveDashboards() {
-    const accName = $("#accountName").val();
-    
-    if (accName.trim() === '' || accName.length === 0) {
-        window.alert("Enter Dashboard Name");
-    }
-}
+
 
 function getSavedDashboardsAPI() {
     const savedDashboardsAPI = [
@@ -180,7 +188,7 @@ function createGauge(data, container) {
     // Min & Max Columns
     let minMaxDiv = document.createElement("div");
     minMaxDiv.classList.add("d-flex", "flex-column", "text-center", "mx3");
-    minMaxDiv.innerHTML = `<div>${min}</div><div>Minimum</div><div>${max}</div><div>Maximum</div>`;
+    minMaxDiv.innerHTML = `<p>${min}</p><p>Minimum</p><p>${max}</p><p>Maximum</p>`;
 
     // Avg & Sum Columns
     let avgSumDiv = document.createElement("div");
