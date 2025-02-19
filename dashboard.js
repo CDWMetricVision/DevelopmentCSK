@@ -1,3 +1,11 @@
+window.addEventListener("load",() => {
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    if (params.has("access_token")) {
+        const token = params.get("access_token");
+        sessionStorage.setItem('MetricVisionAccessToken',token);
+    }
+})
 function showMetrics() {
   window.location.href = "./metrics.html";
 }
@@ -28,7 +36,7 @@ function createDashboards() {
   
     if (accessToken) {
       const selectedAcc = $("#customerAccounts").val();
-      const navURL = '/createDashboard.html?' + 'customerAccount='+selectedAcc;
+      const navURL = `/createDashboard.html?customerAccount=${selectedAcc}&access_token=${accessToken}`;
       window.open(navURL, '_blank');
     } else {
       alert("Access token not found. Please sign in again.");
@@ -186,7 +194,7 @@ function createGauge(data, container) {
     // Min & Max Columns
     let minMaxDiv = document.createElement("div");
     minMaxDiv.classList.add("d-flex", "flex-column", "text-center", "mx3");
-    minMaxDiv.innerHTML = `<div>${min}</div><div>Minimum</div><div>${max}</div><div>Maximum</div>`;
+    minMaxDiv.innerHTML = `<p>${min}</p><p>Minimum</p><p>${max}</p><p>Maximum</p>`;
 
     // Avg & Sum Columns
     let avgSumDiv = document.createElement("div");

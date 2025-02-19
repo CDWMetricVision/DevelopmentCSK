@@ -115,6 +115,10 @@ window.addEventListener("load",() => {
             }
         }
     }
+    if (params.has("access_token")) {
+        const token = params.get("access_token");
+        sessionStorage.setItem('MetricVisionAccessToken',token);
+    }
 })
 function localDateToUTC(rawDateInput, rawTimeInput) {
     let [year, month, day] = rawDateInput.split("-");
@@ -508,7 +512,7 @@ async function customTimeFetchCloudWatchData(customStartTimeandDate, customEndTi
             }
         } else {
             let cloudWatchData = await response.json();
-            sessionStorage.setItem("MetricVisionDashboardData", json.Stringify(cloudWatchData));
+            sessionStorage.setItem("MetricVisionDashboardData", JSON.stringify(cloudWatchData));
             return {
                 "data": cloudWatchData,
                 "result": true
@@ -652,7 +656,7 @@ async function getWidgets(){
         if (!data.result) {
             $("#loader").hide();
             let sectionHeader = document.querySelector("#metricsInput");
-            sectionHeader.empty();
+            $("#metricsInput").empty();
             let error = document.createElement("p");
             error.innerHTML = `Error: ${data.errorMessage.status}`;
             sectionHeader.appendChild(error);
