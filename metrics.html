@@ -127,60 +127,6 @@
                                     <input class="form-check-input instance-metrics" type="checkbox" id="calls_transferred_to_agent">
                                     <label class="form-check-label" for="calls_transferred_to_agent">Calls Transferred To Agent</label>
                                 </div>
-                            </div>
-                        </li>
-                        <hr>
-                        <!-- Dynamic Contact Metrics -->
-                        <li class="dropdown-item">
-                            <label class="font-weight-bold">Contact Metrics</label>
-                            <select class="form-control" id="contactSelect">
-                                <option value="">Select a Contact</option>
-                            </select>
-                            <div id="contactMetricsOptions" class="nested-menu mt-2" style="display: none;">
-                                <div class="form-check">
-                                    <input class="form-check-input contact-metrics" type="checkbox"
-                                        id="contact_flow_errors">
-                                    <label class="form-check-label" for="contact_flow_errors">Contact Flow
-                                        Errors</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input contact-metrics" type="checkbox"
-                                        id="contact_flow_fatal_errors">
-                                    <label class="form-check-label" for="contact_flow_fatal_errors">Contact Flow Fatal
-                                        Errors</label>
-                                </div>
-                            </div>
-                        </li>
-                        <hr>
-                        <!-- Dynamic Queue Metrics -->
-                        <li class="dropdown-item">
-                            <label class="font-weight-bold">Queue Metrics</label>
-                            <select class="form-control" id="queueSelect">
-                                <option value="">Select a Queue</option>
-                            </select>
-                            <div id="queueMetricsOptions" class="nested-menu mt-2" style="display: none;">
-                                <div class="form-check">
-                                    <input class="form-check-input queue-metrics" type="checkbox"
-                                        id="longest_queue_wait_time">
-                                    <label class="form-check-label" for="longest_queue_wait_time">Longest Queue Wait
-                                        Time</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input queue-metrics" type="checkbox"
-                                        id="queue_capacity_exceeded_error">
-                                    <label class="form-check-label" for="queue_capacity_exceeded_error">Queue Capacity
-                                        Exceeded Error</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input queue-metrics" type="checkbox" id="queue_size">
-                                    <label class="form-check-label" for="queue_size">Queue Size</label>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- Additional Metrics -->
-                        <li class="dropdown-item">
-                            <label class="font-weight-bold">Additional Metrics</label>
-                            <div class="nested-menu mt-2">
                                 <div class="form-check">
                                     <input class="form-check-input additional-metrics" type="checkbox" id="contact_lens_sentiment">
                                     <label class="form-check-label" for="contact_lens_sentiment">Contact Lens Sentiment</label>
@@ -257,6 +203,61 @@
                                     <input class="form-check-input additional-metrics" type="checkbox" id="chats_breaching_active_chat_quota">
                                     <label class="form-check-label" for="chats_breaching_active_chat_quota">Chats Breaching Active Chat Quota</label>
                                 </div>
+                            </div>
+                        </li>
+                        <hr>
+                        <!-- Dynamic Contact Metrics -->
+                        <li class="dropdown-item">
+                            <label class="font-weight-bold">Contact Metrics</label>
+                            <select class="form-control" id="contactSelect">
+                                <option value="">Select a Contact</option>
+                            </select>
+                            <div id="contactMetricsOptions" class="nested-menu mt-2" style="display: none;">
+                                <div class="form-check">
+                                    <input class="form-check-input contact-metrics" type="checkbox"
+                                        id="contact_flow_errors">
+                                    <label class="form-check-label" for="contact_flow_errors">Contact Flow
+                                        Errors</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input contact-metrics" type="checkbox"
+                                        id="contact_flow_fatal_errors">
+                                    <label class="form-check-label" for="contact_flow_fatal_errors">Contact Flow Fatal
+                                        Errors</label>
+                                </div>
+                            </div>
+                        </li>
+                        <hr>
+                        <!-- Dynamic Queue Metrics -->
+                        <li class="dropdown-item">
+                            <label class="font-weight-bold">Queue Metrics</label>
+                            <select class="form-control" id="queueSelect">
+                                <option value="">Select a Queue</option>
+                            </select>
+                            <div id="queueMetricsOptions" class="nested-menu mt-2" style="display: none;">
+                                <div class="form-check">
+                                    <input class="form-check-input queue-metrics" type="checkbox"
+                                        id="longest_queue_wait_time">
+                                    <label class="form-check-label" for="longest_queue_wait_time">Longest Queue Wait
+                                        Time</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input queue-metrics" type="checkbox"
+                                        id="queue_capacity_exceeded_error">
+                                    <label class="form-check-label" for="queue_capacity_exceeded_error">Queue Capacity
+                                        Exceeded Error</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input queue-metrics" type="checkbox" id="queue_size">
+                                    <label class="form-check-label" for="queue_size">Queue Size</label>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- Additional Metrics -->
+                        <li class="dropdown-item">
+                            <label class="font-weight-bold">Additional Metrics</label>
+                            <div class="nested-menu mt-2">
+                                
                             </div>
                         </li>
                         <hr>
