@@ -624,6 +624,10 @@ body {
     border-radius: 5px;
     width: 33%;
 }
+/* dark mode */
+body.dark-mode .chart{
+    color: #000;
+}
 .slider {
     position: absolute;
     cursor: pointer;

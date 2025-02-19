@@ -132,7 +132,17 @@ function timezoneDropdownChoice(event) {
     timezoneDropdownButtonText.innerHTML = event.target.innerHTML;
 }
 async function getContactFlowNames() {
-    let baseURL = sessionStorage.getItem("baseApiUrl");
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    let baseURL;
+    if (params.has("customerAccount")) {
+        const selectedAcc = params.get("customerAccount");
+        const apis = getDashboardsAPI();
+        baseURL = apis
+        .filter(account => account[selectedAcc])
+        .map(account => account[selectedAcc])[0];
+    }
+    // let baseURL = sessionStorage.getItem("baseApiUrl");
     let instanceId = $("#instancesId").data('instance-id');
     let paramURL = `${baseURL}/contactFlows/?instanceId=${instanceId}`;
     try {
@@ -189,7 +199,17 @@ async function getContactFlowNames() {
     }
 }
 async function getQueueNames() {
-    let baseURL = sessionStorage.getItem("baseApiUrl");
+    let baseURL;
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    if (params.has("customerAccount")) {
+        const selectedAcc = params.get("customerAccount");
+        const apis = getDashboardsAPI();
+        baseURL = apis
+        .filter(account => account[selectedAcc])
+        .map(account => account[selectedAcc])[0];
+    }
+    // let baseURL = sessionStorage.getItem("baseApiUrl");
     let instanceId = $("#instancesId").data('instance-id');
     let paramURL = `${baseURL}/queues/?instanceId=${instanceId}`;
     try {
@@ -259,19 +279,6 @@ function handleWidgetSelection(event) {
     finalAccountAndInstanceButton.dataset.selectedwidget = event.target.dataset.value;
     getContactFlowNames();
     getQueueNames();
-}
-function renderChart(container, metricName, seriesData) {
-    let chart = anychart.line();
-        let series = chart.line(seriesData);
-        series.name(metricName);
-        chart.title(metricName + " Over Time");
-        let flexDiv = document.createElement("section");
-        flexDiv.classList.add("flex-grow-1");
-        let flexDivId = `lineChart_${metricName}`;
-        flexDiv.setAttribute("id", flexDivId);
-        chart.container(flexDiv);
-        chart.draw();
-        container.appendChild(flexDiv);
 }
 function cleanMetricName(metricId) {
     return metricId
