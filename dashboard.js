@@ -48,13 +48,7 @@ function handleInputChange(event) {
     $("#createDashboards").attr("disabled", false);
 }
 
-function saveDashboards() {
-    const accName = $("#accountName").val();
-    
-    if (accName.trim() === '' || accName.length === 0) {
-        window.alert("Enter Dashboard Name");
-    }
-}
+
 
 function getSavedDashboardsAPI() {
     const savedDashboardsAPI = [
