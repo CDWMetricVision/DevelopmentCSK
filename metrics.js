@@ -1189,8 +1189,6 @@ function createNewAlarm() {
 }
 
 function toggleDarkMode() {
-             document.getElementById("dataTables").classList.toggle("dark-mode");
-}
             document.body.classList.toggle("dark-mode");
             const toggleBtn = document.querySelector(".toggle-btn2");
 
@@ -1199,4 +1197,4 @@ function toggleDarkMode() {
             } else {
                 toggleBtn.innerHTML = "🌙"; // Switch to moon
             }
-        }
+}
