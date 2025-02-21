@@ -310,7 +310,6 @@ function createIcons() {
 
     let select = document.createElement("select");
     select.addEventListener("change", handlePeriodChange);
-    select.setAttribute("disabled",true);
     let defaultOption = document.createElement("option");
     defaultOption.textContent = "Select";
     defaultOption.value = "";
@@ -371,14 +370,14 @@ function createIcons() {
         option.textContent = data.text;
         select.appendChild(option);
     });
-    selectWrapper.append(label,select);
-    let editBtn = document.createElement("button");
-    editBtn.innerHTML = "Edit";
-    editBtn.classList.add("edit-btn");
-    editBtn.addEventListener("click", handleEditBtn);
+    selectWrapper.append(label, select);
+    // let editBtn = document.createElement("button");
+    // editBtn.innerHTML = "Edit";
+    // editBtn.classList.add("edit-btn");
+    // editBtn.addEventListener("click", handleEditBtn);
     const container = document.querySelector("#chart-edit-container");
     container.innerHTML = "";
-    container.append(chartIcon, tableIcon, gaugeIcon, selectWrapper, editBtn);
+    container.append(chartIcon, tableIcon, gaugeIcon, selectWrapper);
 }
 
 function hideTables() {
@@ -504,12 +503,7 @@ async function handlePeriodChange(e) {
         createIcons();
     }
 }
-function handleEditBtn(e) {
-    const select = document.querySelector('.periodWrapper select');
-    if (select) {
-        select.removeAttribute('disabled');
-    }
-}
+
 function createGauge(data, container) {
     // create data set on our data
     let values = data["Values"]
