@@ -89,7 +89,7 @@ function getCreateWidgetRequestBody(dashboardName,metrics,instanceId,view) {
 window.addEventListener("load",() => {
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
-
+    sessionStorage.removeItem('MetricVisionDashboardData');
 
     if (params.has("customerAccount")) {
         const selectedAcc = params.get("customerAccount");
@@ -719,4 +719,53 @@ async function getWidgets(){
         console.log(err);
     }
 
+}
+async function saveDashboards() {
+    const accName = $("#accountName").val();
+    const dashboardData = sessionStorage.getItem('MetricVisionDashboardData');
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    if (accName.trim() === '' || accName.length === 0) {
+        window.alert("Enter Dashboard Name");
+        return;
+    }
+    if(!dashboardData) {
+        window.alert("There is no valid dashboard to save!!");
+        return;
+    } 
+    let dashboardPayloadData = new Object();
+    let payloadData = new Object();
+    dashboardPayloadData = {
+        'data' : JSON.parse(dashboardData),
+        'name' : accName,
+        'widgetType': document.querySelector("#widgetSelection").dataset.selectedwidget.toLowerCase(),
+    }
+    payloadData = {
+        'accountName': params.get("customerAccount"),
+        "dashboard_data": [
+            dashboardPayloadData
+        ]
+    }
+    console.log("payloadData",payloadData);
+    let paramURL = "https://l2y83qdrp0.execute-api.us-east-1.amazonaws.com/test/saveDashboard";
+    try {
+        $("#loader").show();
+        const response = await fetch(paramURL, {
+            method: "POST",
+            body: JSON.stringify(payloadData),
+        });
+        if (!response.ok) {
+            $("#loader").hide();
+            window.alert("error occured!!");
+        } else {
+            $("#loader").hide();
+           window.alert("successfully saved!!");
+        }
+    } catch(err) {
+        console.log(err)
+        return {
+            "errorMessage": err,
+            "result": false
+        }
+    }
 }
