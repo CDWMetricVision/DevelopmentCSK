@@ -116,7 +116,7 @@ function createGauge(data, container) {
     // Compute min, max, sum, and avg
     let min, max, avg, sum;
 
-    if (data.Id && (data.Id.includes("percentage") || data.Id.includes("packet_loss"))) {
+    if (data.Id.includes("percentage") || data.Id.includes("packet_loss")) {
         min = 0;
         max = 100;
         sum = "N/A";
@@ -188,7 +188,7 @@ function createGauge(data, container) {
     // Min & Max Columns
     let minMaxDiv = document.createElement("div");
     minMaxDiv.classList.add("d-flex", "flex-column", "text-center", "mx3");
-    minMaxDiv.innerHTML = `<p>${min}</p><p>Minimum</p><p>${max}</p><p>Maximum</p>`;
+    minMaxDiv.innerHTML = `<div>${min}</div><div>Minimum</div><div>${max}</div><div>Maximum</div>`;
 
     // Avg & Sum Columns
     let avgSumDiv = document.createElement("div");
@@ -262,20 +262,71 @@ function createTable(data, container) {
         })
     }
     table.appendChild(tableBody);
-    tableWrapper.setAttribute("style", "display: none !important");
     container.appendChild(tableWrapper);
+}
+function createTableLineGauge(data,container) {
+    if (data.Id.includes("percentage")) {
+        data.Values.forEach(function(value, index) {
+            data.Values[index] = Math.floor(value * 100)
+        })
+    }
+    createLineGraphNew(data, container);
+}
+function createLineGraphNew(data, container) {
+    let metric = data.Id;
+    let chartMetricData = [];
+    for (let i = 0; i < data["Timestamps"].length; i++) {
+        let chartData = [];
+        if (metric === "to_instance_packet_loss_rate") {
+            chartData.push(data["Timestamps"][i], data["Values"][i].toFixed(3))
+            chartMetricData.push(chartData)
+            continue
+        } else {
+            chartData.push(data["Timestamps"][i], data["Values"][i])
+            chartMetricData.push(chartData)
+        }
+    }
+    let graphData = {
+        "title": metric,
+        "xAxis": "Interval",
+        "yAxis": metric,
+        "data": chartMetricData
+    }
+    chartLineGraph(graphData, container)
+}
+function chartLineGraph(graphData, container) {
+    let {title, xAxis, yAxis, data} = graphData;
+    let chart = anychart.line();
+    chart.data(data);
+    chart.title(cleanMetricName(title));
+    
+    // Step 5: Customize axes
+    chart.xAxis().title(xAxis);
+
+    let flexDiv = document.createElement("section");
+    flexDiv.classList.add("flex-grow-1");
+    let flexDivId = `lineChart_${title}`;
+    flexDiv.setAttribute("id", flexDivId);
+    flexDiv.setAttribute("class", "line-chart");
+
+    // Step 6: Display the chart
+    chart.container(flexDiv);
+    chart.draw();
+    container.appendChild(flexDiv);
+
 }
 async function getSavedDashboards() {
     let customerAccount = $("#customerAccounts").val()
-    const apis = getSavedDashboardsAPI();
-    let apiURL = apis
-    .filter(account => account[customerAccount])
-    .map(account => account[customerAccount])[0];
+    let apiURL = 'https://l2y83qdrp0.execute-api.us-east-1.amazonaws.com/test/showsaveddashboaed';
     $("#loader").show();
+    let payloadData = {
+        "accountName": customerAccount
+    }
     try{
         await fetch(apiURL,
             {
-                method: "GET",
+                method: 'POST',
+                body: JSON.stringify(payloadData)
             }
         ).then(response =>{
             if (!response.ok) {
@@ -283,69 +334,49 @@ async function getSavedDashboards() {
             }
             return response.json();
             }).then(data=>{
-                const body = data.body;
-                console.log(body.data);
+                const body = JSON.parse(data.body);
+                let parsedData = JSON.parse(body["data"]);
                 $(".chartContainer").show();
                 let chartContainer = document.querySelector(".chartContainer");
                 $(".chartContainer").empty();
-                // chartContainer.empty();
                 $(".dashboard-container").empty();
-
-                for (const key in body.data) {
-                    let div = document.createElement("div");
-                    div.classList.add("dashboard-container");
-                    let dasboardContentWrapper = document.createElement("div");
-                    dasboardContentWrapper.classList.add("dashboard-wrapper");
-                    let p = document.createElement("p");
-                    p.innerHTML = `${key} Dashboard`;
-                    div.append(p);
-
-                    console.log(`Key: ${key}`);
-                    
-                    const parsedData = JSON.parse(body.data[key]);
-                    const metrics = parsedData.widgets.map(widget => ({
-                        name: widget.properties.metrics[0][1], // Metric name
-                        instanceId: widget.properties.metrics[0][3], // Instance ID
-                        region: widget.properties.region
-                    }));
-                    // const timeSeriesData = generateDataWithTimeZone();
-                    timeSeriesData = []; // need to change accordingly for the data recieved
-
-                    if (parsedData.widgets && parsedData.widgets.length > 0) {
-                        for (const widget of parsedData.widgets) {
-                            let id = 'id_' + Math.random().toString(36).substr(2, 9);
+                for (const [keys,data] of Object.entries(parsedData)) {
+                    // console.log(values);
+                    console.log(data);
+                        let div = document.createElement("div");
+                        div.classList.add("dashboard-container");
+                        let dasboardContentWrapper = document.createElement("div");
+                        dasboardContentWrapper.classList.add("dashboard-wrapper");
+                        let p = document.createElement("p");
+                        p.innerHTML = `${data[0]["name"]} Dashboard`;
+                        div.append(p);
+    
+                        for(const [keys,mData] of Object.entries(data[0]["data"]["MetricDataResults"])) {
                             let innerDiv = document.createElement("div");
+                            let id = 'id_' + Math.random().toString(36).substr(2, 9);
                             innerDiv.id = id;
                             innerDiv.classList.add("chart");
                             dasboardContentWrapper.append(innerDiv);
-                            if(widget.properties.view && widget.properties.view == "gauge") {
-                                createGauge({ Id: metrics[0].name, Values: timeSeriesData.map(d => d[1]) }, innerDiv);
+                            div.append(dasboardContentWrapper);
+                            if (mData.Id.includes("percentage")) {
+                                mData.Values.forEach(function(value, index) {
+                                    mData.Values[index] = Math.floor(value * 100)
+                                })
                             }
-                            else if(widget.properties.view && widget.properties.view == "bar"){
-                                renderChart(innerDiv, widget["properties"]["title"], timeSeriesData);
+                            if(data[0]["widgetType"].toLowerCase() == 'line') {
+                                createTableLineGauge(mData, innerDiv);
                             }
-                            else if(widget.properties.view && widget.properties.view == "table"){
-                                // need to change
-                                // createTable({ Id: metrics[0].name, Values: timeSeriesData, Timestamps: timeSeriesData }, innerDiv);
-                                renderChart(innerDiv, widget["properties"]["title"], timeSeriesData); 
+                            if(data[0]["widgetType"].toLowerCase() == 'numberchart') {
+                                createTable(mData, innerDiv);
                             }
-                            else {
-                                renderChart(innerDiv, widget["properties"]["title"], timeSeriesData);
+                            if(data[0]["widgetType"].toLowerCase() == 'gauge') {
+                                createGauge(mData, innerDiv);
                             }
-                            console.log(`  Type: ${widget.type}`);
-                            console.log(`  Position: (${widget.x}, ${widget.y})`);
-                            console.log(`  Size: ${widget.width}x${widget.height}`);
-                            console.log(`  Properties:`, widget.properties);
                         }
                         div.append(dasboardContentWrapper);
-                    } else {
-                        console.log("  No widgets found.");
-                    }
-                    chartContainer.append(div);
+                        chartContainer.append(div);
                 }
-                // createTable(body);
                 $("#loader").hide();
-
             })
             .catch(error =>{
                 $("#loader").hide();
