@@ -1,4 +1,5 @@
-
+let accessToken = 'eyJraWQiOiIwQ1wvQnZCVzZKVlNlaG1IbitLTWhob2ZPd2JFWVhoMEFmRWdCRUhza3BZbz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIxNGY4NDQ2OC1mMDMxLTcwYWYtMmNlOC1kZGM4NWEwNWU5NWIiLCJjb2duaXRvOmdyb3VwcyI6WyJhZG1pbiJdLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV80Mk11UjVtV1QiLCJ2ZXJzaW9uIjoyLCJjbGllbnRfaWQiOiI2NjhlNmhhdWVhNGk0OWdjMWE0MHF0N3ZuMCIsImV2ZW50X2lkIjoiY2U3NmQ5ZWYtMzNhNS00MzFhLWFmODAtNzA4YTRhNzU0MzY0IiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJwaG9uZSBvcGVuaWQgZW1haWwiLCJhdXRoX3RpbWUiOjE3NDAxNzg3MDQsImV4cCI6MTc0MDE4MjMwNCwiaWF0IjoxNzQwMTc4NzA0LCJqdGkiOiJmMzhhZjczMi1jODc5LTRkOTUtYThhYy02OWNjYjA5MDRkZjAiLCJ1c2VybmFtZSI6IjE0Zjg0NDY4LWYwMzEtNzBhZi0yY2U4LWRkYzg1YTA1ZTk1YiJ9.lo2q6x2wdt9YaiduUhgjqnkdjokRgay1gVw6Wfp1Me3RKusZOgOOvuA_Iuw9LhgLs3ONImy3QyjxP7kDiNOPuRJrO6K1QXVb0XxEIS7Rzf6IKu_kSQFCuxqSrO7-aCGw-oiZ0Ksa_oMPtuMQZkSQd5qnwV-crZpsyRaUvSoaKKhSyNohhtzDZbb3mIrIu3u22RaIWrRrfbLt9PgolICYoYNc04Jga7Ht-JF7JGUx3WWD6Aj1PC8Xl3DwZ0mMnTrdlupxdQU3Zdy_LAMo0WdNat9sEm4HU8i_YrwM8wfaukHAWA6PqIZDmW64t5Lhqriv-K3a5RxZK7djZSshGgPnRQ';
+sessionStorage.setItem("MetricVisionAccessToken", accessToken);
 
 window.onload = () => {
   if (window.location.hash) {
@@ -442,14 +443,15 @@ function hideOtherCharts(e) {
     }
 }
 async function handlePeriodChange(e) {
-    const section = e.target.closest('section');
-    if(!section) return;
+    // const section = e.target.closest('section');
+    // if(!section) return;
     $("#loader").show();
-    let periodIntervalVal = (e.target.value) * 60;
+    let periodIntervalVal = e.target.value;
     let startDate = document.querySelector("#customStartDate").value
     let endDate = document.querySelector("#customEndDate").value
     let startTime = document.querySelector("#startTime").value
     let endTime = document.querySelector("#endTime").value
+    let chosenMetrics = chooseMetrics();
     let timezoneChoice = document.querySelector("#timezoneButton").innerHTML;
     let localTimezoneChoice = timezoneChoice.split(" ")[0];
     let formatterOptions = {
@@ -474,7 +476,7 @@ async function handlePeriodChange(e) {
     }
     let startUTC = localDateToUTC(startDate, startTime);
     let endUTC = localDateToUTC(endDate, endTime);
-    let data = await customTimeFetchCloudWatchData(startUTC, endUTC, '','',section.id,periodIntervalVal);
+    let data = await customTimeFetchCloudWatchData(startUTC, endUTC, chosenMetrics['contactName'],chosenMetrics['queueName'],chosenMetrics['individualMetricsString'], periodIntervalVal);
     if (!data.result) {
         $("#loader").hide();
         sectionHeader.removeChild(loadingModal);
@@ -787,7 +789,7 @@ async function submitCustomDateTimeframe() {
     let endDate = document.querySelector("#customEndDate").value
     let startTime = document.querySelector("#startTime").value
     let endTime = document.querySelector("#endTime").value
-    let timezoneChoice = document.querySelector("#timezoneButton").innerHTML
+    let timezoneChoice = document.querySelector("#timezoneButton").innerHTML;
     let chosenMetrics = chooseMetrics();
     let metricsInput = document.querySelector("#metricsInput");
     if (startDate && endDate && startTime && endTime && chosenMetrics.individualMetricsString) {
@@ -806,7 +808,7 @@ async function submitCustomDateTimeframe() {
         minute: "2-digit",
         hour12: true,
     }
-    let timezoneFormats = {
+    const timezoneFormats = {
         "Hawaii": "Pacific/Honolulu",
         "Alaska": "America/Anchorage",
         "Pacific": "America/Los_Angeles", 
@@ -816,7 +818,7 @@ async function submitCustomDateTimeframe() {
         "UTC": "UTC"
     }
     if (localTimezoneChoice != "Local") {
-        formatterOptions.timeZone = timezoneFormats[localTimezoneChoice];
+        formatterOptions.timeZone = timezoneFormats[localTimezoneChoice]
     }
     let startUTC = localDateToUTC(startDate, startTime);
     let endUTC = localDateToUTC(endDate, endTime);
