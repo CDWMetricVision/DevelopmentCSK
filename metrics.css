@@ -310,6 +310,8 @@ a:hover {
 .dropdown-menu {
     max-height: 250px;
     overflow-y: auto;
+    position: relative;
+    min-width: 0;
 }
 
 .dropdown-item {
@@ -368,11 +370,6 @@ a:hover {
 
 .accounts-options-wrapper > button, .instances-content-container {
     width: 220px;
-}
-
-.dropdown-menu {
-    position: relative;
-    min-width: 0;
 }
 
 /* alarm page */
@@ -706,7 +703,7 @@ input:checked + .slider:before {
 
 .input-wrapper>label{
     min-width: 100px;
-    width: 120px;
+    width: 100px;
     max-width: 150px;
 }
 

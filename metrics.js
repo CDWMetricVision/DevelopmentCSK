@@ -17,6 +17,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+function showLoader() {
+  document.querySelector("#loader").setAttribute("style", "display: flex");
+}
+
+function hideLoader() {
+  document.querySelector("#loader").setAttribute("style", "display: none");
+}
+
 async function getARNQueryParams() {
     let queryString = window.location.search;
     let urlParams = new URLSearchParams(queryString);
@@ -26,27 +34,27 @@ async function getARNQueryParams() {
     }
 }
 
-// function toggleSidePanel() {
-//     const sidePanel = document.getElementById('sidePanel');
-//     sidePanel.classList.toggle('active');
-// }
-function sendInstanceId(event) {
+async function sendInstanceId(baseApiUrl, instanceId) {
+  showLoader();
+  try {
     $("#results").empty();
     $("#sectionResults .loading").empty();
-    let baseApiUrl = event.target.dataset.baseApiUrl;
     sessionStorage.setItem("baseApiUrl", baseApiUrl);
-    let instanceId = event.target.dataset.instanceId;
     let url = new URL(window.location.href);
     url.searchParams.set("instanceId", instanceId);
-    window.history.replaceState({}, '', url)
-    getContactFlowNames();
-    getQueueNames();
+    window.history.replaceState({}, "", url);
+    await getContactFlowNames(baseApiUrl, instanceId);
+    await getQueueNames(baseApiUrl, instanceId);
+  } catch (err) {
+    console.log("error in getting the instance", err);
+  } finally {
+    hideLoader();
+  }
 }
 
-async function getQueueNames() {
-    let baseURL = sessionStorage.getItem("baseApiUrl");
-    let instanceId = await getARNQueryParams();
-    let paramURL = `${baseURL}/queues/?instanceId=${instanceId['instanceId']}`;
+async function getQueueNames(baseApiUrl, instanceId) {
+    let baseURL = baseApiUrl;
+    let paramURL = `${baseURL}/queues/?instanceId=${instanceId}`;
     try {
         let token = sessionStorage.getItem("MetricVisionAccessToken");
         let response = await fetch(paramURL, {
@@ -57,9 +65,10 @@ async function getQueueNames() {
         })
         if (!response.ok) {
             if (response.status === 401) {
-                let modalEl = document.querySelector("#signInAgainModal");
-                let modal = new bootstrap.Modal(modalEl);
-                modal.show();
+                // let modalEl = document.querySelector("#signInAgainModal");
+                // let modal = new bootstrap.Modal(modalEl);
+                // modal.show();
+                alert("Authentication failed, Please login again!");
             }
             let failedResponse = await response.json();
             return {
@@ -101,10 +110,9 @@ async function getQueueNames() {
     }
 }
 
-async function getContactFlowNames() {
-    let baseURL = sessionStorage.getItem("baseApiUrl");
-    let instanceId = await getARNQueryParams();
-    let paramURL = `${baseURL}/contactFlows/?instanceId=${instanceId['instanceId']}`;
+async function getContactFlowNames(baseApiUrl, instanceId) {
+    let baseURL = baseApiUrl;
+    let paramURL = `${baseURL}/contactFlows/?instanceId=${instanceId}`;
     try {
         let token = sessionStorage.getItem("MetricVisionAccessToken");
         let response = await fetch(paramURL, {
@@ -115,9 +123,10 @@ async function getContactFlowNames() {
         })
         if (!response.ok) {
             if (response.status === 401) {
-                let modalEl = document.querySelector("#signInAgainModal");
-                let modal = new bootstrap.Modal(modalEl);
-                modal.show();
+                // let modalEl = document.querySelector("#signInAgainModal");
+                // let modal = new bootstrap.Modal(modalEl);
+                // modal.show();
+                alert("Authentication failed, Please login again!");
             }
             let failedResponse = await response.json();
             return {
@@ -198,9 +207,10 @@ async function customTimeFetchCloudWatchData(customStartTimeandDate, customEndTi
         })
         if (!response.ok) {
             if (response.status === 401) {
-                let modalEl = document.querySelector("#signInAgainModal");
-                let modal = new bootstrap.Modal(modalEl);
-                modal.show();
+                // let modalEl = document.querySelector("#signInAgainModal");
+                // let modal = new bootstrap.Modal(modalEl);
+                // modal.show();
+                alert("Authentication failed, Please login again!");
             }
             let failedResponse = await response.json();
             return {
@@ -1111,8 +1121,6 @@ function selectAccount(event) {
     const connectInstances = document.getElementById('connectInstances');
     let instanceName = document.querySelector("#awsConnectInstanceName");
     instanceName.innerHTML = "";
-    let finalAccountAndInstanceButton = document.querySelector("#getMetricsButton");
-    finalAccountAndInstanceButton.disabled = true;
     let title = event.target.innerHTML;
     connectInstances.innerHTML = `
     <p class="mt-3 text-center" id="awsAccountName">${title} </p>
@@ -1145,10 +1153,7 @@ function selectInstance(event) {
     let apiUrl = event.target.dataset.baseApiUrl;
     instanceNameSpace.innerHTML = event.target.innerHTML;
     $("#selected-instance").text(event.target.innerHTML);
-    let finalAccountAndInstanceButton = document.querySelector("#getMetricsButton");
-    finalAccountAndInstanceButton.dataset.instanceId = instanceId
-    finalAccountAndInstanceButton.dataset.baseApiUrl = apiUrl
-    finalAccountAndInstanceButton.disabled = false;
+    sendInstanceId(apiUrl, instanceId);
 }
 
 function createNewDashboard() {
@@ -1172,29 +1177,13 @@ function showMetrics() {
     window.location.href = "./metrics.html";
 }
 
-function showAlarms() {
-    // Get the access token from sessionStorage
-    let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
-
-    if (accessToken) {
-        // Open the alarms page with the access token added in the URL as a query parameter
-        window.location.href = `/alarm.html?access_token=${accessToken}`;
-    } else {
-        alert('Access token not found. Please sign in again.');
-    }
-}
-
-function createNewAlarm() {
-    alert('Creating a new alarm...');
-}
-
 function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            const toggleBtn = document.querySelector(".toggle-btn2");
+    document.body.classList.toggle("dark-mode");
+    const toggleBtn = document.querySelector(".toggle-btn2");
 
-            if (document.body.classList.contains("dark-mode")) {
-                toggleBtn.innerHTML = "☀️"; // Switch to sun
-            } else {
-                toggleBtn.innerHTML = "🌙"; // Switch to moon
-            }
+    if (document.body.classList.contains("dark-mode")) {
+        toggleBtn.innerHTML = "☀️"; // Switch to sun
+    } else {
+        toggleBtn.innerHTML = "🌙"; // Switch to moon
+    }
 }

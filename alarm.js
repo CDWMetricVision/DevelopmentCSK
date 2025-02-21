@@ -156,12 +156,28 @@ function showDashboards() {
 }
 
 function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            const toggleBtn = document.querySelector(".toggle-btn2");
+    document.body.classList.toggle("dark-mode");
+    const toggleBtn = document.querySelector(".toggle-btn2");
 
-            if (document.body.classList.contains("dark-mode")) {
-                toggleBtn.innerHTML = "☀️"; // Switch to sun
-            } else {
-                toggleBtn.innerHTML = "🌙"; // Switch to moon
-            }
+    if (document.body.classList.contains("dark-mode")) {
+        toggleBtn.innerHTML = "☀️"; // Switch to sun
+    } else {
+        toggleBtn.innerHTML = "🌙"; // Switch to moon
+    }
+}
+
+function showAlarms() {
+  // Get the access token from sessionStorage
+  let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
+
+  if (accessToken) {
+    // Open the alarms page with the access token added in the URL as a query parameter
+    window.location.href = `/alarm.html?access_token=${accessToken}`;
+  } else {
+    alert("Access token not found. Please sign in again.");
+  }
+}
+
+function createNewAlarm() {
+  alert("Creating a new alarm...");
 }
