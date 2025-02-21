@@ -47,12 +47,15 @@
     <div class="filteration-container">
         <div class="accounts-options-wrapper">
             <!-- Accounts Section -->
-            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false" id="awsAccountName">Accounts</button>
-            <div class="dropdown-menu">
-                <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Development</button>
-                <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Test1</button>
-                <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Test2</button>
+             <div class="drp-input d-flex">
+                 <label class="mr-1" for="awsAccountName">Accounts</label>
+                 <button style="width: 250px;" class="dropdown-toggle drp-btn" type="button" data-toggle="dropdown"
+                 aria-haspopup="true" aria-expanded="false" id="awsAccountName">Select</button>
+                 <div class="dropdown-menu">
+                     <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Development</button>
+                     <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Test1</button>
+                     <button class="dropdown-item" onclick="selectAccount(event)">MAS Sandbox Test2</button>
+                 </div>
             </div>
             <div id="connectInstances" class="w-100"></div>
             <p id="awsConnectInstanceName" class="text-center" class=""></p>
@@ -63,10 +66,10 @@
         <div class="filter-content-wrapper">
             <!-- Metrics Dropdown -->
             <div class="d-flex justify-content-start input-wrapper metrics-dropdown">
-                <label class="mr-1">Metrics</label>
+                <label class="mr-1" for="chosenMetrics">Metrics</label>
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="chosenMetrics"
-                        style="padding: 5px; width: 330px; height: 38px;" data-toggle="dropdown"
+                        style="padding: 5px; width: 250px; height: 38px;" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         Select
                     </button>
@@ -207,9 +210,9 @@
                         </li>
                         <hr>
                         <!-- Dynamic Contact Metrics -->
-                        <li class="dropdown-item">
+                        <li class="dropdown-item w-100">
                             <label class="font-weight-bold">Contact Metrics</label>
-                            <select class="form-control" id="contactSelect">
+                            <select class="form-control w-100" id="contactSelect">
                                 <option value="">Select a Contact</option>
                             </select>
                             <div id="contactMetricsOptions" class="nested-menu mt-2" style="display: none;">
@@ -229,9 +232,9 @@
                         </li>
                         <hr>
                         <!-- Dynamic Queue Metrics -->
-                        <li class="dropdown-item">
+                        <li class="dropdown-item w-100">
                             <label class="font-weight-bold">Queue Metrics</label>
-                            <select class="form-control" id="queueSelect">
+                            <select class="form-control w-100" id="queueSelect">
                                 <option value="">Select a Queue</option>
                             </select>
                             <div id="queueMetricsOptions" class="nested-menu mt-2" style="display: none;">
@@ -263,7 +266,7 @@
                 <label class="mr-1">Timezone</label>
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="timezoneButton"
-                        style="padding: 5px; width: 330px; height: 38px;" data-toggle="dropdown"
+                        style="padding: 5px; width: 250px; height: 38px;" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         Select
                     </button>
@@ -292,7 +295,7 @@
                 <label class="mr-1">Auto Refresh</label>
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="autoRefreshButton"
-                        style="padding: 5px; width: 330px; height: 38px;" data-toggle="dropdown"
+                        style="padding: 5px; width: 250px; height: 38px;" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         Off
                     </button>
@@ -352,8 +355,8 @@
     </div>
     <div id="metricsInput"></div>
     <div class="dataTables" id="dataTables">
-        <div class="row justify-content-center" id="sectionResults">
-            <section style="text-align: center" class="row loading"></section>
+        <div class="w-100 justify-content-center" id="sectionResults">
+            <section style="text-align: center" class="row justify-content-center loading"></section>
         </div>
         <div class="results-container" id="results"></div>
     </div>

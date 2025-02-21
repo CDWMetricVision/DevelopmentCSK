@@ -10,11 +10,11 @@
     /* https://colorffy.com/dark-theme-generator?colors=abc0f3-121212 */
 
     /** Base colors */
-    --clr-dark-a: #000000;
+    --clr-dark-a: #292b2d;
     --clr-light-a0: #ffffff;
 
     /** Dark theme primary colors */
-    --clr-primary-a0: #abc0f3;
+    --clr-primary-a0: #cc0000;
     --clr-primary-a10: #b5c7f4;
     --clr-primary-a20: #becef6;
     --clr-primary-a30: #c8d5f7;
@@ -29,6 +29,7 @@
     --clr-surface-a40: #717171;
     --clr-surface-a50: #8b8b8b;
 
+
     /** Dark theme tonal surface colors */
     --clr-surface-tonal-a0: #2d3038;
     --clr-surface-tonal-a10: #41444b;
@@ -39,19 +40,21 @@
 
     /* CSS Variables for Light Mode (Default) */
     --background-color: #ffffff;  /* White */
-    --text-color: #000000;      /* Black */
-    --button-background: #007bff; /* Blue */
+    --text-color: #292b2d;      /* Black */
+    --button-background: #898a8e; /* Blue */
     --button-text: #ffffff;      /* White */
-    --nav-background: var(--clr-primary-a50);
+    --nav-background: #eeee;
+    --button-background-hover: #b8b8bb;
 }
 
 /* Dark Mode Styles */
 body.dark-mode {
   --background-color: var(--clr-dark-a); /* Dark Gray */
   --text-color: #ffffff;      /* White */
-  --button-background: #0056b3;
+  --button-background: #898a8e;
+  --button-background-hover: #b8b8bb;
   --button-text: #ffffff;
-  --nav-background: var(--clr-surface-a40);
+  --nav-background: #eeee;
 }
 
 body {
@@ -87,28 +90,28 @@ body {
 #timezoneButton,
 #chosenMetrics,
 #autoRefreshButton, #widgetSelection {
-    background-color: #f8c8dc !important;
+    background-color: var(--background-color) !important;
     /* Pale pink */
-    border-color: #f8c8dc !important;
+    border-color: var(--text-color) !important;
     /* Match border color */
-    color: #000 !important;
+    color: var(--text-color) !important;
     /* Ensure text is readable */
 }
 
 #timezoneButton:hover,
 #chosenMetrics:hover,
 #autoRefreshButton:hover {
-    background-color: #f4a6c0 !important;
+    /* background-color: var(button-background-hover) !important; */
     /* Slightly darker pink on hover */
-    border-color: #f4a6c0 !important;
+    border-color: var(--text-color) !important;
 }
 
 /* GO Button - Pale Wine Color */
 /* GO Button - Pale Wine Color with Bold & Highlighted Look */
 #customDateTimeButton,#getWidgets {
-    background-color: #7b506f !important;
+    background-color: var(--clr-primary-a0) !important;
     /* Pale wine */
-    border-color: #7b506f !important;
+    /* border-color: #7b506f !important; */
     color: #fff !important;
     /* White text */
     font-size: 18px;
@@ -117,17 +120,17 @@ body {
     padding: 10px;
     width: 150px;
     height: 45px;
-    box-shadow: 0px 0px 10px rgba(123, 80, 111, 0.8);
+    box-shadow: 0px 0px 5px var(--clr-primary-a0);
     /* Highlight effect */
     text-transform: uppercase;
     /* Makes 'GO' more prominent */
 }
 
 #customDateTimeButton:hover {
-    background-color: #5e3b54 !important;
+    background-color: #660000 !important;
     /* Darker wine on hover */
-    border-color: #5e3b54 !important;
-    box-shadow: 0px 0px 15px rgba(94, 59, 84, 1);
+    border-color: #660000 !important;
+    box-shadow: 0px 0px 10px rgba(94, 59, 84, 1);
     /* Stronger glow on hover */
 }
 
@@ -255,27 +258,6 @@ button:disabled {
     margin-left: 270px;
 }
 
-/* Left panel styles */
-.side-panel {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: fixed;
-    top: 0;
-    left: -350px;
-    width: 350px;
-    height: 100%;
-    background-color: #2c3e50;
-    color: white;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    transition: all 0.3s ease-in-out;
-    z-index: 1000;
-    padding: 10px;
-}
-
-.side-panel.active {
-    left: 0;
-}
 
 .toggle-btn {
     position: fixed;
@@ -698,13 +680,15 @@ input:checked + .slider:before {
     min-width: 100px;
     width: 100px;
     max-width: 150px;
+    text-align: right;
 }
 
 .input-wrapper > input{
     padding: 5px;
     width: 200px;
-    height: 30px;
-    font-size: small;
+    height: 38px;
+    font-size: medium;
+    border: 1px solid var(--text-color);
 }
 
 /* Navigation bar styles */
@@ -752,11 +736,11 @@ input:checked + .slider:before {
     height: 100%;
     display: flex;
     align-items: center;
+    color: var(--clr-dark-a);
 }
 
 .nav-links:hover {
     background-color: #fbfeffc9;
-    color: var(--clr-dark-a);
     /* background-color: var(--nav-background); */
 }
 
@@ -764,6 +748,7 @@ input:checked + .slider:before {
     background: #ffffffb5;
     color: var(--clr-dark-a);
     border-radius: 0;
+    border-bottom: 3px solid var(--clr-primary-a0)
 }
 
 /* Dark mode styles */
@@ -812,6 +797,7 @@ input:checked + .slider:before {
 
 /* Styles for chart edit icons */
 .chart-edit-container {
+    margin-top: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -848,4 +834,15 @@ input:checked + .slider:before {
 .table-responsive * {
     background-color: var(--background-color);
     color: var(--text-color);
+}
+
+.drp-btn {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 170px;
+    height: 38px;
 }

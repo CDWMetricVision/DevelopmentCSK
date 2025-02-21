@@ -1117,10 +1117,12 @@ function selectAccount(event) {
     instanceName.innerHTML = "";
     let title = event.target.innerHTML;
     connectInstances.innerHTML = `
-    <p class="mt-3 text-center" id="awsAccountName">${title} </p>
-    <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Instances</button>
-    <div class="dropdown-menu instanceList"></div>
+    <div class="d-flex">
+    <label class="mr-1" for="awsInstance">Instances</label>
+    <button class="dropdown-toggle drp-btn" style="width: 250px;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="awsInstance">Select</button>
+    <div class="dropdown-menu instanceList"></div></div>
     `;
+    document.querySelector("#awsAccountName").innerHTML = title;
     $("#selected-account").text(title);
     let allAccountsList = accountsAndConnectInstancesObject();
     let instanceList = document.querySelector(".instanceList");
@@ -1142,11 +1144,9 @@ function selectAccount(event) {
 }
 
 function selectInstance(event) {
-    let instanceNameSpace = document.querySelector("#awsConnectInstanceName");
     let instanceId = event.target.dataset.instanceId
     let apiUrl = event.target.dataset.baseApiUrl;
-    instanceNameSpace.innerHTML = event.target.innerHTML;
-    $("#selected-instance").text(event.target.innerHTML);
+    document.querySelector("#awsInstance").innerHTML = event.target.innerHTML;
     sendInstanceId(apiUrl, instanceId);
 }
 
