@@ -1,5 +1,3 @@
-
-
 window.onload = () => {
   if (window.location.hash) {
     let hash = window.location.hash;
@@ -442,14 +440,15 @@ function hideOtherCharts(e) {
     }
 }
 async function handlePeriodChange(e) {
-    const section = e.target.closest('section');
-    if(!section) return;
+    // const section = e.target.closest('section');
+    // if(!section) return;
     $("#loader").show();
-    let periodIntervalVal = (e.target.value) * 60;
+    let periodIntervalVal = e.target.value;
     let startDate = document.querySelector("#customStartDate").value
     let endDate = document.querySelector("#customEndDate").value
     let startTime = document.querySelector("#startTime").value
     let endTime = document.querySelector("#endTime").value
+    let chosenMetrics = chooseMetrics();
     let timezoneChoice = document.querySelector("#timezoneButton").innerHTML;
     let localTimezoneChoice = timezoneChoice.split(" ")[0];
     let formatterOptions = {
@@ -474,7 +473,7 @@ async function handlePeriodChange(e) {
     }
     let startUTC = localDateToUTC(startDate, startTime);
     let endUTC = localDateToUTC(endDate, endTime);
-    let data = await customTimeFetchCloudWatchData(startUTC, endUTC, '','',section.id,periodIntervalVal);
+    let data = await customTimeFetchCloudWatchData(startUTC, endUTC, chosenMetrics['contactName'],chosenMetrics['queueName'],chosenMetrics['individualMetricsString'], periodIntervalVal);
     if (!data.result) {
         $("#loader").hide();
         sectionHeader.removeChild(loadingModal);
@@ -787,7 +786,7 @@ async function submitCustomDateTimeframe() {
     let endDate = document.querySelector("#customEndDate").value
     let startTime = document.querySelector("#startTime").value
     let endTime = document.querySelector("#endTime").value
-    let timezoneChoice = document.querySelector("#timezoneButton").innerHTML
+    let timezoneChoice = document.querySelector("#timezoneButton").innerHTML;
     let chosenMetrics = chooseMetrics();
     let metricsInput = document.querySelector("#metricsInput");
     if (startDate && endDate && startTime && endTime && chosenMetrics.individualMetricsString) {
@@ -806,7 +805,7 @@ async function submitCustomDateTimeframe() {
         minute: "2-digit",
         hour12: true,
     }
-    let timezoneFormats = {
+    const timezoneFormats = {
         "Hawaii": "Pacific/Honolulu",
         "Alaska": "America/Anchorage",
         "Pacific": "America/Los_Angeles", 
@@ -816,7 +815,7 @@ async function submitCustomDateTimeframe() {
         "UTC": "UTC"
     }
     if (localTimezoneChoice != "Local") {
-        formatterOptions.timeZone = timezoneFormats[localTimezoneChoice];
+        formatterOptions.timeZone = timezoneFormats[localTimezoneChoice]
     }
     let startUTC = localDateToUTC(startDate, startTime);
     let endUTC = localDateToUTC(endDate, endTime);
