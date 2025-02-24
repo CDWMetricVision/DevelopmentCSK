@@ -846,3 +846,9 @@ input:checked + .slider:before {
     width: 170px;
     height: 38px;
 }
+.alarm-input-wrapper{
+    width: 100%;
+    margin:20px 0;
+    display: flex;
+    justify-content: center;
+}
