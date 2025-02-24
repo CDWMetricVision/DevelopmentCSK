@@ -308,6 +308,7 @@ function createIcons() {
     label.innerHTML = "Interval: "
 
     let select = document.createElement("select");
+    select.classList.add("chart-interval");
     select.addEventListener("change", handlePeriodChange);
     let defaultOption = document.createElement("option");
     defaultOption.textContent = "Select";
@@ -860,6 +861,10 @@ async function submitCustomDateTimeframe() {
         }
         createIcons();
     }
+    document
+      .getElementById("customDateTimeButton")
+      .scrollIntoView({ behavior: "smooth", block: "start" });
+
 }
 
 function refreshDropdownChoice(event) {
