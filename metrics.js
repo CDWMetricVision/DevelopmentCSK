@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
       e.stopPropagation(); // Stop the click from propagating and closing the dropdown
     });
   });
+  checkTheme();
 });
 
 function showLoader() {
@@ -1170,13 +1171,42 @@ function showMetrics() {
     window.location.href = "./metrics.html";
 }
 
-function toggleDarkMode() {
-    document.body.classList.toggle("dark-mode");
-    const toggleBtn = document.querySelector(".toggle-btn2");
+function showAlarms() {
+  // Get the access token from sessionStorage
+  let accessToken = sessionStorage.getItem("MetricVisionAccessToken");
 
-    if (document.body.classList.contains("dark-mode")) {
-        toggleBtn.innerHTML = "☀️"; // Switch to sun
-    } else {
-        toggleBtn.innerHTML = "🌙"; // Switch to moon
-    }
+  if (accessToken) {
+    // Open the alarms page with the access token added in the URL as a query parameter
+    window.location.href = `/alarm.html?access_token=${accessToken}`;
+  } else {
+    alert("Access token not found. Please sign in again.");
+  }
+}
+
+function toggleDarkMode() {
+    const storedTheme = localStorage.getItem("theme");
+    setTheme(storedTheme == "dark" ? "light" : "dark");
+}
+
+function setTheme(theme) {
+    const toggleBtn = document.querySelector(".toggle-btn2");
+  if (theme === "dark") {
+    document.body.classList.add("dark-mode");
+    localStorage.setItem("theme", "dark");
+    toggleBtn.innerHTML = "☀️"; // Switch to sun
+  } else {
+    document.body.classList.remove("dark-mode");
+    localStorage.setItem("theme", "light");
+    toggleBtn.innerHTML = "🌙"; // Switch to moon
+  }
+}
+
+function checkTheme() {
+  // Load theme from localStorage on page load
+  const storedTheme = localStorage.getItem("theme");
+  if (storedTheme) {
+    setTheme(storedTheme);
+  } else {
+    setTheme("light");
+  }
 }

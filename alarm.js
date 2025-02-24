@@ -1,5 +1,9 @@
 let alarmsData = []; // Global variable to store alarms data
 
+document.addEventListener("DOMContentLoaded", () => {
+  checkTheme();
+});
+
 // Function to get available accounts and their respective API URLs
 function getAccountsAlarmsAPI() {
     const allAccountsAlarmsList = [
@@ -155,15 +159,40 @@ function showDashboards() {
   window.location.href = "./dashboard.html";
 }
 
-function toggleDarkMode() {
-    document.body.classList.toggle("dark-mode");
-    const toggleBtn = document.querySelector(".toggle-btn2");
 
-    if (document.body.classList.contains("dark-mode")) {
-        toggleBtn.innerHTML = "☀️"; // Switch to sun
-    } else {
-        toggleBtn.innerHTML = "🌙"; // Switch to moon
-    }
+function toggleDarkMode() {
+  // document.body.classList.toggle("dark-mode");
+  const storedTheme = localStorage.getItem("theme");
+  setTheme(storedTheme == "dark" ? "light" : "dark");
+
+}
+
+function setTheme(theme) {
+    const toggleBtn = document.querySelector(".toggle-btn2");
+  if (theme === "dark") {
+    document.body.classList.add("dark-mode");
+    localStorage.setItem("theme", "dark");
+    toggleBtn.innerHTML = "☀️"; // Switch to sun
+  } else {
+    document.body.classList.remove("dark-mode");
+    localStorage.setItem("theme", "light");
+    toggleBtn.innerHTML = "🌙"; // Switch to moon
+  }
+}
+
+function checkTheme() {
+  // Load theme from localStorage on page load
+  const storedTheme = localStorage.getItem("theme");
+  if (storedTheme) {
+    setTheme(storedTheme);
+  } else {
+    setTheme("light");
+  }
+  if (document.body.classList.contains("dark-mode")) {
+    toggleBtn.innerHTML = "☀️"; // Switch to sun
+  } else {
+    toggleBtn.innerHTML = "🌙"; // Switch to moon
+  }
 }
 
 function showAlarms() {
