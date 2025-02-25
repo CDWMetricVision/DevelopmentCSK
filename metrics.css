@@ -62,17 +62,16 @@ body.dark-mode {
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--background-color);
     margin: 0;
     padding: 0;
-    color: #f75115;
     display: flex;
     align-items: center;
     flex-direction: column;
     min-height: 100vh;
     background-size: cover;
     background-position: center;
+    color: var(--text-color);
 }
 
 .togglee-btn {
@@ -154,14 +153,6 @@ body {
 .logout-button:hover {
     background-color: #c0392b;
     transform: scale(1.05);
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: var(--background-color);
-    color: #333;
-    margin: 0;
-    padding: 0;
 }
 
 .container {
