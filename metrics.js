@@ -892,7 +892,7 @@ async function submitCustomDateTimeframe() {
 
 function refreshDropdownChoice(event) {
     let refreshDropdownButton = document.querySelector("#autoRefreshButton");
-    refreshDropdownButton.innerHTML = `<i class="fa-solid fa-arrows-rotate fa-lg"></i> ${event.target.innerHTML}`;
+    refreshDropdownButton.innerHTML = `${event.target.innerHTML}`;
     if (refreshDropdownButton.dataset.intervalId) {
         clearInterval(refreshDropdownButton.dataset.intervalId);
         refreshDropdownButton.dataset.intervalId = "";
