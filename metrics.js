@@ -1091,22 +1091,13 @@ document.addEventListener("DOMContentLoaded", function () {
     displayTimeandDates();
 });
 
-//For testing purposes, use fake data to simulate real data when working in test environment, because not authenticated with Cognito
 
-// let fakeData = { "MetricDataResults": [{ "Id": "calls_per_interval", "Label": "VoiceCalls CallsPerInterval", "Timestamps": ["12/11 10:36 AM", "12/11 2:36 PM", "12/12 3:41 PM", "12/16 2:42 PM"], "Values": [6.0, 2.0, 4.0, 1.0] }, { "Id": "missed_calls", "Label": "VoiceCalls MissedCalls", "Timestamps": ["12/10 01:00 AM","12/10 04:00 AM", "12/10 06:32 AM"], "Values": [1.0,2.0,4.0] }, { "Id": "calls_breaching_concurrency_quota", "Label": "VoiceCalls CallsBreachingConcurrencyQuota", "Timestamps": [], "Values": [] }, { "Id": "call_recording_upload_error", "Label": "CallRecordings CallRecordingUploadError", "Timestamps": [], "Values": [] }, { "Id": "chats_breaching_active_chat_quota", "Label": "Chats ChatsBreachingActiveChatQuota", "Timestamps": [], "Values": [] }, { "Id": "concurrent_active_chats", "Label": "Chats ConcurrentActiveChats", "Timestamps": [], "Values": [] }, { "Id": "contact_flow_errors", "Label": "1cf9d6bb-1a1e-44a4-b3c7-951cc17cb9de ContactFlow ContactFlowErrors", "Timestamps": [], "Values": [] }, { "Id": "contact_flow_fatal_errors", "Label": "1cf9d6bb-1a1e-44a4-b3c7-951cc17cb9de ContactFlow ContactFlowFatalErrors", "Timestamps": [], "Values": [] }, { "Id": "throttled_calls", "Label": "VoiceCalls ThrottledCalls", "Timestamps": [], "Values": [] }, { "Id": "to_instance_packet_loss_rate", "Label": "Agent Voice WebRTC ToInstancePacketLossRate", "Timestamps": [], "Values": [] }] }
-// let completeFakeData = {
-//     "data": fakeData,
-//     "result": true
-// }
-
-// sessionStorage.setItem("fakeMetricVisionData", JSON.stringify(completeFakeData))
-
-
-// function toggleSidePanel() {
-//     const sidePanel = document.getElementById('sidePanel');
-//     sidePanel.classList.toggle('active');
-// }
-
+function clientToAccountMapping() {
+  return {
+    CSK: ["MAS Sandbox Development", "MAS Sandbox Test1", "MAS Sandbox Test2"],
+    MScloud: ["CDW Cloud MS"],
+  };
+}
 
 function accountsAndConnectInstancesObject() {
     const allAccountsList = [
@@ -1135,6 +1126,15 @@ function accountsAndConnectInstancesObject() {
                     "mastest2": "ce2575a1-6ad8-4694-abd6-53acf392c698"
                 },
                 "baseAPIGatewayURL": "https://9v5jzdmc6a.execute-api.us-east-1.amazonaws.com/test"
+            }
+        },
+        {
+            "CDW Cloud MS": {
+                connectInstances: {
+                cdwcloudms: "81929398-ea15-429d-8259-a85d54c05e9b",
+                cdwcloudsolutioncentre: "4c2a8892-8b0d-415d-84a5-9cadeba8c67a"
+                },
+                baseAPIGatewayURL: "https://a37xf754ya.execute-api.us-east-1.amazonaws.com/csccloud"
             }
         }
     ]
