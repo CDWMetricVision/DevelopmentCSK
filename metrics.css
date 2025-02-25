@@ -327,13 +327,14 @@ a:hover {
     justify-content: center;
     align-items: flex-start;
     width: 100%;
-    min-height: 220px;
+    min-height: 150px;
     flex-wrap: wrap;
 }
 
 .accounts-options-wrapper,
 .filter-content-wrapper,
-.filter-content-wrapper-2 {
+.filter-content-wrapper-2,
+.filter-content-wrapper-3 {
     padding: 1rem;
     width: fit-content;
 }
@@ -804,6 +805,7 @@ input:checked + .slider:before {
 .periodWrapper {
     background: var(--background-color);
     color: var(--text-color);
+    margin-right: 5px;
 }
 
 .periodWrapper > label {
