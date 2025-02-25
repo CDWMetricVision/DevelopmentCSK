@@ -862,3 +862,15 @@ input:checked + .slider:before {
 .line-chart {
     height: 250px;
 }
+.dashboard-parent-container {
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+.dashboard-parent-container button{
+    width: fit-content;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+}

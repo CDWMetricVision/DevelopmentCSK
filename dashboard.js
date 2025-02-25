@@ -316,6 +316,37 @@ function chartLineGraph(graphData, container) {
     container.appendChild(flexDiv);
 
 }
+async function deleteAllDashboardHandler() {
+    let payloadData = new Object();
+    payloadData = {
+        'accountName' : $("#customerAccounts").val(),
+        'dashboard_name' : ''
+    }
+    let apiURL = 'https://l2y83qdrp0.execute-api.us-east-1.amazonaws.com/test/delete_dashboard';
+        if (window.confirm("Are you sure, want to delete all the saved dashboards?")) {
+            $("#loader").show();
+            try{
+                let response = await fetch(apiURL, {
+                    method: 'DELETE',
+                    body: JSON.stringify(payloadData)
+                })
+                if (!response.ok) {
+                    $("#loader").hide();
+                    window.alert("Dashboard Deletion Not Successful");
+                    console.error("Deletion Not Successful");
+                } else {
+                    $("#loader").hide();
+                    window.alert("Dashboard Deleted Successfully");
+                    getSavedDashboards();
+                }
+            }
+            catch(err){
+                $("#loader").hide();
+            }
+        } else {
+            console.log("Cancelled!");
+        }
+}
 async function getSavedDashboards() {
     let customerAccount = $("#customerAccounts").val()
     let apiURL = 'https://l2y83qdrp0.execute-api.us-east-1.amazonaws.com/test/showsaveddashboaed';
@@ -341,41 +372,62 @@ async function getSavedDashboards() {
                 let chartContainer = document.querySelector(".chartContainer");
                 $(".chartContainer").empty();
                 $(".dashboard-container").empty();
-                for (const [keys,data] of Object.entries(parsedData)) {
-                    // console.log(values);
-                    console.log(data);
-                        let div = document.createElement("div");
-                        div.classList.add("dashboard-container");
-                        let dasboardContentWrapper = document.createElement("div");
-                        dasboardContentWrapper.classList.add("dashboard-wrapper");
-                        let p = document.createElement("p");
-                        p.innerHTML = `${data[0]["name"]} Dashboard`;
-                        div.append(p);
-    
-                        for(const [keys,mData] of Object.entries(data[0]["data"]["MetricDataResults"])) {
-                            let innerDiv = document.createElement("div");
-                            let id = 'id_' + Math.random().toString(36).substr(2, 9);
-                            innerDiv.id = id;
-                            innerDiv.classList.add("chart");
-                            dasboardContentWrapper.append(innerDiv);
+                if (Object.entries(parsedData).length != 0 ) {
+                    let parentdiv = document.createElement("div");
+                    parentdiv.classList.add("dashboard-parent-container");
+                    let dashboardHeader = document.createElement("p");
+                    dashboardHeader.innerHTML = "Dashboards";
+                    let deleteAllText = document.createElement("button");
+                    deleteAllText.classList.add("btn-block");
+                    deleteAllText.classList.add("btn");
+                    deleteAllText.classList.add("btn-secondary");
+                    deleteAllText.innerHTML = "Delete All";
+                    deleteAllText.addEventListener("click", deleteAllDashboardHandler);
+                    parentdiv.append(dashboardHeader);
+                    parentdiv.append(deleteAllText);
+                    chartContainer.append(parentdiv);
+                    console.log(Object.entries(parsedData).length) == 0;
+                    for (const [keys,data] of Object.entries(parsedData)) {
+                        // console.log(values);
+                        // console.log(data);
+                            let div = document.createElement("div");
+                            div.classList.add("dashboard-container");
+                            let dasboardContentWrapper = document.createElement("div");
+                            dasboardContentWrapper.classList.add("dashboard-wrapper");
+                            let p = document.createElement("p");
+                            p.innerHTML = `${data[0]["name"]} Dashboard`;
+                            div.append(p);
+        
+                            for(const [keys,mData] of Object.entries(data[0]["data"]["MetricDataResults"])) {
+                                let innerDiv = document.createElement("div");
+                                let id = 'id_' + Math.random().toString(36).substr(2, 9);
+                                innerDiv.id = id;
+                                innerDiv.classList.add("chart");
+                                dasboardContentWrapper.append(innerDiv);
+                                div.append(dasboardContentWrapper);
+                                if (mData.Id.includes("percentage")) {
+                                    mData.Values.forEach(function(value, index) {
+                                        mData.Values[index] = Math.floor(value * 100)
+                                    })
+                                }
+                                if(data[0]["widgetType"].toLowerCase() == 'line') {
+                                    createTableLineGauge(mData, innerDiv);
+                                }
+                                if(data[0]["widgetType"].toLowerCase() == 'numberchart') {
+                                    createTable(mData, innerDiv);
+                                }
+                                if(data[0]["widgetType"].toLowerCase() == 'gauge') {
+                                    createGauge(mData, innerDiv);
+                                }
+                            }
                             div.append(dasboardContentWrapper);
-                            if (mData.Id.includes("percentage")) {
-                                mData.Values.forEach(function(value, index) {
-                                    mData.Values[index] = Math.floor(value * 100)
-                                })
-                            }
-                            if(data[0]["widgetType"].toLowerCase() == 'line') {
-                                createTableLineGauge(mData, innerDiv);
-                            }
-                            if(data[0]["widgetType"].toLowerCase() == 'numberchart') {
-                                createTable(mData, innerDiv);
-                            }
-                            if(data[0]["widgetType"].toLowerCase() == 'gauge') {
-                                createGauge(mData, innerDiv);
-                            }
-                        }
-                        div.append(dasboardContentWrapper);
-                        chartContainer.append(div);
+                            chartContainer.append(div);
+                    }
+                } else {
+                    let noDataFoundContainer = document.createElement("p");
+                    noDataFoundContainer.innerHTML = "No Saved Dashboards";
+                    noDataFoundContainer.style = "text-align:center";
+                    chartContainer.append(noDataFoundContainer);
                 }
                 $("#loader").hide();
             })
